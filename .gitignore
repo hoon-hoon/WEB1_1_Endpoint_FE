@@ -27,5 +27,5 @@ dist-ssr
 *storybook.log
 
 # dependencies
-yarn.lock
+
 package-lock.json
