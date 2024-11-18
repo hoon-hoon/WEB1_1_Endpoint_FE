@@ -1,12 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import { NavBarType } from '@/types';
 import { FaHome, FaGamepad, FaSearch, FaUser } from 'react-icons/fa';
 
 const BottomNavBar = ({ activeTab, setActiveTab }: NavBarType) => {
+  const navigate = useNavigate();
   const tabs = [
-    { id: 'home', label: '메인', icon: <FaHome /> },
-    { id: 'game', label: '게임', icon: <FaGamepad /> },
-    { id: 'search', label: '검색', icon: <FaSearch /> },
-    { id: 'profile', label: '마이', icon: <FaUser /> },
+    { id: 'home', label: '메인', icon: <FaHome />, path: '/' },
+    { id: 'game', label: '게임', icon: <FaGamepad />, path: '/game' },
+    { id: 'search', label: '검색', icon: <FaSearch />, path: '/search' },
+    { id: 'profile', label: '마이', icon: <FaUser />, path: '/profile' },
   ];
 
   return (
@@ -15,7 +17,10 @@ const BottomNavBar = ({ activeTab, setActiveTab }: NavBarType) => {
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => {
+              setActiveTab(tab.id);
+              navigate(tab.path);
+            }}
             className={`flex flex-col items-center justify-center w-full h-full py-2 text-sm transition-colors duration-200 ${
               activeTab === tab.id ? 'text-black bg-gray-200 rounded-md' : 'text-gray-500'
             }`}

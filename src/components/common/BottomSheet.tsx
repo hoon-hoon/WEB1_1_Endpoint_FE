@@ -4,11 +4,11 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from '../shared/drawer';
+} from '../../shared/drawer';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { useState } from 'react';
-import FlexBox from '../shared/FlexBox';
+import FlexBox from '../../shared/FlexBox';
 
 type BottomSheetProps = {
   isOpen: boolean;
