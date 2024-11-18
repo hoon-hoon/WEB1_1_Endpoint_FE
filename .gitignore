@@ -25,7 +25,9 @@ dist-ssr
 *.sw?
 
 *storybook.log
-
+*.stories.tsx
+.storybook
+stories
 # dependencies
 
 package-lock.json
