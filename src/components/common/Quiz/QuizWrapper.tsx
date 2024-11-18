@@ -2,7 +2,7 @@ import { Quiz } from '@/types';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useState } from 'react';
 import { QuizAB, QuizAns, QuizFooter, QuizMul, QuizOX } from '.';
-import BottomSheet from '@/components/BottomSheet';
+import BottomSheet from '../BottomSheet';
 
 interface QuizWrapperProps {
   quiz: Quiz;
@@ -36,33 +36,34 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
     return null;
   };
 
-  return (<>
-    <div
-      className="border rounded-lg shadow-sm p-4 mb-4 bg-white"
-      style={{ maxWidth: '600px', margin: '0 auto' }}
-    >
-      <div className="flex items-center mb-4">
-        <Avatar size="S" />
-        <div className="ml-4">
-          <h4 className="text-md font-bold">{quiz.author}</h4>
-          <p className="text-sm text-gray-500">
-            {quiz.type === 'OX' ? 'OX 퀴즈' : quiz.type === 'ABTest' ? 'A/B 테스트' : '객관식'}
-          </p>
+  return (
+    <>
+      <div
+        className="border rounded-lg shadow-sm p-4 mb-4 bg-white"
+        style={{ maxWidth: '600px', margin: '0 auto' }}
+      >
+        <div className="flex items-center mb-4">
+          <Avatar size="S" />
+          <div className="ml-4">
+            <h4 className="text-md font-bold">{quiz.author}</h4>
+            <p className="text-sm text-gray-500">
+              {quiz.type === 'OX' ? 'OX 퀴즈' : quiz.type === 'ABTest' ? 'A/B 테스트' : '객관식'}
+            </p>
+          </div>
         </div>
+        {renderQuizContent()}
+        {selectedAnswer !== null && isCorrect !== null && (
+          <QuizAns isCorrect={isCorrect} explanation={quiz.explanation} />
+        )}
+        <QuizFooter
+          likes={likes}
+          comments={quiz.comments}
+          isLiked={isLiked}
+          onToggleLike={handleToggleLike}
+          onCommentsClick={() => setBottomSheetOpen(true)}
+        />
       </div>
-      {renderQuizContent()}
-      {selectedAnswer !== null && isCorrect !== null && (
-        <QuizAns isCorrect={isCorrect} explanation={quiz.explanation} />
-      )}
-      <QuizFooter
-        likes={likes}
-        comments={quiz.comments}
-        isLiked={isLiked}
-        onToggleLike={handleToggleLike}
-        onCommentsClick={() => setBottomSheetOpen(true)}
-      />
-    </div>
-    <BottomSheet
+      <BottomSheet
         isOpen={isBottomSheetOpen}
         setOpen={setBottomSheetOpen}
         comments={quiz.comments}

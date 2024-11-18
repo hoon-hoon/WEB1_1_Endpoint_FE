@@ -11,7 +11,6 @@ import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useState } from 'react';
 import FlexBox from '../../shared/FlexBox';
 import { Comment } from '@/types';
-import { Dropdown } from './common';
 
 type BottomSheetProps = {
   isOpen: boolean;
@@ -34,11 +33,11 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
           <DrawerTitle>댓글</DrawerTitle>
           <DrawerDescription />
           <div className="flex items-center gap-2">
-            <Dropdown
+            {/* <Dropdown
               options={['최신 순', '좋아요 순']}
               selectedOption={sortOption}
               onOptionSelect={handleSortOptionChange}
-            />
+            /> */}
             <button
               type="button"
               className="absolute top-5 right-7"
