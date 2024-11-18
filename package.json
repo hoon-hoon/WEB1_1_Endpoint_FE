@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@eolluga/eolluga-ui": "^3.3.1",
@@ -35,9 +37,11 @@
     "globals": "^15.9.0",
     "postcss": "^8.4.49",
     "prettier": "^3.3.3",
+    "storybook": "^8.2.9",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "^5.4.1",
+    "vite-tsconfig-paths": "^5.1.2"
   }
 }
