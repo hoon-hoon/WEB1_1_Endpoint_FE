@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopBar from '@/components/common/TopBar';
-import Dropdown from '@/components/common/Dropdown';
+import DropDown from '@/components/common/DropDown';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
 import Button from '@/components/common/Button/Button';
 
@@ -45,7 +45,7 @@ export default function CreateGame() {
               <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="room-name">
                 퀴즈 주제
               </label>
-              <Dropdown
+              <DropDown
                 items={topics}
                 selectedItem={topic}
                 setItem={setTopic}
@@ -56,7 +56,7 @@ export default function CreateGame() {
               <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="room-name">
                 난이도
               </label>
-              <Dropdown
+              <DropDown
                 items={difficulties}
                 selectedItem={difficulty}
                 setItem={setDifficulty}

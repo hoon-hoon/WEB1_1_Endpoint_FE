@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
-type DropdownProps = {
+type DropDownProps = {
   items: string[];
   selectedItem: string;
   setItem: (item: string) => void;
   placeholder?: string;
 };
 
-const Dropdown = ({ items, selectedItem, setItem, placeholder = '' }: DropdownProps) => {
+const DropDown = ({ items, selectedItem, setItem, placeholder = '' }: DropDownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string>(selectedItem);
 
@@ -49,4 +49,4 @@ const Dropdown = ({ items, selectedItem, setItem, placeholder = '' }: DropdownPr
   );
 };
 
-export default Dropdown;
+export default DropDown;
