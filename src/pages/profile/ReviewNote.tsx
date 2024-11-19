@@ -2,8 +2,10 @@ import { useState } from 'react';
 import TopBar from '@/components/common/TopBar';
 import ReviewNoteCard from '@/components/mypage/ReviewNoteCard';
 import { ReviewNoteItem } from '@/types/MyPageTpyes';
+import { useNavigate } from 'react-router-dom';
 
 export default function ReviewNote() {
+  const navigate = useNavigate();
   const [notes, setNotes] = useState<ReviewNoteItem[]>([
     {
       id: '1',
@@ -37,7 +39,13 @@ export default function ReviewNote() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <TopBar leftIcon="left" leftText="오답노트" />
+      <TopBar
+        leftIcon="left"
+        leftText="오답노트"
+        onClickLeft={() => {
+          navigate(-1);
+        }}
+      />
       <main className="max-w-3xl mx-auto pt-20 p-4 space-y-6">
         {notes.map((note) => (
           <ReviewNoteCard key={note.id} note={note} onDelete={handleDeleteNote} />
