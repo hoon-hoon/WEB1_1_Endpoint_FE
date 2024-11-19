@@ -7,6 +7,7 @@ import CallbackPage from './pages/Login/CallbackPage';
 import LoginPage from './pages/Login/LoginPage';
 
 import { useState } from 'react';
+import ReviewNote from './pages/profile/ReviewNote';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
@@ -27,6 +28,7 @@ function App() {
           <Route path="/game" element={<GamePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={<MyPage />} />
+          <Route path="/profile/reviewNote" element={<ReviewNote />} />
           <Route path="/game/create" element={<CreateGame />} />
           <Route path="/game/waiting" element={<WaitingRoom />} />
           <Route path="/game/random" element={<RandomMatch />} />
