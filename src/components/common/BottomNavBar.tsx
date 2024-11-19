@@ -1,14 +1,20 @@
 import { useNavigate } from 'react-router-dom';
+import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { NavBarType } from '@/types';
-import { FaHome, FaGamepad, FaSearch, FaUser } from 'react-icons/fa';
+import { IoGameControllerOutline } from 'react-icons/io5';
 
 const BottomNavBar = ({ activeTab, setActiveTab }: NavBarType) => {
   const navigate = useNavigate();
   const tabs = [
-    { id: 'home', label: '메인', icon: <FaHome />, path: '/' },
-    { id: 'game', label: '게임', icon: <FaGamepad />, path: '/game' },
-    { id: 'search', label: '검색', icon: <FaSearch />, path: '/search' },
-    { id: 'profile', label: '마이', icon: <FaUser />, path: '/profile' },
+    { id: 'home', label: '메인', icon: <Icon icon="home" />, path: '/' },
+    {
+      id: 'game',
+      label: '게임',
+      icon: <IoGameControllerOutline size={24} />,
+      path: '/game',
+    },
+    { id: 'search', label: '검색', icon: <Icon icon="search" />, path: '/search' },
+    { id: 'profile', label: '마이', icon: <Icon icon="person_outlined" />, path: '/profile' },
   ];
 
   return (

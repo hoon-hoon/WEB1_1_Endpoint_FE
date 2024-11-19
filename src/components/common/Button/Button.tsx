@@ -1,6 +1,6 @@
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   variant?: 'fill' | 'unfill';
   color?: 'blue' | 'gray' | 'red' | 'green' | 'orange';
   size?: 'small' | 'medium' | 'large' | 'long';

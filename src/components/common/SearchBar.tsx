@@ -1,4 +1,4 @@
-import { FaSearch } from 'react-icons/fa';
+import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
 export default function SearchBar() {
   return (
@@ -9,7 +9,7 @@ export default function SearchBar() {
         className="w-full pl-4 pr-10 h-12 rounded-full border-2 border-gray-300 focus:outline-none focus:border-gray-400"
       />
       <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-        <FaSearch />
+        <Icon icon="search" />
       </button>
     </div>
   );
