@@ -130,7 +130,7 @@ const WaitingRoom = () => {
               <TextField
                 value={inviteCode}
                 state="readOnly"
-                onChange={() => console.log(1)}
+                onChange={() => console.log('')}
                 size={'M'}
               />
               <button
@@ -145,7 +145,9 @@ const WaitingRoom = () => {
               </button>
             </div>
           </div>
+
           <Button label="게임 시작" variant="fill" color="gray" size="long" onClick={startGame} />
+
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
