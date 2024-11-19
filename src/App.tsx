@@ -1,7 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { BottomNavBar } from './components';
+import MainLayout from './layouts/MainLayout';
+import AuthLayout from './layouts/AuthLayout';
 import { GamePage, MainPage, MyPage, SearchPage } from './pages';
 import { CreateGame, WaitingRoom, RandomMatch, CodeEntry } from './pages/game';
+import CallbackPage from './pages/Login/CallbackPage';
+import LoginPage from './pages/Login/LoginPage';
 
 import { useState } from 'react';
 
@@ -10,8 +13,16 @@ function App() {
 
   return (
     <Router>
-      <div className="pb-16">
-        <Routes>
+      <Routes>
+        {/* 인증 관련 경로 AuthLayout*/}
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/auth/kakao/callback" element={<CallbackPage provider="kakao" />} />
+          <Route path="/auth/google/callback" element={<CallbackPage provider="google" />} />
+        </Route>
+
+        {/* 그 외 BottomNavbar 사용시 MainLayout */}
+        <Route element={<MainLayout activeTab={activeTab} setActiveTab={setActiveTab} />}>
           <Route path="/" element={<MainPage />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/search" element={<SearchPage />} />
@@ -21,9 +32,8 @@ function App() {
           <Route path="/game/random" element={<RandomMatch />} />
           <Route path="/game/entry" element={<CodeEntry />} />
           {/* 추가적인 페이지 라우팅을 등록 */}
-        </Routes>
-        <BottomNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
-      </div>
+        </Route>
+      </Routes>
     </Router>
   );
 }
