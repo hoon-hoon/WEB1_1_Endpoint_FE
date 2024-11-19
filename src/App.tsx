@@ -2,9 +2,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
 import { GamePage, MainPage, MyPage, SearchPage } from './pages';
-import { CreateGame, WaitingRoom, RandomMatch } from './pages/game';
+import { CreateGame, WaitingRoom, RandomMatch, CodeEntry } from './pages/game';
 import CallbackPage from './pages/Login/CallbackPage';
 import LoginPage from './pages/Login/LoginPage';
+
 import { useState } from 'react';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/game/create" element={<CreateGame />} />
           <Route path="/game/waiting" element={<WaitingRoom />} />
           <Route path="/game/random" element={<RandomMatch />} />
+          <Route path="/game/entry" element={<CodeEntry />} />
           {/* 추가적인 페이지 라우팅을 등록 */}
         </Route>
       </Routes>

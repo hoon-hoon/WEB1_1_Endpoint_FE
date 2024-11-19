@@ -1,8 +1,6 @@
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
-import { IoTrophyOutline } from 'react-icons/io5';
 import defaultImageURL from '@/shared/defaultImage';
 import FlexBox from '@/shared/FlexBox';
-import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { Badge } from './common/Badge';
 import { ShadcnButton } from './common/Button/ShadcnButton';
 

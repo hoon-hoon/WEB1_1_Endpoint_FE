@@ -12,7 +12,7 @@ import { Member } from '@/components/MemberItem';
 import Button from '@/components/common/Button/Button';
 
 const Members: Member[] = [
-  { id: 'a', nickName: '플레이어1', isHost: true, rating: 1500 },
+  { id: 'a', nickName: '플레이어1', isHost: true, rating: 2000 },
   { id: 'b', nickName: '플레이어2', isHost: false, rating: 1500 },
   { id: 'c', nickName: '플레이어3', isHost: false, rating: 1500 },
   { id: 'd', nickName: '플레이어4', isHost: false, rating: 1500 },
@@ -24,7 +24,7 @@ const inviteCode = 'QUIZ123';
 const WaitingRoom = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [members, setMembers] = useState<Member[]>(Members);
+  const [members] = useState<Member[]>(Members);
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopBar from '@/components/common/TopBar';
-import DropDown from '@/components/common/Dropdown';
+import DropDown from '@/components/common/DropDown';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
 import Button from '@/components/common/Button/Button';
 

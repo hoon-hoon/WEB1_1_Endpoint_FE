@@ -13,8 +13,8 @@ const DropDown = ({ items, selectedItem, setItem, placeholder = '' }: DropDownPr
   const [selected, setSelected] = useState<string>(selectedItem);
 
   const handleSelect = (value: string) => {
-    setSelected(value);
     setItem(value);
+    setSelected(value);
     setIsOpen(false);
   };
 
