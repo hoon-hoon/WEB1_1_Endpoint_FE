@@ -1,6 +1,7 @@
 import TopBar from '@/components/common/TopBar';
 import { MenuButton } from '@/components/mypage/MenuButton';
-import { Modal } from '@/components/mypage/Modal';
+import { AchievementModal } from '@/components/mypage/AchievementModal';
+
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { useState } from 'react';
@@ -12,14 +13,17 @@ export default function MyPage() {
     {
       title: '퀴즈 마스터',
       description: '100문제 연속 정답',
+      achieved: true,
     },
     {
       title: '지식의 탑',
       description: '1000문제 해결',
+      achieved: false,
     },
     {
       title: '개근왕',
       description: '30일 연속 접속',
+      achieved: true,
     },
   ];
 
@@ -75,11 +79,11 @@ export default function MyPage() {
           </button>
         </div>
 
-        <MenuButton icon="theme" label="오답노트" to="/" />
+        <MenuButton icon="theme" label="오답노트" to="/profile/reviewNote" />
         <MenuButton icon="pencil" label="내 퀴즈 만들기" to="/" />
         <MenuButton icon="paper_blank_portrait" label="내 퀴즈 관리하기" to="/" />
       </main>
-      <Modal
+      <AchievementModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         achievements={achievements}
