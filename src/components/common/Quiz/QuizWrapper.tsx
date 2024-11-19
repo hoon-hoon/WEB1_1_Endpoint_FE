@@ -40,7 +40,7 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
     <>
       <div
         className="border rounded-lg shadow-sm p-4 mb-4 bg-white"
-        style={{ maxWidth: '600px', margin: '0 auto' }}
+        style={{ maxWidth: '600px'}}
       >
         <div className="flex items-center mb-4">
           <Avatar size="S" />
