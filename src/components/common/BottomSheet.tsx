@@ -20,11 +20,13 @@ type BottomSheetProps = {
 
 export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetProps) {
   const [inputValue, setInputValue] = useState<string>('');
-  const [sortOption, setSortOption] = useState<string>('최신 순'); // 정렬 옵션 상태
+  //const [sortOption, setSortOption] = useState<string>('최신 순'); // 정렬 옵션 상태
 
+  /*
   const handleSortOptionChange = (option: string) => {
     setSortOption(option);
   };
+  */
 
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>

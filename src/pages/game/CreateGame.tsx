@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TopBar from '@/components/common/TopBar';
 import DropDown from '@/components/common/DropDown';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
+import Button from '@/components/common/Button/Button';
 
 const topics = [
   'JavaScript',
@@ -39,7 +40,7 @@ export default function CreateGame() {
 
       <main className="flex-1 pt-20 pb-6 px-4">
         <div className="max-w-md mx-auto">
-          <div className="p-6 mb-8 bg-white border rounded-lg">
+          <div className="p-6 mb-4 bg-white border rounded-lg">
             <div className="pb-8">
               <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="room-name">
                 퀴즈 주제
@@ -75,12 +76,13 @@ export default function CreateGame() {
               />
             </div>
           </div>
-          <button
-            className="w-full h-14 text-lg"
+          <Button
+            label="방 생성하기"
+            variant="fill"
+            color="gray"
+            size="long"
             onClick={() => navigate('/game/waiting', { state: { topic, difficulty, quizCount } })}
-          >
-            방 생성하기
-          </button>
+          />
         </div>
       </main>
     </div>

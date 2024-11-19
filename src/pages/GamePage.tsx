@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
+import { IoGameControllerOutline, IoTrophyOutline } from 'react-icons/io5';
 import TopBar from '../components/common/TopBar';
 import defaultImageURL from '@/shared/defaultImage';
 
@@ -40,7 +41,7 @@ export default function Game() {
 
             <button className="w-full flex h-16 text-lg justify-between items-center p-4 bg-white border rounded-l focus:bg-gray-100">
               <div className="flex items-center gap-3">
-                <Icon icon={'person_outlined'} />
+                <IoGameControllerOutline size={24} />
                 랜덤 매칭
               </div>
               <Icon icon={'chevron_right_outlined'} />
@@ -51,7 +52,7 @@ export default function Game() {
               onClick={() => console.log(11)}
             >
               <div className="flex items-center gap-3">
-                <Icon icon={'person_outlined'} />
+                <IoTrophyOutline size={24} />
                 코드로 참가
               </div>
               <Icon icon={'chevron_right_outlined'} />
