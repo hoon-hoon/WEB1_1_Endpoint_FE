@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { QuizOX as QuizOXType } from '@/types';
+import { Button } from '../Button';
 
 interface QuizOXProps {
   quiz: QuizOXType;
@@ -21,37 +22,21 @@ function QuizOX({ quiz, onAnswerSelect }: QuizOXProps) {
     <div>
       <h3 className="text-lg font-semibold mb-4">{quiz.question}</h3>
 
-      <div className="flex justify-between">
-        <button
-          className={`flex-1 text-center py-3 border border-gray-300 rounded-l-lg transition-colors duration-300 ${
-            selectedAnswer
-              ? selectedAnswer === 'O' && isCorrect
-                ? 'bg-pastelGreen text-white'
-                : selectedAnswer === 'O' && !isCorrect
-                  ? 'bg-pastelRed text-white'
-                  : 'bg-white'
-              : 'bg-white hover:bg-blue-100'
-          }`}
+      <div className="flex space-x-2">
+        <Button
+          label="O"
           onClick={() => handleAnswerSelect('O')}
-          disabled={!!selectedAnswer}
-        >
-          O
-        </button>
-        <button
-          className={`flex-1 text-center py-3 border border-gray-300 rounded-r-lg transition-colors duration-300 ${
-            selectedAnswer
-              ? selectedAnswer === 'X' && isCorrect
-                ? 'bg-pastelGreen text-white'
-                : selectedAnswer === 'X' && !isCorrect
-                  ? 'bg-pastelRed text-white'
-                  : 'bg-white'
-              : 'bg-white hover:bg-blue-100'
-          }`}
+          color={selectedAnswer === 'O' ? (isCorrect ? 'pastelGreen' : 'pastelRed') : 'gray'}
+          variant={selectedAnswer === 'O' ? 'fill' : 'unfill'}
+          size="long"
+        />
+        <Button
+          label="X"
           onClick={() => handleAnswerSelect('X')}
-          disabled={!!selectedAnswer}
-        >
-          X
-        </button>
+          color={selectedAnswer === 'X' ? (isCorrect ? 'pastelGreen' : 'pastelRed') : 'gray'}
+          variant={selectedAnswer === 'X' ? 'fill' : 'unfill'}
+          size="long"
+        />
       </div>
     </div>
   );
