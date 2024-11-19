@@ -24,7 +24,7 @@ function QuizAns({ isCorrect, explanation }: QuizAnsProps) {
       <div className="mt-6">
         <p className="mb-2 text-sm font-medium text-gray-700">전체 정답률</p>
         <div className="flex items-center gap-2">
-          <ProgressBar progress={40} color="#25BD4B" />
+          <ProgressBar progress={40} colorClass="bg-pastelGreen" />
           <span className="text-sm font-semibold text-gray-600">40%</span>
         </div>
       </div>

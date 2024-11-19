@@ -24,14 +24,14 @@ function QuizMul({ quiz, onAnswerSelect }: QuizMulProps) {
         {quiz.options.map((option, index) => (
           <li key={index}>
             <button
-              className={`w-full px-4 py-2 rounded transition-colors duration-300 ${
+              className={`w-full px-4 py-2 rounded transition-colors duration-300 border ${
                 selectedAnswer
                   ? option === quiz.correctAnswer
-                    ? 'bg-green-200 text-green-800'
+                    ? 'bg-pastelGreen text-white'
                     : option === selectedAnswer
-                      ? 'bg-red-200 text-red-800'
-                      : 'bg-gray-200 text-gray-800'
-                  : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                      ? 'bg-pastelRed text-white'
+                      : 'text-gray-800'
+                  : 'text-gray-800 hover:bg-gray-300'
               }`}
               onClick={() => handleAnswerSelect(option)}
               disabled={!!selectedAnswer}

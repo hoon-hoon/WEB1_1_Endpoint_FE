@@ -1,15 +1,12 @@
 interface ProgressBarProps {
   progress: number;
-  color?: string;
+  colorClass?: string;
 }
 
-export default function ProgressBar({ progress, color = 'black' }: ProgressBarProps) {
+export default function ProgressBar({ progress, colorClass = 'bg-black' }: ProgressBarProps) {
   return (
     <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-      <div
-        className="h-full bg-black transition-all"
-        style={{ width: `${progress}%`, backgroundColor: color }}
-      />
+      <div className={`h-full transition-all ${colorClass}`} style={{ width: `${progress}%` }} />
     </div>
   );
 }
