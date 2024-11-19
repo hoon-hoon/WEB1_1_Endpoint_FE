@@ -1,0 +1,7 @@
+{
+  "result": {
+    "accessToken": "mock_access_token",
+    "refreshToken": "mock_refresh_token",
+    "tokenType": "Bearer"
+  }
+}
