@@ -1,8 +1,27 @@
+import { Modal } from '@/components/mypage/Modal';
 import TopBar from '@/components/TopBar';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
+import { useState } from 'react';
 
 export default function MyPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const achievements = [
+    {
+      title: '퀴즈 마스터',
+      description: '100문제 연속 정답',
+    },
+    {
+      title: '지식의 탑',
+      description: '1000문제 해결',
+    },
+    {
+      title: '개근왕',
+      description: '30일 연속 접속',
+    },
+  ];
+
   return (
     <div className="max-w-full min-h-screen bg-gray-50">
       <TopBar />
@@ -47,7 +66,10 @@ export default function MyPage() {
               <p className="text-sm text-gray-500">100문제 연속 정답</p>
             </div>
           </div>
-          <button className="mt-4 w-full rounded-lg border border-gray-300 py-3 text-center text-gray-600">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="mt-4 w-full rounded-lg border border-gray-300 py-3 text-center text-gray-600"
+          >
             전체 업적 조회하기
           </button>
         </div>
@@ -74,6 +96,11 @@ export default function MyPage() {
           <Icon icon="chevron_right_outlined" size={24} />
         </button>
       </main>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        achievements={achievements}
+      />
     </div>
   );
 }
