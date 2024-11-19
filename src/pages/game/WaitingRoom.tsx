@@ -24,7 +24,7 @@ const inviteCode = 'QUIZ123';
 const WaitingRoom = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [members, setMembers] = useState<Member[]>(Members);
+  const [members] = useState<Member[]>(Members);
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
