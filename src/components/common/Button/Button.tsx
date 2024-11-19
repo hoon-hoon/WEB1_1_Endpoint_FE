@@ -1,14 +1,14 @@
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
   variant?: 'fill' | 'unfill';
-  color?: string; // 배경 색상
-  textColor?: string; // 텍스트 색상
-  borderColor?: string; // 테두리 색상
+  color?: string;
+  textColor?: string;
+  borderColor?: string;
   size?: 'small' | 'medium' | 'large' | 'long';
-  showBorder?: boolean; // fill일 때도 테두리를 표시할지 여부
+  showBorder?: boolean;
 }
 
 function Button({
@@ -43,7 +43,7 @@ function Button({
         filter: 'brightness(1)',
         transition: 'filter 0.2s ease',
       }}
-      // 터치 이벤트 발생 시 버튼이 눌렸다는 표시를 위해 filter 속성을 변경
+      // 터치 이벤트 발생 시 살짝 어두워짐
       onTouchStart={(e) => {
         (e.currentTarget as HTMLElement).style.filter = 'brightness(0.9)';
       }}

@@ -14,14 +14,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* 인증 관련 경로는 AuthLayout을 사용 */}
+        {/* 인증 관련 경로 AuthLayout*/}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/kakao/callback" element={<CallbackPage provider="kakao" />} />
           <Route path="/auth/google/callback" element={<CallbackPage provider="google" />} />
         </Route>
 
-        {/* 나머지 경로는 MainLayout을 사용 */}
+        {/* 그 외 BottomNavbar 사용시 MainLayout */}
         <Route element={<MainLayout activeTab={activeTab} setActiveTab={setActiveTab} />}>
           <Route path="/" element={<MainPage />} />
           <Route path="/game" element={<GamePage />} />
@@ -29,6 +29,7 @@ function App() {
           <Route path="/profile" element={<MyPage />} />
           <Route path="/game/create" element={<CreateGame />} />
           <Route path="/game/waiting" element={<WaitingRoom />} />
+          {/* 추가적인 페이지 라우팅을 등록 */}
         </Route>
       </Routes>
     </Router>
