@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import TopBar from '@/components/common/TopBar';
 import { ArrowRight } from 'lucide-react';
+import FlexBox from '@/shared/FlexBox';
 import Button from '@/components/common/Button/Button';
 
 export default function CodeEntry() {
@@ -15,9 +16,8 @@ export default function CodeEntry() {
   };
 
   return (
-    <div className="bg-gray-50 flex flex-col">
+    <FlexBox direction="col">
       <TopBar leftIcon="left" leftText="코드로 참가" onClickLeft={() => navigate(-1)} />
-
       <main className="flex-1 pt-20 pb-6 px-4">
         <div className="max-w-md mx-auto">
           <div className="p-6 mb-6 bg-white border rounded-lg">
@@ -46,6 +46,6 @@ export default function CodeEntry() {
           </p>
         </div>
       </main>
-    </div>
+    </FlexBox>
   );
 }

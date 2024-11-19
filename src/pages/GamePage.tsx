@@ -8,7 +8,7 @@ import defaultImageURL from '@/shared/defaultImage';
 export default function Game() {
   const navigate = useNavigate();
   return (
-    <div className="w-full flex flex-col">
+    <div className="flex flex-col">
       <TopBar />
       <main className="flex-1 pt-16">
         <div className="max-w-md mx-auto p-6">
@@ -39,7 +39,10 @@ export default function Game() {
               <Icon icon={'chevron_right_outlined'} />
             </button>
 
-            <button className="w-full flex h-16 text-lg justify-between items-center p-4 bg-white border rounded-l focus:bg-gray-100">
+            <button
+              className="w-full flex h-16 text-lg justify-between items-center p-4 bg-white border rounded-l focus:bg-gray-100"
+              onClick={() => navigate('/game/random')}
+            >
               <div className="flex items-center gap-3">
                 <IoGameControllerOutline size={24} />
                 랜덤 매칭
@@ -49,7 +52,7 @@ export default function Game() {
 
             <button
               className="w-full flex h-16 text-lg justify-between items-center p-4 bg-white border rounded-lg focus:bg-gray-100"
-              onClick={() => console.log(11)}
+              onClick={() => navigate('/game/entry')}
             >
               <div className="flex items-center gap-3">
                 <IoTrophyOutline size={24} />

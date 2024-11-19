@@ -57,7 +57,7 @@ const WaitingRoom = () => {
   };
 
   return (
-    <div className="bg-gray-50 flex flex-col">
+    <div className="flex flex-col">
       <TopBar leftIcon="left" leftText="게임 대기방" onClickLeft={() => navigate(-1)} />
 
       {isLoading && (
