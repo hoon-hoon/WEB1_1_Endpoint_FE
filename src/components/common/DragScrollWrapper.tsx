@@ -28,7 +28,7 @@ export default function DragScrollWrapper({ children }: { children: React.ReactN
 
   return (
     <div
-      className="w-full flex space-x-4 overflow-x-auto scrollbar-hide"
+      className="flex space-x-8 overflow-x-auto scrollbar-hide"
       ref={containerRef}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
