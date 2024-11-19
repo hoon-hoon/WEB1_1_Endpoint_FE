@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { BottomNavBar } from './components';
 import { GamePage, MainPage, MyPage, SearchPage } from './pages';
-import CreateGame from './pages/game/CreateGame';
-import WaitingRoom from './pages/game/WaitingRoom';
+import { CreateGame, WaitingRoom, RandomMatch } from './pages/game';
+
 import { useState } from 'react';
 
 function App() {
@@ -18,6 +18,7 @@ function App() {
           <Route path="/profile" element={<MyPage />} />
           <Route path="/game/create" element={<CreateGame />} />
           <Route path="/game/waiting" element={<WaitingRoom />} />
+          <Route path="/game/random" element={<RandomMatch />} />
           {/* 추가적인 페이지 라우팅을 등록 */}
         </Routes>
         <BottomNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
