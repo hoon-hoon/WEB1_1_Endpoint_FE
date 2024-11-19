@@ -1,6 +1,7 @@
 import { QuizWrapper } from '@/components';
+import { Quiz } from '@/types';
 
-const dummyQuizzes = [
+const dummyQuizzes: Quiz[] = [
   {
     id: 1,
     type: 'OX',
