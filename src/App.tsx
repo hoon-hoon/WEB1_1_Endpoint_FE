@@ -1,31 +1,28 @@
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { BottomNavBar } from './components';
 import { GamePage, MainPage, MyPage, SearchPage } from './pages';
+import CreateGame from './pages/game/CreateGame';
+import WaitingRoom from './pages/game/WaitingRoom';
+import { useState } from 'react';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'home':
-        return <MainPage />;
-      case 'game':
-        return <GamePage />;
-      case 'search':
-        return <SearchPage />;
-      case 'profile':
-        return <MyPage />;
-      default:
-        return <MainPage />;
-    }
-  };
   return (
-    <>
+    <Router>
       <div className="pb-16">
-        {renderContent()}
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/game" element={<GamePage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/profile" element={<MyPage />} />
+          <Route path="/game/create" element={<CreateGame />} />
+          <Route path="/game/waiting" element={<WaitingRoom />} />
+          {/* 추가적인 페이지 라우팅을 등록 */}
+        </Routes>
         <BottomNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
-    </>
+    </Router>
   );
 }
 
