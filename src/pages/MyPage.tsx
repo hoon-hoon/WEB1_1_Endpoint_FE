@@ -1,3 +1,4 @@
+import { MenuButton } from '@/components/mypage/MenuButton';
 import { Modal } from '@/components/mypage/Modal';
 import TopBar from '@/components/TopBar';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
@@ -74,27 +75,9 @@ export default function MyPage() {
           </button>
         </div>
 
-        <button className="flex w-full items-center justify-between rounded-lg bg-white p-4 border border-gray-300 shadow-sm">
-          <div className="flex items-center gap-2">
-            <Icon icon="theme" size={24} />
-            <span>오답노트</span>
-          </div>
-          <Icon icon="chevron_right_outlined" size={24} />
-        </button>
-        <button className="flex w-full items-center justify-between rounded-lg bg-white p-4 border border-gray-300 shadow-sm">
-          <div className="flex items-center gap-2">
-            <Icon icon="pencil" size={24} />
-            <span>내 퀴즈 만들기</span>
-          </div>
-          <Icon icon="chevron_right_outlined" size={24} />
-        </button>
-        <button className="flex w-full items-center justify-between rounded-lg bg-white p-4 border border-gray-300 shadow-sm">
-          <div className="flex items-center gap-2">
-            <Icon icon="paper_blank_portrait" size={24} />
-            <span>내 퀴즈 관리하기</span>
-          </div>
-          <Icon icon="chevron_right_outlined" size={24} />
-        </button>
+        <MenuButton icon="theme" label="오답노트" />
+        <MenuButton icon="pencil" label="내 퀴즈 만들기" />
+        <MenuButton icon="paper_blank_portrait" label="내 퀴즈 관리하기" />
       </main>
       <Modal
         isOpen={isModalOpen}
