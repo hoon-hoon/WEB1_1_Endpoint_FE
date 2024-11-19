@@ -1,11 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MainLayout from './layouts/MainLayout';
-import AuthLayout from './layouts/AuthLayout';
+import { BottomNavBar } from './components';
 import { GamePage, MainPage, MyPage, SearchPage } from './pages';
 import CreateGame from './pages/game/CreateGame';
 import WaitingRoom from './pages/game/WaitingRoom';
-import CallbackPage from './pages/Login/CallbackPage';
-import LoginPage from './pages/Login/LoginPage';
 import { useState } from 'react';
 
 function App() {
@@ -13,16 +10,8 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        {/* 인증 관련 경로 AuthLayout*/}
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/auth/kakao/callback" element={<CallbackPage provider="kakao" />} />
-          <Route path="/auth/google/callback" element={<CallbackPage provider="google" />} />
-        </Route>
-
-        {/* 그 외 BottomNavbar 사용시 MainLayout */}
-        <Route element={<MainLayout activeTab={activeTab} setActiveTab={setActiveTab} />}>
+      <div className="pb-16">
+        <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/search" element={<SearchPage />} />
@@ -30,8 +19,9 @@ function App() {
           <Route path="/game/create" element={<CreateGame />} />
           <Route path="/game/waiting" element={<WaitingRoom />} />
           {/* 추가적인 페이지 라우팅을 등록 */}
-        </Route>
-      </Routes>
+        </Routes>
+        <BottomNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
+      </div>
     </Router>
   );
 }
