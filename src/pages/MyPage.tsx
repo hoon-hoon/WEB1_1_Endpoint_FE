@@ -1,6 +1,6 @@
+import TopBar from '@/components/common/TopBar';
 import { MenuButton } from '@/components/mypage/MenuButton';
 import { Modal } from '@/components/mypage/Modal';
-import TopBar from '@/components/TopBar';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { useState } from 'react';
@@ -75,9 +75,9 @@ export default function MyPage() {
           </button>
         </div>
 
-        <MenuButton icon="theme" label="오답노트" />
-        <MenuButton icon="pencil" label="내 퀴즈 만들기" />
-        <MenuButton icon="paper_blank_portrait" label="내 퀴즈 관리하기" />
+        <MenuButton icon="theme" label="오답노트" to="/" />
+        <MenuButton icon="pencil" label="내 퀴즈 만들기" to="/" />
+        <MenuButton icon="paper_blank_portrait" label="내 퀴즈 관리하기" to="/" />
       </main>
       <Modal
         isOpen={isModalOpen}
