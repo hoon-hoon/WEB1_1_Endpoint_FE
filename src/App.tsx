@@ -1,11 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
+import { LoginPage, InterestPage, CallbackPage } from './pages/Login';
 import { GamePage, MainPage, MyPage, SearchPage } from './pages';
 import { CreateGame, WaitingRoom, RandomMatch, CodeEntry } from './pages/game';
-import CallbackPage from './pages/Login/CallbackPage';
-import LoginPage from './pages/Login/LoginPage';
-
 import { useState } from 'react';
 import ReviewNote from './pages/profile/ReviewNote';
 
@@ -20,6 +18,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/kakao/callback" element={<CallbackPage provider="kakao" />} />
           <Route path="/auth/google/callback" element={<CallbackPage provider="google" />} />
+          <Route path="/login/interest" element={<InterestPage />} />
         </Route>
 
         {/* 그 외 BottomNavbar 사용시 MainLayout */}
