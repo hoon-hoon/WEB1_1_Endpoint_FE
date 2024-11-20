@@ -26,14 +26,14 @@ function QuizOX({ quiz, onAnswerSelect }: QuizOXProps) {
         <Button
           label="O"
           onClick={() => handleAnswerSelect('O')}
-          color={selectedAnswer === 'O' ? (isCorrect ? 'pastelGreen' : 'pastelRed') : 'gray'}
+          color={selectedAnswer === 'O' ? (isCorrect ? '#A0E2B0' : '#FAA4A3') : 'gray'}
           variant={selectedAnswer === 'O' ? 'fill' : 'unfill'}
           size="long"
         />
         <Button
           label="X"
           onClick={() => handleAnswerSelect('X')}
-          color={selectedAnswer === 'X' ? (isCorrect ? 'pastelGreen' : 'pastelRed') : 'gray'}
+          color={selectedAnswer === 'X' ? (isCorrect ? '#A0E2B0' : '#FAA4A3') : 'gray'}
           variant={selectedAnswer === 'X' ? 'fill' : 'unfill'}
           size="long"
         />

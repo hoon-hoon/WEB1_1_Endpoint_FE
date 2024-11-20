@@ -9,7 +9,7 @@ interface QuizMulProps {
 
 function QuizMul({ quiz, onAnswerSelect }: QuizMulProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [, setIsCorrect] = useState<boolean | null>(null);
 
   const handleAnswerSelect = (option: string) => {
     if (selectedAnswer) return;
@@ -23,15 +23,15 @@ function QuizMul({ quiz, onAnswerSelect }: QuizMulProps) {
       <h3 className="text-lg font-semibold">{quiz.question}</h3>
       <ul className="space-y-2 mt-4">
         {quiz.options.map((option, index) => {
-          let color: 'pastelGreen' | 'pastelRed' | 'gray' = 'gray';
+          let color: '#A0E2B0' | '#FAA4A3' | 'gray' = 'gray';
           let variant: 'fill' | 'unfill' = 'unfill';
 
           if (selectedAnswer) {
             if (option === quiz.correctAnswer) {
-              color = 'pastelGreen';
+              color = '#A0E2B0';
               variant = 'fill';
             } else if (option === selectedAnswer) {
-              color = 'pastelRed';
+              color = '#FAA4A3';
               variant = 'fill';
             }
           }
