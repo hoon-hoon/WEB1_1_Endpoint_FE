@@ -3,7 +3,6 @@ import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useState } from 'react';
 import { QuizAB, QuizAns, QuizFooter, QuizMul, QuizOX } from '.';
 import BottomSheet from '../common/BottomSheet';
-import Card from '../common/Card';
 
 interface QuizWrapperProps {
   quiz: Quiz;
@@ -38,8 +37,8 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   };
 
   return (
-    <>
-      <Card>
+    <div className="flex items-center h-full">
+      <div className="w-full p-6 bg-white border border-gray-300 rounded-lg shadow-md">
         <div className="flex items-center mb-4">
           <Avatar size="S" />
           <div className="ml-4">
@@ -60,13 +59,13 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
           onToggleLike={handleToggleLike}
           onCommentsClick={() => setBottomSheetOpen(true)}
         />
-      </Card>
+      </div>
       <BottomSheet
         isOpen={isBottomSheetOpen}
         setOpen={setBottomSheetOpen}
         comments={quiz.comments}
       />
-    </>
+    </div>
   );
 }
 
