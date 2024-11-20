@@ -31,8 +31,8 @@ export default function Dialog({
           onClick={(e) => e.stopPropagation()}
         >
           <p className="text-center font-bold text-lg text-balance"> {title}</p>
-          <button onClick={onClose} className="absolute top-4 right-4">
-            <Icon icon={'close'} size={24} />
+          <button onClick={onClose} className="absolute top-4 right-2">
+            <Icon icon={'close'} size={28} />
           </button>
 
           {description && <div className="p-4 text-neutral-500 ">{description}</div>}
