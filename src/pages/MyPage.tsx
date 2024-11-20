@@ -5,6 +5,7 @@ import { AchievementModal } from '@/components/mypage/AchievementModal';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { useState } from 'react';
+import UserModal from '@/components/mypage/UserModal';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];
 
@@ -15,8 +16,23 @@ interface Achievement {
   achieved: boolean;
 }
 
+interface ModalStates {
+  achievement: boolean;
+  user: boolean;
+}
+
 export default function MyPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalStates, setModalStates] = useState<ModalStates>({
+    achievement: false,
+    user: false,
+  });
+
+  const handleModalToggle = (modalName: keyof ModalStates, isOpen: boolean) => {
+    setModalStates((prev) => ({
+      ...prev,
+      [modalName]: isOpen,
+    }));
+  };
 
   const achievements: Achievement[] = [
     {
@@ -41,7 +57,7 @@ export default function MyPage() {
 
   const achievedAchievements = achievements
     .filter((achievement) => achievement.achieved)
-    .slice(0, 3); // 달성한 업적 중 3개만
+    .slice(0, 3);
 
   return (
     <div className="max-w-full min-h-screen bg-gray-50">
@@ -62,7 +78,7 @@ export default function MyPage() {
                 <p className="text-sm text-gray-500">레이팅: 1500</p>
               </div>
             </div>
-            <button className="text-gray-400">
+            <button className="text-gray-400" onClick={() => handleModalToggle('user', true)}>
               <Icon icon="gear" size={24} />
             </button>
           </div>
@@ -78,7 +94,7 @@ export default function MyPage() {
           </div>
         </div>
 
-        <div className=" rounded-xl bg-white p-4 border border-gray-300 shadow-sm">
+        <div className="rounded-xl bg-white p-4 border border-gray-300 shadow-sm">
           <h3 className="mb-4 text-lg font-medium">업적</h3>
           {achievedAchievements.length > 0 ? (
             <div className="space-y-4">
@@ -96,7 +112,7 @@ export default function MyPage() {
             <p className="text-gray-500">아직 달성한 업적이 없습니다.</p>
           )}
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => handleModalToggle('achievement', true)}
             className="mt-4 w-full rounded-lg border border-gray-300 py-3 text-center text-gray-600"
           >
             전체 업적 조회하기
@@ -107,9 +123,11 @@ export default function MyPage() {
         <MenuButton icon="pencil" label="내 퀴즈 만들기" to="/" />
         <MenuButton icon="paper_blank_portrait" label="내 퀴즈 관리하기" to="/" />
       </main>
+
+      <UserModal isOpen={modalStates.user} onClose={() => handleModalToggle('user', false)} />
       <AchievementModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={modalStates.achievement}
+        onClose={() => handleModalToggle('achievement', false)}
         achievements={achievements}
       />
     </div>
