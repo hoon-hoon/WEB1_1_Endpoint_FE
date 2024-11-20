@@ -1,4 +1,5 @@
 import { QuizWrapper } from '@/components';
+import TopBar from '@/components/common/TopBar';
 import { Quiz } from '@/types';
 
 const dummyQuizzes: Quiz[] = [
@@ -89,11 +90,14 @@ const dummyQuizzes: Quiz[] = [
 
 const MainPage = () => {
   return (
+    <>
+    <TopBar />
     <div style={{ marginTop: '64px', padding: '16px' }}>
       {dummyQuizzes.map((quiz) => (
         <QuizWrapper key={quiz.id} quiz={quiz} />
       ))}
     </div>
+    </>
   );
 };
 
