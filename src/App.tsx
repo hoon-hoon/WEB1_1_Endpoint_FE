@@ -2,10 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
 import { LoginPage, InterestPage, CallbackPage } from './pages/Login';
-import { GamePage, MainPage, MyPage, SearchPage } from './pages'
+import { GamePage, MainPage, MyPage, SearchPage } from './pages';
 import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play } from './pages/game';
-import CallbackPage from './pages/Login/CallbackPage';
-import LoginPage from './pages/Login/LoginPage';
 import { useState } from 'react';
 import ReviewNote from './pages/profile/ReviewNote';
 
