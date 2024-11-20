@@ -1,5 +1,5 @@
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
-import ProgressBar from '../ProgressBar';
+import ProgressBar from '../common/ProgressBar';
 
 interface QuizAnsProps {
   isCorrect: boolean;

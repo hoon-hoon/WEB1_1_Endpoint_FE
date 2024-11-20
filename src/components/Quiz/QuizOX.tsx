@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { QuizOX as QuizOXType } from '@/types';
-import { Button } from '../Button';
+import { Button } from '../common/Button';
 
 interface QuizOXProps {
   quiz: QuizOXType;

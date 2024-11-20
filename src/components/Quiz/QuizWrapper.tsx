@@ -2,7 +2,7 @@ import { Quiz } from '@/types';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useState } from 'react';
 import { QuizAB, QuizAns, QuizFooter, QuizMul, QuizOX } from '.';
-import BottomSheet from '../BottomSheet';
+import BottomSheet from '../common/BottomSheet';
 
 interface QuizWrapperProps {
   quiz: Quiz;
@@ -38,10 +38,7 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
 
   return (
     <>
-      <div
-        className="border rounded-lg shadow-sm p-4 mb-4 bg-white"
-        style={{ maxWidth: '600px'}}
-      >
+      <div className="border rounded-lg shadow-sm p-4 mb-4 bg-white" style={{ maxWidth: '600px' }}>
         <div className="flex items-center mb-4">
           <Avatar size="S" />
           <div className="ml-4">
