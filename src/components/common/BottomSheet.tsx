@@ -9,7 +9,6 @@ import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useState } from 'react';
-import FlexBox from '../../shared/FlexBox';
 import { Comment } from '@/types';
 
 type BottomSheetProps = {
@@ -70,7 +69,7 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
           </div>
         </div>
         <div className="w-full border-t-2 fixed bottom-4 pt-3 bg-white">
-          <FlexBox className="px-4 gap-4">
+          <div className="flex flex-col px-4 gap-4">
             <TextField
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -81,7 +80,7 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
             <div className="p-3 bg-black rounded-xl" onClick={() => console.log('댓글 게시')}>
               <Icon icon="add" className="fill-white" />
             </div>
-          </FlexBox>
+          </div>
         </div>
       </DrawerContent>
     </Drawer>

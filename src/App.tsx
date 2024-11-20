@@ -3,7 +3,7 @@ import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
 import { LoginPage, InterestPage, CallbackPage } from './pages/Login';
 import { GamePage, MainPage, MyPage, SearchPage } from './pages';
-import { CreateGame, WaitingRoom, RandomMatch, CodeEntry } from './pages/game';
+import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play } from './pages/game';
 import { useState } from 'react';
 import ReviewNote from './pages/profile/ReviewNote';
 
@@ -34,6 +34,7 @@ function App() {
           <Route path="/game/entry" element={<CodeEntry />} />
           {/* 추가적인 페이지 라우팅을 등록 */}
         </Route>
+        <Route path="/game/play" element={<Play />} />
       </Routes>
     </Router>
   );

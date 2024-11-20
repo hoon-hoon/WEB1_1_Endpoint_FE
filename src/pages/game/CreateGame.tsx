@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import TopBar from '@/components/common/TopBar';
 import DropDown from '@/components/common/DropDown';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
-import Button from '@/components/common/Button/Button';
+import Container from '@/shared/Container';
+import FlexBox from '@/shared/FlexBox';
+import Label from '@/shared/Label';
+import Card from '@/components/common/Card';
+import { Button as ShadcnButton } from '@/shadcn/ui/button';
 
 const topics = [
   'JavaScript',
@@ -35,56 +39,48 @@ export default function CreateGame() {
   };
 
   return (
-    <div className="bg-gray-50 flex flex-col">
+    <FlexBox direction="col">
       <TopBar leftIcon="left" leftText="게임 방 생성" onClickLeft={() => navigate(-1)} />
-
-      <main className="flex-1 pt-20 pb-6 px-4">
-        <div className="max-w-md mx-auto">
-          <div className="p-6 mb-4 bg-white border rounded-lg">
-            <div className="pb-8">
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="room-name">
-                퀴즈 주제
-              </label>
-              <DropDown
-                items={topics}
-                selectedItem={topic}
-                setItem={setTopic}
-                placeholder="퀴즈 주제를 입력하세요"
-              />
-            </div>
-            <div className="pb-8">
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="room-name">
-                난이도
-              </label>
-              <DropDown
-                items={difficulties}
-                selectedItem={difficulty}
-                setItem={setDifficulty}
-                placeholder="난이도를 선택하세요"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="room-name">
-                문제 갯수
-              </label>
-              <NumberStepper
-                count={quizCount}
-                setCount={(count) => handleCount(count)}
-                width={'long'}
-                size={'M'}
-                description="최소 5문제부터 최대 20문제까지 가능합니다"
-              />
-            </div>
+      <Container>
+        <Card>
+          <div className="pb-8">
+            <Label content="퀴즈 주제" htmlFor="room-name" />
+            <DropDown
+              items={topics}
+              selectedItem={topic}
+              setItem={setTopic}
+              placeholder="퀴즈 주제를 입력하세요"
+            />
           </div>
-          <Button
-            label="방 생성하기"
-            variant="fill"
-            color="gray"
-            size="long"
-            onClick={() => navigate('/game/waiting', { state: { topic, difficulty, quizCount } })}
-          />
-        </div>
-      </main>
-    </div>
+          <div className="pb-8">
+            <Label content="난이도" htmlFor="difficulty" />
+            <DropDown
+              items={difficulties}
+              selectedItem={difficulty}
+              setItem={setDifficulty}
+              placeholder="난이도를 선택하세요"
+            />
+          </div>
+          <div>
+            <Label content="문제 갯수" htmlFor="quiz-count" />
+            <NumberStepper
+              count={quizCount}
+              setCount={(count) => handleCount(count)}
+              width={'long'}
+              size={'M'}
+              description="최소 5문제부터 최대 20문제까지 가능합니다"
+            />
+          </div>
+        </Card>
+
+        <ShadcnButton
+          className="w-full h-14 text-lg"
+          size="lg"
+          onClick={() => navigate('/game/waiting', { state: { topic, difficulty, quizCount } })}
+        >
+          방 생성하기
+        </ShadcnButton>
+      </Container>
+    </FlexBox>
   );
 }
