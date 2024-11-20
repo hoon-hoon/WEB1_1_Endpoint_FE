@@ -1,6 +1,7 @@
-import { useReducer } from 'react';
+import '@/styles/transition.css';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
+import { useTopBarState } from '@/hooks/useTopBarState';
 import { MdLogout } from 'react-icons/md';
 import { SiQuizlet } from 'react-icons/si';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shadcn/ui/popover';
@@ -16,42 +17,18 @@ type TopBarProps = {
   onClickLeft?: () => void;
 };
 
-type ActionType =
-  | { type: 'TOGGLE_POP' }
-  | { type: 'LOGOUT' }
-  | { type: 'EXIT' }
-  | { type: 'CLOSE' };
-
-type StateType = {
-  isPop: boolean;
-  showLogoutDialog: boolean;
-  showExitDialog: boolean;
-};
-
-const reducer = (state: StateType, action: ActionType): StateType => {
-  switch (action.type) {
-    case 'TOGGLE_POP':
-      return { ...state, isPop: !state.isPop };
-    case 'LOGOUT':
-      return { ...state, isPop: false, showLogoutDialog: true };
-    case 'EXIT':
-      return { ...state, isPop: false, showExitDialog: true };
-    case 'CLOSE':
-      return { ...state, isPop: false, showLogoutDialog: false, showExitDialog: false };
-    default:
-      return state;
-  }
-};
-
-const initialState: StateType = {
-  isPop: false,
-  showLogoutDialog: false,
-  showExitDialog: false,
-};
-
 const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProps) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useTopBarState();
 
+  const handleTransition = (onClickLeft: () => void) => {
+    if (!document.startViewTransition) {
+      onClickLeft();
+      return;
+    }
+    document.startViewTransition(() => {
+      onClickLeft();
+    });
+  };
   // 로그아웃
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
@@ -68,9 +45,9 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
           {leftIcon === 'default' ? (
             <SiQuizlet size={32} color="blue" />
           ) : (
-            <div className="cursor-pointer" onClick={onClickLeft}>
+            <button onClick={() => handleTransition(onClickLeft!)}>
               <Icon icon={'chevron_left_outlined'} />
-            </div>
+            </button>
           )}
           {leftText === '' ? (
             <span className="text-2xl font-bold">uizy</span>
