@@ -1,11 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
+import { LoginPage, InterestPage, CallbackPage } from './pages/Login';
 import { GamePage, MainPage, MyPage, SearchPage } from './pages';
-import { CreateGame, WaitingRoom, RandomMatch, CodeEntry } from './pages/game';
-import CallbackPage from './pages/Login/CallbackPage';
-import LoginPage from './pages/Login/LoginPage';
-
+import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play } from './pages/game';
 import { useState } from 'react';
 import ReviewNote from './pages/profile/ReviewNote';
 
@@ -20,6 +18,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/kakao/callback" element={<CallbackPage provider="kakao" />} />
           <Route path="/auth/google/callback" element={<CallbackPage provider="google" />} />
+          <Route path="/login/interest" element={<InterestPage />} />
         </Route>
 
         {/* 그 외 BottomNavbar 사용시 MainLayout */}
@@ -35,6 +34,7 @@ function App() {
           <Route path="/game/entry" element={<CodeEntry />} />
           {/* 추가적인 페이지 라우팅을 등록 */}
         </Route>
+        <Route path="/game/play" element={<Play />} />
       </Routes>
     </Router>
   );

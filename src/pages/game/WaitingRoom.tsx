@@ -9,7 +9,8 @@ import TopBar from '@/components/common/TopBar';
 import DragScrollWrapper from '@/components/common/DragScrollWrapper';
 import MemberItem from '@/components/MemberItem';
 import { Member } from '@/components/MemberItem';
-import Button from '@/components/common/Button/Button';
+import Card from '@/components/common/Card';
+import { Button as ShadcnButton } from '@/shadcn/ui/button';
 
 const Members: Member[] = [
   { id: 'a', nickName: '플레이어1', isHost: true, rating: 2000 },
@@ -57,7 +58,7 @@ const WaitingRoom = () => {
   };
 
   return (
-    <div className="bg-gray-50 flex flex-col">
+    <div className="flex flex-col">
       <TopBar leftIcon="left" leftText="게임 대기방" onClickLeft={() => navigate(-1)} />
 
       {isLoading && (
@@ -82,82 +83,82 @@ const WaitingRoom = () => {
         />
       )}
       <section className="pt-20 px-4">
-        <div className="max-w-md mx-auto">
-          <div className="p-4 mb-4 bg-white border rounded-lg">
-            <label className="block text-m font-bold text-gray-700 mb-1">참여자</label>
-            <DragScrollWrapper>
-              {members.map((member: Member) => (
-                <>
-                  <MemberItem member={member} key={member.id} handleExit={handleDialog} />
-                </>
-              ))}
-            </DragScrollWrapper>
-          </div>
-        </div>
+        <Card>
+          <label className="block text-m font-bold text-gray-700 mb-1">참여자</label>
+          <DragScrollWrapper>
+            {members.map((member: Member) => (
+              <>
+                <MemberItem member={member} key={member.id} handleExit={handleDialog} />
+              </>
+            ))}
+          </DragScrollWrapper>
+        </Card>
       </section>
       <section className="px-4">
-        <div className="max-w-md mx-auto pb-8">
-          <div className="p-6 mb-4 bg-white border rounded-lg">
-            <div className="pb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">퀴즈 주제</label>
-              <div className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm">
-                <span>{topic}</span>
-              </div>
-            </div>
-            <div className="pb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">난이도</label>
-              <div className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm">
-                <span>{difficulty}</span>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="room-name">
-                문제 갯수
-              </label>
-              <NumberStepper
-                state="readOnly"
-                count={quizCount}
-                width={'long'}
-                size={'M'}
-                description="최소 5문제부터 최대 20문제까지 가능합니다"
-                setCount={() => console.log('')}
-              />
-            </div>
-          </div>
-          <div className="p-6 mb-8 bg-white border rounded-lg">
-            <h2 className="text-xl font-bold mb-4">초대 코드</h2>
-            <div className="flex items-center gap-2">
-              <TextField
-                value={inviteCode}
-                state="readOnly"
-                onChange={() => console.log('')}
-                size={'M'}
-              />
-              <button
-                onClick={copyInviteCode}
-                className="bg-black p-2 rounded-lg focus:outline-none border "
-              >
-                {copied ? (
-                  <Icon icon="checkmark" className="fill-white" />
-                ) : (
-                  <Icon icon="copy" className="fill-white" />
-                )}
-              </button>
+        <Card>
+          <div className="pb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">퀴즈 주제</label>
+            <div className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm">
+              <span>{topic}</span>
             </div>
           </div>
 
-          <Button label="게임 시작" variant="fill" color="gray" size="long" onClick={startGame} />
+          <div className="pb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">난이도</label>
+            <div className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm">
+              <span>{difficulty}</span>
+            </div>
+          </div>
 
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              게임 시작 중...
-            </>
-          ) : (
-            <>
-              <Play className="mr-2 h-6 w-6" /> 게임 시작
-            </>
-          )}
+          <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="room-name">
+            문제 갯수
+          </label>
+          <NumberStepper
+            state="readOnly"
+            count={quizCount}
+            width={'long'}
+            size={'M'}
+            description="최소 5문제부터 최대 20문제까지 가능합니다"
+            setCount={() => console.log('')}
+          />
+        </Card>
+
+        <Card>
+          <h2 className="text-xl font-bold mb-4">초대 코드</h2>
+          <div className="flex items-center gap-2">
+            <TextField
+              value={inviteCode}
+              state="readOnly"
+              onChange={() => console.log('')}
+              size={'M'}
+            />
+            <ShadcnButton size="icon" onClick={copyInviteCode}>
+              {copied ? (
+                <Icon icon="checkmark" className="fill-white" />
+              ) : (
+                <Icon icon="copy" className="fill-white" />
+              )}
+            </ShadcnButton>
+          </div>
+        </Card>
+        <div className="max-w-xl mx-auto">
+          <ShadcnButton
+            className="w-full h-14 text-lg"
+            size="lg"
+            onClick={startGame}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                게임 시작 중...
+              </>
+            ) : (
+              <>
+                <Play className="mr-2 h-6 w-6" /> 게임 시작
+              </>
+            )}
+          </ShadcnButton>
         </div>
       </section>
     </div>
