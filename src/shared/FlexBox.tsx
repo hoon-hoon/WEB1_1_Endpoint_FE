@@ -9,7 +9,7 @@ export default function FlexBox({ className, direction, children }: FlexBoxProps
     <div
       className={`flex ${
         direction === 'col' ? 'flex-col' : 'flex-row'
-      } ${className?.includes('items-') ? '' : 'items-center'} ${className}`}
+      } max-w-xl mx-auto ${className}`}
     >
       {children}
     </div>

@@ -26,3 +26,9 @@ body {
     padding: 0 16px;
   }
 }
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
