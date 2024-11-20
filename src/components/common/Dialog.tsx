@@ -30,25 +30,25 @@ export default function Dialog({
           className="max-w-xs flex flex-col justify-center items-center p-4 bg-white rounded-xl relative"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex flex-row justify-between items-start gap-4">
-            <div className="flex flex-col body-04-bold whitespace-nowrap">
-              {label && <div>{label}</div>}
-              {title}
-            </div>
-            {dismissible && (
-              <button onClick={onClose} className="mr-2">
-                <Icon icon={'close'} size={24} />
-              </button>
-            )}
-          </div>
-          {description && <div className="body-02-regular">{description}</div>}
+          <p className="text-center font-bold text-lg text-balance"> {title}</p>
+          <button onClick={onClose} className="absolute top-4 right-4">
+            <Icon icon={'close'} size={24} />
+          </button>
+
+          {description && <div className="p-4 text-neutral-500 ">{description}</div>}
           {(leftText || rightText) && (
             <FlexBox className="gap-4 mt-4 justify-around items-center w-full">
               {leftText && (
                 <Button size="long" color="black" onClick={leftOnClick} label={leftText} />
               )}
               {rightText && (
-                <Button size="long" color="black" onClick={rightOnClick} label={rightText} />
+                <Button
+                  size="long"
+                  variant="unfill"
+                  color="black"
+                  onClick={rightOnClick}
+                  label={rightText}
+                />
               )}
             </FlexBox>
           )}
