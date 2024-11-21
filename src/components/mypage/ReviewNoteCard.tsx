@@ -1,5 +1,6 @@
 import { ReviewNoteItem } from '@/types/MyPageTpyes';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
+import Card from '../common/Card';
 
 export default function ReviewNoteCard({
   note,
@@ -9,7 +10,7 @@ export default function ReviewNoteCard({
   onDelete: (id: string) => void;
 }) {
   return (
-    <div className="bg-white rounded-lg border border-gray-300 relative">
+    <Card className="p-0 mb-0 border-gray-300 relative">
       <button
         onClick={() => onDelete(note.id)}
         className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 rounded-full"
@@ -65,6 +66,6 @@ export default function ReviewNoteCard({
           <p className="text-gray-700 leading-relaxed">{note.explanation}</p>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

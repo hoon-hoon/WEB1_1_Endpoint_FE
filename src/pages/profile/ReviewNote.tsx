@@ -3,6 +3,8 @@ import TopBar from '@/components/common/TopBar';
 import ReviewNoteCard from '@/components/mypage/ReviewNoteCard';
 import { ReviewNoteItem } from '@/types/MyPageTpyes';
 import { useNavigate } from 'react-router-dom';
+import Container from '@/shared/Container';
+import FlexBox from '@/shared/FlexBox';
 
 export default function ReviewNote() {
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ export default function ReviewNote() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <Container>
       <TopBar
         leftIcon="left"
         leftText="오답노트"
@@ -46,11 +48,11 @@ export default function ReviewNote() {
           navigate(-1);
         }}
       />
-      <main className="max-w-3xl mx-auto pt-20 p-4 space-y-6">
+      <FlexBox direction="col" className="gap-4">
         {notes.map((note) => (
           <ReviewNoteCard key={note.id} note={note} onDelete={handleDeleteNote} />
         ))}
-      </main>
-    </div>
+      </FlexBox>
+    </Container>
   );
 }
