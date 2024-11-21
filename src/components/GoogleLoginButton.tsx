@@ -1,4 +1,4 @@
-import Button from './common/Button/Button';
+import { Button } from '@/shadcn/ui/button';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
 const GoogleLoginButton = () => {
@@ -12,16 +12,14 @@ const GoogleLoginButton = () => {
 
   return (
     <Button
-      label="구글 로그인"
+      variant="google"
+      size="lg"
+      className="w-full flex items-center justify-center gap-2 text-lg"
       onClick={handleGoogleLogin}
-      color="#FFFFFF"
-      textColor="#3c4043"
-      borderColor="#CCCCCC"
-      size="long"
-      icon={<Icon icon="google_color" />}
-      iconPosition="left"
-      showBorder={true}
-    />
+    >
+      <Icon icon="google_color" size={36} />
+      <span className="text-base font-semibold">구글로 시작하기</span>
+    </Button>
   );
 };
 
