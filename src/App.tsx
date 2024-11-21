@@ -6,6 +6,7 @@ import { GamePage, MainPage, MyPage, SearchPage } from './pages';
 import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play } from './pages/game';
 import { useState } from 'react';
 import ReviewNote from './pages/profile/ReviewNote';
+import QuizManagement from './pages/profile/QuizManagement';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
@@ -28,6 +29,7 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={<MyPage />} />
           <Route path="/profile/reviewNote" element={<ReviewNote />} />
+          <Route path="/profile/quizManagement" element={<QuizManagement />} />
           <Route path="/game/create" element={<CreateGame />} />
           <Route path="/game/waiting" element={<WaitingRoom />} />
           <Route path="/game/random" element={<RandomMatch />} />
