@@ -7,9 +7,9 @@ import { Play, Loader2 } from 'lucide-react';
 import Dialog from '@/components/common/Dialog';
 import TopBar from '@/components/common/TopBar';
 import DragScrollWrapper from '@/components/common/DragScrollWrapper';
-import MemberItem from '@/components/MemberItem';
-import { Member } from '@/components/MemberItem';
+import MemberItem, { Member } from '@/components/MemberItem';
 import Card from '@/components/common/Card';
+import Label from '@/shared/Label';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 
 const Members: Member[] = [
@@ -84,7 +84,7 @@ const WaitingRoom = () => {
       )}
       <section className="pt-20 px-4">
         <Card>
-          <label className="block text-m font-bold text-gray-700 mb-1">참여자</label>
+          <label className="block text-xl font-bold text-gray-700 mb-2">참여자</label>
           <DragScrollWrapper>
             {members.map((member: Member) => (
               <>
@@ -97,22 +97,20 @@ const WaitingRoom = () => {
       <section className="px-4">
         <Card>
           <div className="pb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">퀴즈 주제</label>
+            <Label className="block mb-2" content="퀴즈 주제" />
             <div className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm">
               <span>{topic}</span>
             </div>
           </div>
 
           <div className="pb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">난이도</label>
+            <Label className="block mb-2" content="난이도" />
             <div className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm">
               <span>{difficulty}</span>
             </div>
           </div>
 
-          <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="room-name">
-            문제 갯수
-          </label>
+          <Label className="block mb-2" content="문제 갯수" />
           <NumberStepper
             state="readOnly"
             count={quizCount}
@@ -141,7 +139,7 @@ const WaitingRoom = () => {
             </ShadcnButton>
           </div>
         </Card>
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-xl mx-auto mb-8">
           <ShadcnButton
             className="w-full h-14 text-lg"
             size="lg"
