@@ -10,18 +10,18 @@ export default function ReviewNoteCard({
   onDelete: (id: string) => void;
 }) {
   return (
-    <Card className="p-0 mb-0 border-gray-300 relative">
+    <Card className=" border-gray-300 relative">
       <button
         onClick={() => onDelete(note.id)}
         className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 rounded-full"
       >
         <Icon icon="close" size={24} />
       </button>
-      <div className="px-6 pt-6 space-y-2">
+      <div className="space-y-2">
         <h2 className="text-xl font-bold leading-tight pr-8">{note.question}</h2>
         <p className="text-gray-500">{note.date}</p>
       </div>
-      <div className="px-6 pb-6 pt-4 space-y-6">
+      <div className="pt-4 space-y-6">
         {note.choices ? (
           <div className="space-y-3">
             {note.choices.map((choice) => (
