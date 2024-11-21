@@ -1,10 +1,9 @@
 import { BaseQuizAPI } from '@/types';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useState } from 'react';
-import { QuizAB, QuizAns, QuizFooter, QuizMul, QuizOX } from '.';
+import { QuizAns, QuizFooter, QuizRenderer } from '.';
 import BottomSheet from '../common/BottomSheet';
-import { dummyComments } from '@/data/dummyComment';
-import { Comment } from '@/types';
+import { useComments } from '@/hooks';
 
 interface QuizWrapperProps {
   quiz: BaseQuizAPI;
@@ -19,22 +18,7 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [isBottomSheetOpen, setBottomSheetOpen] = useState(false);
 
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loadingComments, setLoadingComments] = useState(false);
-
-  const fetchComments = async (quizId: number) => {
-    setLoadingComments(true);
-    setComments([]);
-
-    // 더미 데이터에서 해당 퀴즈 ID에 맞는 댓글 가져오기
-    const response = dummyComments.filter((comment) => comment.quizId === quizId);
-
-    // 임의의 딜레이 추가 (로딩 효과를 모방)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    setComments(response);
-    setLoadingComments(false);
-  };
+  const { comments, loading, fetchComments } = useComments();
 
   const handleCommentsClick = () => {
     setBottomSheetOpen(true);
@@ -51,17 +35,6 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
     setIsCorrect(answer === quiz.answer.content);
   };
 
-  const renderQuizContent = () => {
-    if (quiz.type === 'OX 퀴즈') {
-      return <QuizOX quiz={quiz} onAnswerSelect={handleAnswerSelect} />;
-    } else if (quiz.type === 'ABTest') {
-      return <QuizAB quiz={quiz} />;
-    } else if (quiz.type === '객관식') {
-      return <QuizMul quiz={quiz} onAnswerSelect={handleAnswerSelect} />;
-    }
-    return null;
-  };
-
   return (
     <div className="flex items-center h-full">
       <div className="w-full p-6 bg-white border border-gray-300 rounded-lg shadow-md">
@@ -72,7 +45,7 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
             <p className="text-sm text-gray-500">{quiz.type}</p>
           </div>
         </div>
-        {renderQuizContent()}
+        <QuizRenderer quiz={quiz} onAnswerSelect={handleAnswerSelect} />
         {selectedAnswer !== null && isCorrect !== null && (
           <QuizAns isCorrect={isCorrect} explanation={quiz.answer.explanation} />
         )}
@@ -88,7 +61,7 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
         isOpen={isBottomSheetOpen}
         setOpen={setBottomSheetOpen}
         comments={comments}
-        loading={loadingComments}
+        loading={loading}
       />
     </div>
   );

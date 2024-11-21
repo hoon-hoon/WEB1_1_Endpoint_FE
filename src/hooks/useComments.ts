@@ -1,52 +1,49 @@
-// import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-// import axios from 'axios';
+import { useState } from 'react';
+import { Comment } from '@/types';
+import { dummyComments } from '@/data/dummyComment';
 
-// // 댓글 관련 API를 사용하기 위한 커스텀 훅
-// export const useComments = (quizId: string) => {
-//   const queryClient = useQueryClient();
+const useComments = () => {
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loading, setLoading] = useState(false);
 
-//   // 1. 댓글 가져오기
-//   const { data: comments, isLoading } = useQuery(['comments', quizId], async () => {
-//     const response = await axios.get(`/api/quizzes/${quizId}/comments`);
-//     return response.data;
-//   });
+  const fetchComments = async (quizId: number) => {
+    setLoading(true);
+    setComments([]);
 
-//   // 2. 댓글 등록
-//   const { mutate: addComment } = useMutation(
-//     async (content: string) => {
-//       await axios.post(`/api/quizzes/${quizId}/comments`, { content });
-//     },
-//     {
-//       onSuccess: () => {
-//         queryClient.invalidateQueries(['comments', quizId]); // 댓글 목록 갱신
-//       },
-//     }
-//   );
+    const response = dummyComments.filter((comment) => comment.quizId === quizId);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-//   // 3. 댓글 삭제
-//   const { mutate: deleteComment } = useMutation(
-//     async (commentId: number) => {
-//       await axios.delete(`/api/quizzes/${quizId}/comments/${commentId}`);
-//     },
-//     {
-//       onSuccess: () => {
-//         queryClient.invalidateQueries(['comments', quizId]); // 댓글 목록 갱신
-//       },
-//     }
-//   );
+    setComments(response);
+    setLoading(false);
+  };
 
-//   // 4. 댓글 수정
-//   const { mutate: editComment } = useMutation(
-//     async ({ commentId, content }: { commentId: number; content: string }) => {
-//       await axios.put(`/api/quizzes/${quizId}/comments/${commentId}`, { content });
-//     },
-//     {
-//       onSuccess: () => {
-//         queryClient.invalidateQueries(['comments', quizId]); // 댓글 목록 갱신
-//       },
-//     }
-//   );
+  const deleteComment = async (commentId: number) => {
+    setLoading(true);
 
-//   return {
-//     comments,
-//     isLoading,
+    const updatedComments = comments.filter((comment) => comment.id !== commentId);
+    setComments(updatedComments);
+
+    setLoading(false);
+  };
+
+  const editComment = async (commentId: number, newContent: string) => {
+    setLoading(true);
+
+    const updatedComments = comments.map((comment) =>
+      comment.id === commentId ? { ...comment, content: newContent } : comment,
+    );
+    setComments(updatedComments);
+
+    setLoading(false);
+  };
+
+  return {
+    comments,
+    loading,
+    fetchComments,
+    deleteComment,
+    editComment,
+  };
+};
+
+export default useComments;
