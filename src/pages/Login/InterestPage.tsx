@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { Button as ShadcnButton } from "@/shadcn/ui/button";
-import InterestButton from "../../components/common/Button/InterestButton";
-import Container from "@/shared/Container";
+import { useState } from 'react';
+import { Button as ShadcnButton } from '@/shadcn/ui/button';
+import InterestButton from '../../components/common/Button/InterestButton';
+import Container from '@/shared/Container';
 
 const mock_interests = [
-  "알고리즘",
-  "프로그래밍 언어",
-  "네트워크",
-  "운영체제",
-  "웹 개발",
-  "모바일 개발",
-  "데브옵스/인프라",
-  "데이터베이스",
-  "소프트웨어 공학",
+  '알고리즘',
+  '프로그래밍 언어',
+  '네트워크',
+  '운영체제',
+  '웹 개발',
+  '모바일 개발',
+  '데브옵스/인프라',
+  '데이터베이스',
+  '소프트웨어 공학',
 ];
 
 function InterestPage() {
@@ -30,7 +30,7 @@ function InterestPage() {
     <Container>
       <div className="flex flex-col items-center px-4 py-8 max-w-sm mx-auto">
         <div className="w-full">
-          <h3 className="text-2xl font-bold mb-2">관심사 선택</h3>
+          <h3 className="text-[26px] font-bold mb-2">관심사 선택</h3>
           <p className="text-base text-gray-700 mb-8">
             관심있는 주제를 선택하면 맞춤 퀴즈를 제공해드려요.
           </p>
@@ -51,7 +51,7 @@ function InterestPage() {
             variant="default"
             size="lg"
             className="w-full h-12 text-base"
-            onClick={() => console.log("선택된 관심사:", selectedInterests)}
+            onClick={() => console.log('선택된 관심사:', selectedInterests)}
           >
             선택 완료
           </ShadcnButton>
