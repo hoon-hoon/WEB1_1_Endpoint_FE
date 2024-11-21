@@ -1,53 +1,44 @@
 import { useState } from 'react';
-import type { QuizAB as QuizABType } from '@/types';
+import type { BaseQuizAPI } from '@/types';
 
-function QuizAB({ quiz }: { quiz: QuizABType }) {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+function QuizAB({ quiz }: { quiz: BaseQuizAPI }) {
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-  // 임시 선택 비율
-  const mockPercentages = {
-    optionA: { percentage: 60, count: 61 },
-    optionB: { percentage: 40, count: 40 },
-  };
-
-  const handleOptionClick = (option: string) => {
-    if (selectedOption) return;
-    setSelectedOption(option);
+  const handleOptionClick = (optionNo: number) => {
+    if (selectedOption !== null) return;
+    setSelectedOption(optionNo);
   };
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-4">{quiz.question}</h3>
+      <h3 className="text-lg font-semibold mb-4">{quiz.content}</h3>
       <div className="space-y-4">
-        {quiz.options.map((option, index) => {
+        {quiz.options.map((option) => {
           const isSelected = selectedOption !== null;
-          const isOptionA = option === quiz.options[0];
-          const percentage = isOptionA
-            ? mockPercentages.optionA.percentage
-            : mockPercentages.optionB.percentage;
-          const count = isOptionA ? mockPercentages.optionA.count : mockPercentages.optionB.count;
+          const isCurrentOption = selectedOption === option.no;
 
           return (
             <div
-              key={index}
+              key={option.no}
               className={`p-4 rounded-lg border text-sm font-medium cursor-pointer ${
                 !isSelected ? 'hover:bg-gray-100' : ''
               }`}
-              onClick={() => handleOptionClick(option)}
+              onClick={() => handleOptionClick(option.no)}
               style={{
                 background: isSelected
                   ? `linear-gradient(to right, ${
-                      isOptionA ? '#FBBF24' : '#E5E7EB'
-                    } ${percentage}%, #FFFFFF ${percentage}%)`
+                      isCurrentOption ? '#FBBF24' : '#E5E7EB'
+                    } ${option.selectionRatio * 100}%, #FFFFFF ${option.selectionRatio * 100}%)`
                   : '',
-                color: isSelected ? (isOptionA ? '#FFFFFF' : '#6B7280') : '#000000',
-                borderColor: isSelected ? (isOptionA ? '#FBBF24' : '#E5E7EB') : '#D1D5DB',
+                color: isSelected ? (isCurrentOption ? '#FFFFFF' : '#6B7280') : '#000000',
+                borderColor: isSelected ? (isCurrentOption ? '#FBBF24' : '#E5E7EB') : '#D1D5DB',
               }}
             >
-              {option}{' '}
+              {option.content}{' '}
               {isSelected && (
                 <span className="ml-2 font-semibold">
-                  {percentage}% ({count}명)
+                  {(option.selectionRatio * 100).toFixed(1)}% (
+                  {Math.round(option.selectionRatio * 100)}명)
                 </span>
               )}
             </div>
