@@ -37,8 +37,8 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   };
 
   return (
-    <>
-      <div className="border rounded-lg shadow-sm p-4 mb-4 bg-white" style={{ maxWidth: '600px' }}>
+    <div className="flex items-center h-full">
+      <div className="w-full p-6 bg-white border border-gray-300 rounded-lg shadow-md">
         <div className="flex items-center mb-4">
           <Avatar size="S" />
           <div className="ml-4">
@@ -65,7 +65,7 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
         setOpen={setBottomSheetOpen}
         comments={quiz.comments}
       />
-    </>
+    </div>
   );
 }
 

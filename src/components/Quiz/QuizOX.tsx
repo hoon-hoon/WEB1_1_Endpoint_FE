@@ -21,7 +21,6 @@ function QuizOX({ quiz, onAnswerSelect }: QuizOXProps) {
   return (
     <div>
       <h3 className="text-lg font-semibold mb-4">{quiz.question}</h3>
-
       <div className="flex space-x-2">
         <Button
           label="O"
