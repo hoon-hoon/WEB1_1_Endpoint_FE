@@ -21,7 +21,7 @@ type GameResult = {
 };
 
 export default function Result() {
-  const [rank, setRank] = useState<Rank>(1);
+  const [rank] = useState<Rank>(5);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const [showCelebrate, setCelebrate] = useState(true);
