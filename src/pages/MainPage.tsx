@@ -4,7 +4,7 @@ import 'swiper/css/pagination';
 
 import { QuizWrapper } from '@/components';
 import TopBar from '@/components/common/TopBar';
-import { dummyQuiz } from '@/data/dummyQuiz';
+import { dummyQuizzes } from '@/data/dummyQuiz';
 import Container from '@/shared/Container';
 
 const MainPage = () => {
@@ -17,7 +17,7 @@ const MainPage = () => {
           className="quizSwiper"
           style={{ height: 'calc(100vh - 9rem)' }}
         >
-          {dummyQuiz.map((quiz) => (
+          {dummyQuizzes.map((quiz) => (
             <SwiperSlide key={quiz.id}>
               <QuizWrapper quiz={quiz} />
             </SwiperSlide>

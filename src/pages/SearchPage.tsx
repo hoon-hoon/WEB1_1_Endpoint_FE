@@ -1,7 +1,7 @@
 import { QuizWrapper, TagList } from '@/components';
 import SearchBar from '@/components/common/SearchBar';
 import TopBar from '@/components/common/TopBar';
-import { dummyQuiz } from '@/data/dummyQuiz';
+import { dummyQuizzes } from '@/data/dummyQuiz';
 import Container from '@/shared/Container';
 
 const SearchPage = () => {
@@ -17,7 +17,7 @@ const SearchPage = () => {
         <SearchBar />
         <TagList tags={tags} onTagClick={handleTagClick} />
 
-        {dummyQuiz.map((quiz) => (
+        {dummyQuizzes.map((quiz) => (
           <QuizWrapper key={quiz.id} quiz={quiz} />
         ))}
       </Container>

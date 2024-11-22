@@ -1,9 +1,8 @@
-import type { Comment } from '@/types';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
 interface QuizFooterProps {
   likes: number;
-  comments: Comment[];
+  comments: number;
   isLiked: boolean;
   onToggleLike: () => void;
   onCommentsClick: () => void;
@@ -19,7 +18,7 @@ function QuizFooter({ likes, comments, isLiked, onToggleLike, onCommentsClick }:
 
       <button className="flex items-center" onClick={onCommentsClick} aria-label="댓글">
         <Icon icon="chat" />
-        <span className="ml-1">{comments.length}</span>
+        <span className="ml-1">{comments}</span>
       </button>
     </div>
   );

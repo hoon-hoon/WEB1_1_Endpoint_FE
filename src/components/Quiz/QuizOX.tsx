@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import type { QuizOX as QuizOXType } from '@/types';
+import type { BaseQuizAPI } from '@/types';
 import { Button } from '../common/Button';
 
 interface QuizOXProps {
-  quiz: QuizOXType;
+  quiz: BaseQuizAPI;
   onAnswerSelect: (answer: string) => void;
 }
 
@@ -14,13 +14,13 @@ function QuizOX({ quiz, onAnswerSelect }: QuizOXProps) {
   const handleAnswerSelect = (answer: string) => {
     if (selectedAnswer) return;
     setSelectedAnswer(answer);
-    setIsCorrect(answer === quiz.correctAnswer);
+    setIsCorrect(answer === quiz.answer.content);
     onAnswerSelect(answer);
   };
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-4">{quiz.question}</h3>
+      <h3 className="text-lg font-semibold mb-4">{quiz.content}</h3>
       <div className="flex space-x-2">
         <Button
           label="O"
@@ -32,7 +32,13 @@ function QuizOX({ quiz, onAnswerSelect }: QuizOXProps) {
         <Button
           label="X"
           onClick={() => handleAnswerSelect('X')}
-          color={selectedAnswer === 'X' ? (isCorrect ? '#A0E2B0' : '#FAA4A3') : 'gray'}
+          color={
+            selectedAnswer === 'X'
+              ? isCorrect
+                ? '#A0E2B0'
+                : '#FAA4A3'
+              : 'gray'
+          }
           variant={selectedAnswer === 'X' ? 'fill' : 'unfill'}
           size="long"
         />
