@@ -29,7 +29,7 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
 
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>
-      <DrawerContent className="h-3/5 w-full bg-white" aria-describedby="set-positions">
+      <DrawerContent className="h-3/5 w-full bg-white border-t-2" aria-describedby="set-positions">
         <DrawerHeader className="relative">
           <DrawerTitle>댓글</DrawerTitle>
           <DrawerDescription />
@@ -49,8 +49,8 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
           </div>
         </DrawerHeader>
 
-        <div className="flex flex-col space-y-4 justify-between h-full">
-          <div className="overflow-y-auto p-4">
+        <div className="flex flex-col space-y-4 justify-between overflow-y-scroll">
+          <div className="p-4">
             {comments.length > 0 ? (
               comments.map((comment) => (
                 <div key={comment.id} className="mb-4 flex items-start gap-3 border-b pb-2">
@@ -68,8 +68,8 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
             )}
           </div>
         </div>
-        <div className="w-full border-t-2 fixed bottom-4 pt-3 bg-white">
-          <div className="flex flex-col px-4 gap-4">
+        <div className="w-full border-t-2 sticky bottom-0 pt-4 pb-2 bg-white">
+          <div className="flex px-4 gap-4">
             <TextField
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
