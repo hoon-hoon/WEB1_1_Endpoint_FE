@@ -9,6 +9,8 @@ import UserModal from '@/components/mypage/UserModal';
 import Container from '@/shared/Container';
 import Card from '@/components/common/Card';
 import FlexBox from '@/shared/FlexBox';
+import { Button } from '@/shadcn/ui/button';
+import WithDrawalModal from '@/components/mypage/WithDrawalModal';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];
 
@@ -22,12 +24,14 @@ interface Achievement {
 interface ModalStates {
   achievement: boolean;
   user: boolean;
+  withdrawal: boolean;
 }
 
 export default function MyPage() {
   const [modalStates, setModalStates] = useState<ModalStates>({
     achievement: false,
     user: false,
+    withdrawal: false,
   });
 
   const handleModalToggle = (modalName: keyof ModalStates, isOpen: boolean) => {
@@ -66,7 +70,7 @@ export default function MyPage() {
     <Container>
       <TopBar />
 
-      <Card className="border-gray-300 ">
+      <Card className="border-gray-300">
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Avatar
@@ -130,6 +134,12 @@ export default function MyPage() {
           label="내 퀴즈 관리하기"
           to="/profile/quizManagement"
         />
+        <MenuButton
+          icon="person_outlined"
+          label="회원탈퇴"
+          to=""
+          onClick={() => handleModalToggle('withdrawal', true)}
+        />
       </FlexBox>
 
       <UserModal isOpen={modalStates.user} onClose={() => handleModalToggle('user', false)} />
@@ -137,6 +147,10 @@ export default function MyPage() {
         isOpen={modalStates.achievement}
         onClose={() => handleModalToggle('achievement', false)}
         achievements={achievements}
+      />
+      <WithDrawalModal
+        isOpen={modalStates.withdrawal}
+        onClose={() => handleModalToggle('withdrawal', false)}
       />
     </Container>
   );
