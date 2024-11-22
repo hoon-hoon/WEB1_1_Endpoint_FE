@@ -13,6 +13,11 @@ export const dummyQuiz: Quiz[] = [
     comments: [
       { id: 1, author: 'User1', authorAvatar: 'commentAvatarUrl1', content: '쉬워요' },
       { id: 2, author: 'User2', authorAvatar: 'commentAvatarUrl2', content: '배워갑니다.' },
+      { id: 3, author: 'User3', authorAvatar: 'commentAvatarUrl2', content: '배워갑니다.' },
+      { id: 4, author: 'User4', authorAvatar: 'commentAvatarUrl2', content: '배워갑니다.' },
+      { id: 5, author: 'User5', authorAvatar: 'commentAvatarUrl2', content: '배워갑니다.' },
+      { id: 6, author: 'User6', authorAvatar: 'commentAvatarUrl2', content: '배워갑니다.' },
+      { id: 7, author: 'User7', authorAvatar: 'commentAvatarUrl2', content: '배워갑니다.' },
     ],
   },
   {

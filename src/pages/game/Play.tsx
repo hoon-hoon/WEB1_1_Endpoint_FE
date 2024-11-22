@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TopBar from '@/components/common/TopBar';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Dialog from '@/components/common/Dialog';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import Container from '@/shared/Container';
+import FlexBox from '@/shared/FlexBox';
 import Card from '@/components/common/Card';
 import { Progress } from '@/shadcn/ui/progress';
 import { Medal, LogOut, CheckCircle, XCircle } from 'lucide-react';
@@ -24,6 +26,7 @@ type Question = {
 };
 
 export default function GameProgress() {
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(10);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -75,6 +78,7 @@ export default function GameProgress() {
         setSelectedAnswer(null);
         setShowAnswerResult(null);
       } else {
+        navigate('/game/result');
         // End game
       }
     }
@@ -99,21 +103,20 @@ export default function GameProgress() {
 
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
 
-  const handleExit = () => {
+  const openExitModal = () => {
     setShowExitConfirmation(true);
   };
-  /*
-  const confirmExit = () => {
-    console.log('Exiting the game');
+
+  const handleExit = () => {
+    navigate('/game');
   };
-  */
 
   const currentQuestionData = questions[currentQuestion];
 
   return (
-    <div className="flex flex-col">
+    <FlexBox>
       <TopBar />
-      <Container className="overflow-y-auto">
+      <Container className="overflow-y-auto pb-8">
         <Card className="mb-4">
           <div className="text-2xl font-bold text-center mb-2">남은 시간: {timeLeft}초</div>
           <Progress value={(timeLeft / 10) * 100} className="w-full" />
@@ -187,7 +190,7 @@ export default function GameProgress() {
       </Container>
 
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t">
-        <ShadcnButton onClick={handleExit} variant="destructive" className="w-full h-12 text-lg">
+        <ShadcnButton onClick={openExitModal} variant="destructive" className="w-full h-12 text-lg">
           <LogOut className="mr-2 h-4 w-4" /> 나가기
         </ShadcnButton>
       </div>
@@ -197,10 +200,10 @@ export default function GameProgress() {
         description="게임에서 나가면 현재 진행 상황이 모두 사라집니다. 정말 나가시겠습니까?"
         leftText="예"
         rightText="아니요"
-        leftOnClick={() => setShowExitConfirmation(!showExitConfirmation)}
+        leftOnClick={handleExit}
         rightOnClick={() => setShowExitConfirmation(!showExitConfirmation)}
         onClose={() => setShowExitConfirmation(!showExitConfirmation)}
       />
-    </div>
+    </FlexBox>
   );
 }

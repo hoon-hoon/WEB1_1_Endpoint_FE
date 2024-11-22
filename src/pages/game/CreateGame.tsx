@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+//import { useSocketStore } from '@/stores/useSocketStore';
 import TopBar from '@/components/common/TopBar';
 import DropDown from '@/components/common/DropDown';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
@@ -27,6 +28,7 @@ const difficulties: Difficulty[] = ['하', '중', '상'];
 
 export default function CreateGame() {
   const navigate = useNavigate();
+  //const connectSocket = useSocketStore((state) => state.connect);
   const [topic, setTopic] = useState<string>('');
   const [difficulty, setDifficulty] = useState<Difficulty | string>('');
   const [quizCount, setQuizCount] = useState(5);
@@ -36,6 +38,11 @@ export default function CreateGame() {
     if (newCount >= 5 && newCount <= 20) {
       setQuizCount(newCount);
     }
+  };
+
+  const createRoom = () => {
+    //connectSocket(); // 웹소캣 연결 시작 + state에 roomId도 추가할 예정
+    navigate('/game/waiting', { state: { topic, difficulty, quizCount } });
   };
 
   return (
@@ -73,11 +80,7 @@ export default function CreateGame() {
           </div>
         </Card>
 
-        <ShadcnButton
-          className="w-full h-14 text-lg"
-          size="lg"
-          onClick={() => navigate('/game/waiting', { state: { topic, difficulty, quizCount } })}
-        >
+        <ShadcnButton className="w-full h-14 text-lg" size="lg" onClick={createRoom}>
           방 생성하기
         </ShadcnButton>
       </Container>
