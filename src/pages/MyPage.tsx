@@ -4,11 +4,12 @@ import { AchievementModal } from '@/components/mypage/AchievementModal';
 
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
-import { useState } from 'react';
 import UserModal from '@/components/mypage/UserModal';
 import Container from '@/shared/Container';
 import Card from '@/components/common/Card';
 import FlexBox from '@/shared/FlexBox';
+import WithDrawalModal from '@/components/mypage/WithDrawalModal';
+import { useModal } from '@/hooks/useModal';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];
 
@@ -19,23 +20,10 @@ interface Achievement {
   achieved: boolean;
 }
 
-interface ModalStates {
-  achievement: boolean;
-  user: boolean;
-}
-
 export default function MyPage() {
-  const [modalStates, setModalStates] = useState<ModalStates>({
-    achievement: false,
-    user: false,
-  });
-
-  const handleModalToggle = (modalName: keyof ModalStates, isOpen: boolean) => {
-    setModalStates((prev) => ({
-      ...prev,
-      [modalName]: isOpen,
-    }));
-  };
+  const userModal = useModal();
+  const achievementModal = useModal();
+  const withdrawalModal = useModal();
 
   const achievements: Achievement[] = [
     {
@@ -66,7 +54,7 @@ export default function MyPage() {
     <Container>
       <TopBar />
 
-      <Card className="border-gray-300 ">
+      <Card className="border-gray-300">
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Avatar
@@ -81,7 +69,7 @@ export default function MyPage() {
               <p className="text-sm text-gray-500">레이팅: 1500</p>
             </div>
           </div>
-          <button className="text-gray-400" onClick={() => handleModalToggle('user', true)}>
+          <button className="text-gray-400" onClick={userModal.open}>
             <Icon icon="gear" size={24} />
           </button>
         </div>
@@ -115,7 +103,7 @@ export default function MyPage() {
           <p className="text-gray-500">아직 달성한 업적이 없습니다.</p>
         )}
         <button
-          onClick={() => handleModalToggle('achievement', true)}
+          onClick={achievementModal.open}
           className="mt-4 w-full rounded-lg border border-gray-300 py-3 text-center text-gray-600"
         >
           전체 업적 조회하기
@@ -130,14 +118,16 @@ export default function MyPage() {
           label="내 퀴즈 관리하기"
           to="/profile/quizManagement"
         />
+        <MenuButton icon="person_outlined" label="회원탈퇴" to="" onClick={withdrawalModal.open} />
       </FlexBox>
 
-      <UserModal isOpen={modalStates.user} onClose={() => handleModalToggle('user', false)} />
+      <UserModal isOpen={userModal.isOpen} onClose={userModal.close} />
       <AchievementModal
-        isOpen={modalStates.achievement}
-        onClose={() => handleModalToggle('achievement', false)}
+        isOpen={achievementModal.isOpen}
+        onClose={achievementModal.close}
         achievements={achievements}
       />
+      <WithDrawalModal isOpen={withdrawalModal.isOpen} onClose={withdrawalModal.close} />
     </Container>
   );
 }
