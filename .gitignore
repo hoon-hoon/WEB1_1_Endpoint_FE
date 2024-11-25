@@ -31,3 +31,4 @@ stories
 # dependencies
 
 package-lock.json
+.vercel
