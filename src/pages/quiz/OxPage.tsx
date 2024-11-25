@@ -9,19 +9,26 @@ import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/shared/Container';
 import Label from '@/shared/Label';
+import ToastMessage from '@/components/common/ToastMessage';
 
 export default function OXQuizPage() {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [selectedQuizType, setSelectedQuizType] = useState('');
-  const [selectedAnswer, setSelectedAnswer] = useState<string>('O'); // 기본 정답값을 O로 설정
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [question, setQuestion] = useState('');
   const [explanation, setExplanation] = useState('');
   const [image, setImage] = useState<File | null>(null);
+
   const [fieldErrors, setFieldErrors] = useState({
     question: false,
     explanation: false,
+    answer: false,
   });
+
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
   useEffect(() => {
     if (location.pathname === '/quiz/ox') {
@@ -47,7 +54,9 @@ export default function OXQuizPage() {
   };
 
   const handleAnswerChange = (answer: string) => {
-    setSelectedAnswer(answer);
+    // 동일한 답변 클릭 시 선택 해제
+    setSelectedAnswer((prevAnswer) => (prevAnswer === answer ? null : answer));
+    setFieldErrors((prev) => ({ ...prev, answer: false }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,23 +69,43 @@ export default function OXQuizPage() {
     setImage(null);
   };
 
-  const handleSubmit = () => {
+  const validateFields = () => {
     const updatedErrors = {
       question: question.trim() === '',
       explanation: explanation.trim() === '',
+      answer: selectedAnswer === null, // 정답이 선택되지 않은 경우 에러
     };
 
     setFieldErrors(updatedErrors);
 
-    if (!updatedErrors.question && !updatedErrors.explanation) {
-      console.log({ question, selectedAnswer, explanation, image });
+    // 에러가 있는 경우 false 반환
+    return !Object.values(updatedErrors).some((error) => error);
+  };
+
+  const handleSubmit = () => {
+    const isValid = validateFields();
+
+    if (!isValid) {
+      setToastMessage({ message: '필드를 모두 채워주세요.', icon: 'warning' });
+      setToastOpen(true);
+      return;
     }
+
+    setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
+    setToastOpen(true);
+
+    console.log({
+      question,
+      selectedAnswer,
+      explanation,
+      image,
+    });
   };
 
   return (
     <FlexBox direction="col">
       <Container>
-        <TopBar leftIcon="left" leftText="퀴즈 만들기" onClickLeft={() => navigate(-1)} />
+        <TopBar leftIcon="left" leftText="OX 퀴즈 만들기" onClickLeft={() => navigate(-1)} />
         <Card>
           <div className="mb-4">
             <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />
@@ -147,17 +176,15 @@ export default function OXQuizPage() {
             <Label content="정답" htmlFor="answer" className="mb-1" />
             <div className="flex flex-row items-center gap-4">
               <Radio
-                alert="정답을 선택해주세요."
                 size="M"
-                state="enable"
+                state={fieldErrors.answer ? 'error' : 'enable'}
                 title="O"
                 checked={selectedAnswer === 'O'}
                 onChange={() => handleAnswerChange('O')}
               />
               <Radio
-                alert="정답을 선택해주세요."
                 size="M"
-                state="enable"
+                state={fieldErrors.answer ? 'error' : 'enable'}
                 title="X"
                 checked={selectedAnswer === 'X'}
                 onChange={() => handleAnswerChange('X')}
@@ -173,9 +200,16 @@ export default function OXQuizPage() {
             state={fieldErrors.explanation ? 'error' : 'enable'}
           />
         </Card>
+
         <ShadcnButton className="w-full h-12 text-lg" size="default" onClick={handleSubmit}>
           퀴즈 생성하기
         </ShadcnButton>
+        {/* 토스트 크기 수정 필요 <ToastMessage
+          message={toastMessage.message}
+          icon={toastMessage.icon as 'check' | 'warning'}
+          open={toastOpen}
+          setOpen={setToastOpen}
+        /> */}
       </Container>
     </FlexBox>
   );
