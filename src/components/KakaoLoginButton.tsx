@@ -1,5 +1,5 @@
-import Button from './common/Button/Button';
-import Icon from '@eolluga/eolluga-ui/icon/Icon';
+import { Button } from "@/shadcn/ui/button";
+import Icon from "@eolluga/eolluga-ui/icon/Icon";
 
 const KakaoLoginButton = () => {
   const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API;
@@ -11,17 +11,24 @@ const KakaoLoginButton = () => {
   };
 
   return (
+    // <Button
+    //   variant="kakao"
+    //   size="lg"
+    //   className="w-full flex items-center justify-center  gap-2 text-lg"
+    //   onClick={handleKakaoLogin}
+    // >
+    //   <Icon icon="kakaotalk_login" size={36} />
+    //   <span className="text-base font-semibold ">카카오로 시작하기</span>
+    // </Button>
     <Button
-      label="카카오 로그인"
+      variant="kakao"
+      size="lg"
+      className="w-full flex items-center justify-center  gap-2 text-lg py-6 "
       onClick={handleKakaoLogin}
-      color="#FEE500"
-      textColor="#3c4043"
-      borderColor="#CCCCCC"
-      size="long"
-      icon={<Icon icon="kakaotalk_login" />}
-      iconPosition="left"
-      showBorder={true}
-    />
+    >
+      <Icon icon="kakaotalk_login" size={48} />
+      <span className="text-[17px] font-semibold ">카카오로 시작하기</span>
+    </Button>
   );
 };
 

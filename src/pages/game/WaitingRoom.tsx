@@ -54,6 +54,7 @@ const WaitingRoom = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      navigate('/game/play');
     }, 2000);
   };
 

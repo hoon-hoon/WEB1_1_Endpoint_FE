@@ -1,43 +1,31 @@
+import { Button } from '@/shadcn/ui/button';
+
 interface InterestButtonProps {
   label: string;
   selected: boolean;
   variant?: 'sm' | 'md' | 'lg';
-  selectedColor?: string; // 선택된 버튼의 배경색
-  unselectedColor?: string; // 비선택 상태의 버튼 배경색
-  selectedTextColor?: string; // 선택된 버튼의 텍스트 색상
-  unselectedTextColor?: string; // 비선택 상태의 텍스트 색상
   onClick?: () => void;
 }
 
-function InterestButton({
-  label,
-  selected,
-  variant = 'md',
-  selectedColor = '#D1D1D1',
-  unselectedColor = '#FFFFFF',
-  selectedTextColor = '#000000',
-  unselectedTextColor = '#333333',
-  onClick,
-}: InterestButtonProps) {
+function InterestButton({ label, selected, variant = 'md', onClick }: InterestButtonProps) {
   const sizeClasses = {
-    sm: 'text-sm py-3 px-4',
-    md: 'text-base py-4 px-5',
-    lg: 'text-lg py-5 px-6',
+    sm: 'h-8 px-3 text-sm',
+    md: 'h-10 px-4 text-base',
+    lg: 'h-12 px-5 text-lg',
   };
 
   return (
-    <button
+    <Button
+      variant={selected ? 'outline' : 'interest'}
+      className={`w-full text-left ${sizeClasses[variant]} ${
+        selected
+          ? 'shadow-sm bg-blue-500 text-white border border-blue-500 hover:bg-blue-500'
+          : 'shadow-sm  bg-white border border-neutral-200'
+      }`}
       onClick={onClick}
-      className={`w-full text-left rounded-lg border transition-shadow
-        ${sizeClasses[variant]}
-        ${selected ? 'shadow-md' : 'shadow-sm hover:shadow'} focus:outline-none`}
-      style={{
-        backgroundColor: selected ? selectedColor : unselectedColor,
-        color: selected ? selectedTextColor : unselectedTextColor,
-      }}
     >
       {label}
-    </button>
+    </Button>
   );
 }
 

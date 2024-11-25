@@ -3,7 +3,8 @@ import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
 import { LoginPage, InterestPage, CallbackPage } from './pages/Login';
 import { GamePage, MainPage, MyPage, SearchPage } from './pages';
-import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play } from './pages/game';
+import { AbPage, OxPage, MultipleChoicePage } from './pages/quiz';
+import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play, Result } from './pages/game';
 import { useState } from 'react';
 import ReviewNote from './pages/profile/ReviewNote';
 import QuizManagement from './pages/profile/QuizManagement';
@@ -34,9 +35,13 @@ function App() {
           <Route path="/game/waiting" element={<WaitingRoom />} />
           <Route path="/game/random" element={<RandomMatch />} />
           <Route path="/game/entry" element={<CodeEntry />} />
+          <Route path="/quiz/ab" element={<AbPage />} />
+          <Route path="/quiz/ox" element={<OxPage />} />
+          <Route path="/quiz/multiple" element={<MultipleChoicePage />} />
           {/* 추가적인 페이지 라우팅을 등록 */}
         </Route>
         <Route path="/game/play" element={<Play />} />
+        <Route path="/game/result" element={<Result />} />
       </Routes>
     </Router>
   );
