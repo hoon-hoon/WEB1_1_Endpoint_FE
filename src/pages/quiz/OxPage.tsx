@@ -19,7 +19,6 @@ export default function OXQuizPage() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [question, setQuestion] = useState('');
   const [explanation, setExplanation] = useState('');
-  const [image, setImage] = useState<File | null>(null);
 
   const [fieldErrors, setFieldErrors] = useState({
     question: false,
@@ -59,16 +58,6 @@ export default function OXQuizPage() {
     setFieldErrors((prev) => ({ ...prev, answer: false }));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
-  };
-
-  const removeImage = () => {
-    setImage(null);
-  };
-
   const validateFields = () => {
     const updatedErrors = {
       question: question.trim() === '',
@@ -98,7 +87,6 @@ export default function OXQuizPage() {
       question,
       selectedAnswer,
       explanation,
-      image,
     });
   };
 
@@ -147,32 +135,6 @@ export default function OXQuizPage() {
             />
           </div>
           <div className="mb-4">
-            <Label content="이미지 첨부 (최대 1개)" htmlFor="quiz-image" className="mb-1" />
-            <input
-              id="quiz-image"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-            />
-            {image && (
-              <div className="relative mt-2">
-                <img
-                  src={URL.createObjectURL(image)}
-                  alt="Uploaded"
-                  className="w-full h-full object-cover rounded border"
-                />
-                <button
-                  type="button"
-                  onClick={removeImage}
-                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                >
-                  <Icon icon="close" size={48} />
-                </button>
-              </div>
-            )}
-          </div>
-          <div className="mb-4">
             <Label content="정답" htmlFor="answer" className="mb-1" />
             <div className="flex flex-row items-center gap-4">
               <Radio
@@ -204,12 +166,12 @@ export default function OXQuizPage() {
         <ShadcnButton className="w-full h-12 text-lg" size="default" onClick={handleSubmit}>
           퀴즈 생성하기
         </ShadcnButton>
-        {/* 토스트 크기 수정 필요 <ToastMessage
+        <ToastMessage
           message={toastMessage.message}
           icon={toastMessage.icon as 'check' | 'warning'}
           open={toastOpen}
           setOpen={setToastOpen}
-        /> */}
+        />
       </Container>
     </FlexBox>
   );
