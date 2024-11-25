@@ -1,24 +1,10 @@
 import { create } from 'zustand';
+import { Rank, SocketStore } from '@/types/GameTypes';
 /*
 import { io, Socket } from 'socket.io-client';
 
 const SOCKET_SERVER_URL = 'http://localhost:3000/api/socket';
 */
-
-type Player = {
-  id: number;
-  name: string;
-  avatar: string;
-  score: number;
-};
-
-interface SocketStore {
-  players: Player[];
-  currentQuestion: number;
-  timeLeft: number;
-  updateScore: (playerId: number, increment: number) => void;
-  getMyRank: (playerId: number) => { rank: number; score: number };
-}
 
 export const useGameStore = create<SocketStore>((set, get) => ({
   socket: null,
@@ -74,7 +60,7 @@ export const useGameStore = create<SocketStore>((set, get) => ({
   getMyRank: (playerId: number) => {
     const players = get().players;
     const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
-    const rank = sortedPlayers.findIndex((player) => player.id === playerId) + 1;
+    const rank = (sortedPlayers.findIndex((player) => player.id === playerId) + 1) as Rank;
     const score = players.find((player) => player.id === playerId)?.score || 0;
 
     return { rank, score };

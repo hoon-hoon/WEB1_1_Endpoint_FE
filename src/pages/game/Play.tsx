@@ -10,19 +10,8 @@ import Dialog from '@/components/common/Dialog';
 import FlexBox from '@/shared/FlexBox';
 import Container from '@/shared/Container';
 import defaultImageURL from '@/shared/defaultImage';
+import { Question, ScoreUpdateMessage } from '@/types/GameTypes';
 import { useGameStore } from '@/stores/useGameStore';
-
-type Question = {
-  id: number;
-  text: string;
-  options: string[];
-  correctAnswer: number;
-};
-
-type ScoreUpdateMessage = {
-  playerId: number;
-  increment: number;
-};
 
 export default function GameProgress() {
   const navigate = useNavigate();

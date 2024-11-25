@@ -6,10 +6,11 @@ import Card from '@/components/common/Card';
 import { CheckCircle2, XCircle, ArrowRight, Medal } from 'lucide-react';
 import Container from '@/shared/Container';
 import Celebrate from './Celebrate';
+import { Rank } from '@/types/GameTypes';
 import { useGameStore } from '@/stores/useGameStore';
 
 type GameResult = {
-  rank: number;
+  rank: Rank;
   totalPlayers: number;
   problems: {
     question: string;
@@ -73,7 +74,7 @@ export default function Result() {
     ],
   };
 
-  const getMedalIcon = (rank: number) => {
+  const getMedalIcon = (rank: Rank) => {
     switch (rank) {
       case 1:
         return <Medal className="w-8 h-8 text-yellow-500" />;
