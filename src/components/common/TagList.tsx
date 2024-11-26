@@ -1,26 +1,41 @@
+import { useState } from "react";
+
 type TagListProps = {
   tags: string[];
-  onTagClick?: (tag: string) => void;
+  onTagClick?: (selectedTags: string[]) => void;
 };
 
 const TagList = ({ tags, onTagClick }: TagListProps) => {
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const handleTagClick = (tag: string) => {
+    const isSelected = selectedTags.includes(tag);
+    const updatedTags = isSelected
+      ? selectedTags.filter((t) => t !== tag)
+      : [...selectedTags, tag]; 
+
+    setSelectedTags(updatedTags);
+    onTagClick?.(updatedTags);
+  };
+
   return (
-    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-      {tags.map((tag) => (
-        <span
-          key={tag}
-          onClick={() => onTagClick?.(tag)}
-          style={{
-            background: '#f0f0f0',
-            padding: '4px 8px',
-            borderRadius: '16px',
-            cursor: 'pointer',
-            fontSize: '14px',
-          }}
-        >
-          #{tag}
-        </span>
-      ))}
+    <div className="flex flex-wrap gap-2 mb-4">
+      {tags.map((tag) => {
+        const isSelected = selectedTags.includes(tag);
+        return (
+          <span
+            key={tag}
+            onClick={() => handleTagClick(tag)}
+            className={`px-3 py-1 rounded-full cursor-pointer text-sm font-medium ${
+              isSelected
+                ? "bg-gray-400 text-white"
+                : "bg-gray-200"
+            }`}
+          >
+            #{tag}
+          </span>
+        );
+      })}
     </div>
   );
 };

@@ -36,8 +36,8 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   };
 
   return (
-    <div className="flex items-center h-full">
-      <div className="w-full p-6 bg-white border border-gray-300 rounded-lg shadow-md">
+    <div className="flex items-center justify-center h-full">
+      <div className="w-full p-6 bg-white border border-gray-300 rounded-lg shadow-sm">
         <div className="flex items-center mb-4">
           <Avatar size="S" image={quiz.avatarUrl || '/default-avatar.png'} />
           <div className="ml-4">
@@ -46,8 +46,14 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
           </div>
         </div>
         <QuizRenderer quiz={quiz} onAnswerSelect={handleAnswerSelect} />
-        {selectedAnswer !== null && isCorrect !== null && (
-          <QuizAns isCorrect={isCorrect} explanation={quiz.answer.explanation} />
+        {selectedAnswer !== null && (
+          <div
+            className={`transition-all duration-500 ease-in-out overflow-hidden ${
+              isCorrect !== null ? 'max-h-[500px]' : 'max-h-0'
+            }`}
+          >
+            <QuizAns isCorrect={isCorrect!} explanation={quiz.answer.explanation} />
+          </div>
         )}
         <QuizFooter
           likes={likes}

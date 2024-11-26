@@ -2,10 +2,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-import { QuizWrapper } from '@/components';
 import TopBar from '@/components/common/TopBar';
 import { dummyQuizzes } from '@/data/dummyQuiz';
 import Container from '@/shared/Container';
+import { QuizWrapper } from '@/components';
 
 const MainPage = () => {
   return (
@@ -14,8 +14,9 @@ const MainPage = () => {
       <Container>
         <Swiper
           direction="vertical"
-          className="quizSwiper"
-          style={{ height: 'calc(100vh - 9rem)' }}
+          className="quizSwiper h-[80dvh]"
+          // style={{ height: 'calc(100vh - 11rem)' }}
+          spaceBetween={40}
         >
           {dummyQuizzes.map((quiz) => (
             <SwiperSlide key={quiz.id}>
@@ -27,25 +28,5 @@ const MainPage = () => {
     </>
   );
 };
-
-// const MainPage = () => {
-//   return (
-//     <>
-//       <div className='pt-5'>
-//         <Swiper
-//           direction="vertical"
-//           className="quizSwiper"
-//           style={{ height: 'calc(100vh - 64px - 56px)' }}
-//         >
-//           {dummyQuiz.map((quiz) => (
-//             <SwiperSlide key={quiz.id}>
-//               <QuizWrapper quiz={quiz} />
-//             </SwiperSlide>
-//           ))}
-//         </Swiper>
-//       </div>
-//     </>
-//   );
-// };
 
 export default MainPage;
