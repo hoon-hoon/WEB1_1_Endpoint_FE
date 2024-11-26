@@ -12,6 +12,7 @@ import Card from '@/components/common/Card';
 import Label from '@/shared/Label';
 import { Skeleton } from '@/shadcn/ui/skeleton';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
+import ToastMessage from '@/components/common/ToastMessage';
 
 const Members: Member[] = [
   { id: 'a', nickName: '플레이어1', isHost: true, rating: 2000 },
@@ -63,7 +64,7 @@ const WaitingRoom = () => {
 
   return (
     <div className="flex flex-col">
-      <TopBar leftIcon="left" leftText="게임 대기방" onClickLeft={() => navigate(-1)} />
+      <TopBar leftIcon="left" leftText="게임 대기방" onClickLeft={() => navigate('/game/create')} />
 
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -157,7 +158,7 @@ const WaitingRoom = () => {
         </Card>
         <div className="max-w-xl mx-auto mb-8">
           <ShadcnButton
-            className="w-full h-14 text-lg"
+            className="w-full h-14 text-lg relative"
             size="lg"
             onClick={startGame}
             disabled={isLoading}
@@ -172,6 +173,12 @@ const WaitingRoom = () => {
                 <Play className="mr-2 h-6 w-6" /> 게임 시작
               </>
             )}
+            <ToastMessage
+              message="초대코드가 복사되었습니다"
+              icon="check"
+              open={copied}
+              setOpen={setCopied}
+            />
           </ShadcnButton>
         </div>
       </section>
