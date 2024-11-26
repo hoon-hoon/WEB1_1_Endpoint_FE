@@ -121,7 +121,7 @@ export default function ABTestPage() {
               <Radio
                 alert="퀴즈 유형을 선택해주세요."
                 size="M"
-                state="disabled"
+                state="enable"
                 title="AB 테스트"
                 checked={selectedQuizType === 'ab'}
                 onChange={() => handleQuizTypeChange('ab')}

@@ -92,7 +92,7 @@ export default function OXQuizPage() {
   return (
     <FlexBox direction="col">
       <Container>
-        <TopBar leftIcon="left" leftText="OX 퀴즈 만들기" onClickLeft={() => navigate(-1)} />
+        <TopBar leftIcon="left" leftText="퀴즈 만들기" onClickLeft={() => navigate(-1)} />
         <Card>
           <div className="mb-4">
             <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />
@@ -100,7 +100,7 @@ export default function OXQuizPage() {
               <Radio
                 alert="퀴즈 유형을 선택해주세요."
                 size="M"
-                state="disabled"
+                state="enable"
                 title="OX 퀴즈"
                 checked={selectedQuizType === 'ox'}
                 onChange={() => handleQuizTypeChange('ox')}

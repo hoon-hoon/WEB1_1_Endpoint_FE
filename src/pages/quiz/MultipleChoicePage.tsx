@@ -133,7 +133,7 @@ export default function MultipleChoicePage() {
               <Radio
                 alert="퀴즈 유형을 선택해주세요."
                 size="M"
-                state="disabled"
+                state="enable"
                 title="객관식"
                 checked={selectedQuizType === 'multiple'}
                 onChange={() => handleQuizTypeChange('multiple')}
