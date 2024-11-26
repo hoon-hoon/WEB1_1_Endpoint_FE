@@ -5,35 +5,34 @@ import FlexBox from '@/shared/FlexBox';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
-import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/shared/Container';
 import Label from '@/shared/Label';
+import ToastMessage from '@/components/common/ToastMessage';
 
 export default function MultipleChoicePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedQuizType, setSelectedQuizType] = useState('');
-  const [selectedAnswer, setSelectedAnswer] = useState<number>(1); // 기본 정답값을 1로 설정 (error 처리시 화면 규격 이상해짐)
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null); // 초기값 null로 설정
   const [question, setQuestion] = useState('');
   const [options, setOptions] = useState<string[]>(['', '', '', '']);
   const [explanation, setExplanation] = useState('');
-  const [images, setImages] = useState<File[]>([]);
   const [fieldErrors, setFieldErrors] = useState({
     question: false,
     options: [false, false, false, false],
     explanation: false,
+    answer: false,
   });
+
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
   // URL에 따라 선택된 퀴즈 유형 설정
   useEffect(() => {
     if (location.pathname === '/quiz/multiple') {
       setSelectedQuizType('multiple');
-    } else if (location.pathname === '/quiz/ox') {
-      setSelectedQuizType('ox');
-    } else if (location.pathname === '/quiz/ab') {
-      setSelectedQuizType('ab');
     }
   }, [location.pathname]);
 
@@ -54,10 +53,13 @@ export default function MultipleChoicePage() {
         break;
     }
   };
-  // 정답 선택 시 정답값 변경
+
+  // 정답 선택 시 동일한 값을 다시 클릭하면 선택 해제
   const handleAnswerChange = (answer: number) => {
-    setSelectedAnswer(answer);
+    setSelectedAnswer((prevAnswer) => (prevAnswer === answer ? null : answer));
+    setFieldErrors((prev) => ({ ...prev, answer: false })); // 선택 시 에러 제거
   };
+
   // 선택지 입력 시 입력값 변경
   const handleOptionChange = (index: number, value: string) => {
     const updatedOptions = [...options];
@@ -68,36 +70,40 @@ export default function MultipleChoicePage() {
     updatedErrors[index] = value.trim() === '';
     setFieldErrors((prev) => ({ ...prev, options: updatedErrors }));
   };
-  // 이미지 첨부
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      const newImages = [...images, ...files].slice(0, 4); // 최대 4개까지 제한
-      setImages(newImages);
-    }
-  };
-  // 이미지 삭제
-  const removeImage = (index: number) => {
-    const updatedImages = images.filter((_, i) => i !== index);
-    setImages(updatedImages);
-  };
-  // 퀴즈 생성 시 입력값이 없다면 에러 처리를 위한 함수 => 에러처리되면 state가 enable에서 error로 변경
-  const handleSubmit = () => {
+
+  const validateFields = () => {
     const updatedErrors = {
       question: question.trim() === '',
       options: options.map((option) => option.trim() === ''),
       explanation: explanation.trim() === '',
+      answer: selectedAnswer === null, // 정답 선택 여부 확인
     };
 
     setFieldErrors(updatedErrors);
 
-    if (
+    // 에러가 있는 경우 false 반환
+    return (
       !updatedErrors.question &&
       !updatedErrors.options.some((err) => err) &&
-      !updatedErrors.explanation
-    ) {
-      console.log({ question, options, selectedAnswer, explanation, images });
+      !updatedErrors.explanation &&
+      !updatedErrors.answer
+    );
+  };
+
+  // 제출 버튼 클릭 시 유효성 검사 및 데이터 확인
+  const handleSubmit = () => {
+    const isValid = validateFields();
+
+    if (!isValid) {
+      setToastMessage({ message: '필드를 모두 채워주세요.', icon: 'warning' });
+      setToastOpen(true);
+      return;
     }
+
+    setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
+    setToastOpen(true);
+
+    console.log({ question, options, selectedAnswer, explanation });
   };
 
   return (
@@ -144,35 +150,7 @@ export default function MultipleChoicePage() {
               state={fieldErrors.question ? 'error' : 'enable'}
             />
           </div>
-          <div className="mb-4">
-            <Label content="이미지 첨부 (최대 4개)" htmlFor="quiz-images" className="mb-1" />
-            <input
-              id="quiz-images"
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleImageChange}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-            />
-            <div className="grid grid-cols-4 gap-2 mt-2">
-              {images.map((image, index) => (
-                <div key={index} className="relative">
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt={`Uploaded ${index + 1}`}
-                    className="w-full h-20 object-cover rounded border"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(index)}
-                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                  >
-                    <Icon icon="close" size={48} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
+
           <div className="mb-4">
             {['1번 선택지', '2번 선택지', '3번 선택지', '4번 선택지'].map((label, index) => (
               <div key={index} className="mb-2">
@@ -194,9 +172,8 @@ export default function MultipleChoicePage() {
               {options.map((_, index) => (
                 <Radio
                   key={index}
-                  alert="정답을 선택해주세요."
                   size="M"
-                  state="enable"
+                  state={fieldErrors.answer ? 'error' : 'enable'}
                   title={`${index + 1}`}
                   checked={selectedAnswer === index + 1}
                   onChange={() => handleAnswerChange(index + 1)}
@@ -216,6 +193,12 @@ export default function MultipleChoicePage() {
         <ShadcnButton className="w-full h-12 text-lg" size="default" onClick={handleSubmit}>
           퀴즈 생성하기
         </ShadcnButton>
+        <ToastMessage
+          message={toastMessage.message}
+          icon={toastMessage.icon as 'check' | 'warning'}
+          open={toastOpen}
+          setOpen={setToastOpen}
+        />
       </Container>
     </FlexBox>
   );
