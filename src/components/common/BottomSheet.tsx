@@ -24,7 +24,7 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>
       <DrawerContent
-        className="max-h-[80dvh] w-full bg-white border-t-2 flex flex-col"
+        className="h-[60dvh] max-h-[60dvh] w-full bg-white border-t-2 flex flex-col"
         aria-describedby="set-positions"
       >
         <DrawerHeader className="relative flex-shrink-0">
@@ -41,10 +41,17 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
           </div>
         </DrawerHeader>
 
-        {/* 스크롤 영역을 flex-1로 설정하여 남은 공간을 모두 차지하도록 함 */}
         <div className="overflow-y-scroll pb-16">
           <div className="p-4">
-            {comments.length > 0 ? (
+            {loading ? (
+              <div className="flex flex-col justify-center items-center h-full">
+                {/* 스켈레톤 컴포넌트 적용 예정 */}
+                <div className="w-full h-6 bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                <div className="w-full h-6 bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                <div className="w-full h-6 bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                <div className="w-full h-6 bg-gray-300 rounded-md animate-pulse mb-4"></div>
+              </div>
+            ) : comments.length > 0 ? (
               comments.map((comment) => (
                 <div key={comment.id} className="mb-4 flex flex-col gap-2">
                   <div className="flex items-start gap-3 border-b pb-2">
@@ -76,22 +83,22 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
             )}
           </div>
         </div>
-
-        {/* 입력 영역을 absolute로 설정하여 키보드가 올라올 때 댓글 리스트를 가리도록 함 */}
         <div className="absolute bottom-0 left-0 right-0 border-t-2 bg-white">
           <div className="flex px-4 py-4 gap-4">
-            <TextField
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              size="M"
-              mode="outlined"
-              placeholder="댓글을 입력하세요"
-            />
-            <div
-              className="p-3 bg-black rounded-xl cursor-pointer"
-              onClick={() => console.log('댓글 게시')}
-            >
-              <Icon icon="add" className="fill-white" />
+            <div className="flex items-center w-full bg-white border border-gray-100 rounded-lg overflow-hidden gap-1">
+              <TextField
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                size="M"
+                mode="outlined"
+                placeholder="댓글을 입력하세요"
+              />
+              <div
+                className="p-3 bg-black rounded-xl cursor-pointer"
+                onClick={() => console.log('댓글 게시')}
+              >
+                <Icon icon="add" className="fill-white" />
+              </div>
             </div>
           </div>
         </div>
