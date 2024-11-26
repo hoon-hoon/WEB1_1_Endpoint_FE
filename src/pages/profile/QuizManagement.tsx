@@ -40,6 +40,7 @@ export default function MyQuizManagement() {
 
   const handleEdit = (id: number) => {
     console.log(`Editing quiz with id: ${id}`);
+    navigate(`/quiz/edit/multiple/2`); //임시 페이지 이동
   };
 
   return (

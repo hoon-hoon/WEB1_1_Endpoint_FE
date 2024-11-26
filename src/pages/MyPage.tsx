@@ -112,7 +112,7 @@ export default function MyPage() {
 
       <FlexBox direction="col" className="gap-4">
         <MenuButton icon="theme" label="오답노트" to="/profile/reviewNote" />
-        <MenuButton icon="pencil" label="내 퀴즈 만들기" to="/" />
+        <MenuButton icon="pencil" label="내 퀴즈 만들기" to="/quiz/ox" />
         <MenuButton
           icon="paper_blank_portrait"
           label="내 퀴즈 관리하기"

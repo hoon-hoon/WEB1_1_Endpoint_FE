@@ -19,7 +19,7 @@ function InterestButton({ label, selected, variant = 'md', onClick }: InterestBu
       variant={selected ? 'outline' : 'interest'}
       className={`w-full text-left ${sizeClasses[variant]} ${
         selected
-          ? 'shadow-sm bg-blue-500 text-white border border-blue-500 hover:bg-blue-500'
+          ? 'shadow-sm bg-neutral-400 text-white border border-neutral-400 hover:bg-neutral-400'
           : 'shadow-sm  bg-white border border-neutral-200'
       }`}
       onClick={onClick}

@@ -21,7 +21,7 @@ const buttonVariants = cva(
           'hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50',
         link: 'text-neutral-900 underline-offset-4 hover:underline dark:text-neutral-50',
         interest:
-          'hover:bg-blue-500 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50',
+          'hover:bg-neutral-400 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50',
         kakao: 'bg-[#FEE500] text-[#3c4043] shadow hover:bg-[#FDE500] ',
         google:
           'bg-[#FFFFFF] text-[#3c4043] border border-[#CCCCCC] shadow hover:brightness-105 dark:bg-[#3c4043] dark:text-[#FFFFFF] dark:hover:brightness-110',
