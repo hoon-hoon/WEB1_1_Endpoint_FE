@@ -119,16 +119,7 @@ export const dummyComments: Comment[] = [
     ],
   },
 
-  // Quiz ID: 4, Comment Count: 1
-  {
-    id: 7,
-    quizId: 4,
-    writerId: 7,
-    parentCommentId: 0,
-    content: 'CSS는 확실히 스타일링 언어죠.',
-    createdAt: '2024-11-20T16:00:00.000Z',
-    updatedAt: '2024-11-20T16:00:00.000Z',
-  },
+  // Quiz ID: 4, Comment Count: 0
 
   // Quiz ID: 5, Comment Count: 2
   {

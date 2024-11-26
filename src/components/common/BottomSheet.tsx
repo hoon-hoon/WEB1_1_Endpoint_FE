@@ -25,7 +25,7 @@ export default function BottomSheet({ isOpen, setOpen, comments, loading }: Bott
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>
       <DrawerContent
-        className="h-[60dvh] max-h-[60dvh] w-full bg-white border-t-2 flex flex-col"
+        className="min-h-[80dvh] max-h-[80dvh] w-full bg-white border-t-2 flex flex-col"
         aria-describedby="set-positions"
       >
         <DrawerHeader className="relative flex-shrink-0">
@@ -43,10 +43,14 @@ export default function BottomSheet({ isOpen, setOpen, comments, loading }: Bott
         </DrawerHeader>
 
         <div className="overflow-y-scroll pb-16">
-          <div className="p-4">
+          <div
+            className={`p-4 ${
+              comments.length === 0 && !loading ? 'flex justify-center items-center' : ''
+            }`}
+          >
             {loading ? (
               <div className="space-y-4">
-                {[...Array(5)].map((_, index) => (
+                {[...Array(7)].map((_, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <Skeleton className="w-10 h-10 rounded-full" />
                     <div className="flex-1 space-y-2">

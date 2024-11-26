@@ -77,7 +77,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
     },
     count: {
       like: 50,
-      comment: 1,
+      comment: 0,
     },
     liked: false,
   },
