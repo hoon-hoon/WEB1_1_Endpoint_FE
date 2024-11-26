@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import InterestButton from '../../components/common/Button/InterestButton';
-import Container from '@/shared/Container';
 
 const mock_interests = [
   '알고리즘',
@@ -27,37 +26,36 @@ function InterestPage() {
   };
 
   return (
-    <Container>
-      <div className="flex flex-col items-center px-4 py-8 max-w-sm mx-auto">
-        <div className="w-full">
-          <h3 className="text-[26px] font-bold mb-2">관심사 선택</h3>
-          <p className="text-base text-gray-700 mb-8">
-            관심있는 주제를 선택하면 맞춤 퀴즈를 제공해드려요.
-          </p>
+    <div className="h-full flex flex-col justify-between">
+      <div>
+        <h3 className="text-2xl font-bold mb-2">관심사 선택</h3>
+        <p className="text-base text-gray-700 mb-8">
+          관심있는 주제를 선택하면 맞춤 퀴즈를 제공해드려요.
+        </p>
 
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            {mock_interests.map((interest) => (
-              <InterestButton
-                key={interest}
-                label={interest}
-                selected={selectedInterests.includes(interest)}
-                variant="lg"
-                onClick={() => handleInterestSelect(interest)}
-              />
-            ))}
-          </div>
-
-          <ShadcnButton
-            variant="default"
-            size="lg"
-            className="w-full h-12 text-base"
-            onClick={() => console.log('선택된 관심사:', selectedInterests)}
-          >
-            선택 완료
-          </ShadcnButton>
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          {mock_interests.map((interest) => (
+            <InterestButton
+              key={interest}
+              label={interest}
+              selected={selectedInterests.includes(interest)}
+              variant="lg"
+              onClick={() => handleInterestSelect(interest)}
+            />
+          ))}
         </div>
       </div>
-    </Container>
+      <div>
+        <ShadcnButton
+          variant="default"
+          size="lg"
+          className="w-full h-12 text-base"
+          onClick={() => console.log('선택된 관심사:', selectedInterests)}
+        >
+          선택 완료
+        </ShadcnButton>
+      </div>
+    </div>
   );
 }
 
