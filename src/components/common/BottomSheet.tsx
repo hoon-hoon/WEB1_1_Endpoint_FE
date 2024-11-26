@@ -15,31 +15,22 @@ type BottomSheetProps = {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   comments: Comment[];
-  loading: boolean;
+  loading?: boolean;
 };
 
-export default function BottomSheet({ isOpen, setOpen, comments, loading }: BottomSheetProps) {
+export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetProps) {
   const [inputValue, setInputValue] = useState<string>('');
-  //const [sortOption, setSortOption] = useState<string>('최신 순'); // 정렬 옵션 상태
-
-  /*
-  const handleSortOptionChange = (option: string) => {
-    setSortOption(option);
-  };
-  */
 
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>
-      <DrawerContent className="h-3/5 w-full bg-white border-t-2" aria-describedby="set-positions">
-        <DrawerHeader className="relative">
+      <DrawerContent
+        className="max-h-[80dvh] w-full bg-white border-t-2 flex flex-col"
+        aria-describedby="set-positions"
+      >
+        <DrawerHeader className="relative flex-shrink-0">
           <DrawerTitle>댓글</DrawerTitle>
           <DrawerDescription />
           <div className="flex items-center gap-2">
-            {/* <Dropdown
-              options={['최신 순', '좋아요 순']}
-              selectedOption={sortOption}
-              onOptionSelect={handleSortOptionChange}
-            /> */}
             <button
               type="button"
               className="absolute top-5 right-7"
@@ -50,13 +41,10 @@ export default function BottomSheet({ isOpen, setOpen, comments, loading }: Bott
           </div>
         </DrawerHeader>
 
-        <div className="flex flex-col space-y-4 justify-between overflow-y-scroll">
-          <div className="overflow-y-auto p-4">
-            {loading ? (
-              <div className="flex justify-center items-center h-full">
-                <span className="text-gray-500">로딩 중...</span>
-              </div>
-            ) : comments.length > 0 ? (
+        {/* 스크롤 영역을 flex-1로 설정하여 남은 공간을 모두 차지하도록 함 */}
+        <div className="overflow-y-scroll pb-16">
+          <div className="p-4">
+            {comments.length > 0 ? (
               comments.map((comment) => (
                 <div key={comment.id} className="mb-4 flex flex-col gap-2">
                   <div className="flex items-start gap-3 border-b pb-2">
@@ -88,22 +76,22 @@ export default function BottomSheet({ isOpen, setOpen, comments, loading }: Bott
             )}
           </div>
         </div>
-        <div className="w-full border-t-2 sticky bottom-4 pt-1">
-          <div className="flex px-2">
-            <div className="flex items-center w-full bg-white border border-gray-100 rounded-lg overflow-hidden gap-1">
-              <TextField
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                size="M"
-                mode="outlined"
-                placeholder="댓글을 입력하세요"
-              />
-              <button
-                onClick={() => console.log('댓글 게시')}
-                className="flex items-center justify-center px-2 py-2 bg-black text-white text-sm rounded-sm"
-              >
-                <Icon icon="add" className="fill-white" />
-              </button>
+
+        {/* 입력 영역을 absolute로 설정하여 키보드가 올라올 때 댓글 리스트를 가리도록 함 */}
+        <div className="absolute bottom-0 left-0 right-0 border-t-2 bg-white">
+          <div className="flex px-4 py-4 gap-4">
+            <TextField
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              size="M"
+              mode="outlined"
+              placeholder="댓글을 입력하세요"
+            />
+            <div
+              className="p-3 bg-black rounded-xl cursor-pointer"
+              onClick={() => console.log('댓글 게시')}
+            >
+              <Icon icon="add" className="fill-white" />
             </div>
           </div>
         </div>

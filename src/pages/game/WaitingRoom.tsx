@@ -10,6 +10,7 @@ import DragScrollWrapper from '@/components/common/DragScrollWrapper';
 import MemberItem, { Member } from '@/components/MemberItem';
 import Card from '@/components/common/Card';
 import Label from '@/shared/Label';
+import { Skeleton } from '@/shadcn/ui/skeleton';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 
 const Members: Member[] = [
@@ -29,6 +30,8 @@ const WaitingRoom = () => {
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+
+  const [userLoading] = useState(true);
 
   const {
     topic: defaultTopic = '네트워크',
@@ -87,11 +90,23 @@ const WaitingRoom = () => {
         <Card>
           <label className="block text-xl font-bold text-gray-700 mb-2">참여자</label>
           <DragScrollWrapper>
-            {members.map((member: Member) => (
-              <>
-                <MemberItem member={member} key={member.id} handleExit={handleDialog} />
-              </>
-            ))}
+            <MemberItem member={members[0]} key={members[0].id} handleExit={handleDialog} />
+            {members.slice(1).map((member: Member) =>
+              userLoading ? (
+                <div
+                  key={member.id}
+                  className="flex flex-col space-y-1 items-center justify-between text-center"
+                >
+                  <div className="flex flex-col gap-2">
+                    <Skeleton className="w-12 h-12 rounded-full" />
+                    <Skeleton className="h-4 w-16 mb-1" />
+                    <Skeleton className="h-4 w-12 mb-1 rounded-lg" />
+                  </div>
+                </div>
+              ) : (
+                <MemberItem key={member.id} member={member} handleExit={handleDialog} />
+              ),
+            )}
           </DragScrollWrapper>
         </Card>
       </section>
