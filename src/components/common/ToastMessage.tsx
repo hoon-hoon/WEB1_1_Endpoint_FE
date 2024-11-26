@@ -1,5 +1,6 @@
-import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { useEffect, useRef, memo } from 'react';
+import CheckIcon from '@/images/check-icon.svg';
+import WarningIcon from '@/images/warning-icon.svg';
 
 interface ToastMessageProps {
   message: string;
@@ -19,7 +20,7 @@ function ToastMessage({ message, icon, open, setOpen }: ToastMessageProps) {
       timerRef.current = setTimeout(() => {
         setOpen(false);
         timerRef.current = null;
-      }, 1000);
+      }, 1500);
     }
 
     return () => {
@@ -39,11 +40,11 @@ function ToastMessage({ message, icon, open, setOpen }: ToastMessageProps) {
         willChange: 'opacity, transform',
         zIndex: 3,
       }}
-      className="flex flex-row px-spacing-05 py-spacing-03 bg-layer-inverse rounded-full w-full transition-opacity justify-between absolute bottom-[100px]"
+      className="flex flex-row px-spacing-05 py-spacing-03 bg-layer-inverse rounded-full transition-opacity justify-between absolute bottom-16"
     >
       <div className="flex flex-row items-center">
-        {icon === 'check' && <Icon icon="modifier_check" />}
-        {icon === 'warning' && <Icon icon="modifier_cancel" />}
+        {icon === 'check' && <img src={CheckIcon} />}
+        {icon === 'warning' && <img src={WarningIcon} />}
         <span className="pl-2 text-text-on-color body-01-medium">{message}</span>
       </div>
     </div>
