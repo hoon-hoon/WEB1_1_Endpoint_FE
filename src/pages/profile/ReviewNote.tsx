@@ -45,7 +45,7 @@ export default function ReviewNote() {
         leftIcon="left"
         leftText="오답노트"
         onClickLeft={() => {
-          navigate(-1);
+          navigate('/profile');
         }}
       />
       <FlexBox direction="col" className="gap-4">

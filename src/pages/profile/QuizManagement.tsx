@@ -48,7 +48,7 @@ export default function MyQuizManagement() {
         leftIcon="left"
         leftText="내 퀴즈 관리"
         onClickLeft={() => {
-          navigate(-1);
+          navigate('/profile');
         }}
       />
       <FlexBox>
