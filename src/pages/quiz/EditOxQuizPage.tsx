@@ -9,6 +9,7 @@ import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/shared/Container';
 import Label from '@/shared/Label';
+import ToastMessage from '@/components/common/ToastMessage';
 
 // Mock 데이터
 const MOCK_DATA = {
@@ -33,6 +34,9 @@ export default function EditOxQuizPage() {
     explanation: false,
     answer: false,
   });
+
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
   useEffect(() => {
     // Mock 데이터 로드
@@ -77,11 +81,15 @@ export default function EditOxQuizPage() {
 
   const handleSubmit = async () => {
     if (!validateFields()) {
-      console.log('수정 에러 발생:', fieldErrors);
+      setToastMessage({ message: '필드를 모두 채워주세요.', icon: 'warning' });
+      setToastOpen(true);
       return;
     }
 
     console.log('OX 퀴즈 수정 데이터 제출:', quizData);
+
+    setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
+    setToastOpen(true);
 
     // 서버 연결 시 활성화
     // try {
@@ -169,8 +177,18 @@ export default function EditOxQuizPage() {
             state={fieldErrors.explanation ? 'error' : 'enable'}
           />
         </Card>
-        <ShadcnButton size="default" className="w-full h-12 text-lg" onClick={handleSubmit}>
-          퀴즈 수정하기
+        <ShadcnButton
+          className="w-full h-12 text-lg relative"
+          size="default"
+          onClick={handleSubmit}
+        >
+          퀴즈 생성하기
+          <ToastMessage
+            message={toastMessage.message}
+            icon={toastMessage.icon as 'check' | 'warning'}
+            open={toastOpen}
+            setOpen={setToastOpen}
+          />
         </ShadcnButton>
       </Container>
     </FlexBox>
