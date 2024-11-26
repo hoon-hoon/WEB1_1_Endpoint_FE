@@ -10,6 +10,7 @@ import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useState } from 'react';
 import { Comment } from '@/types';
+import { Skeleton } from '@/shadcn/ui/skeleton';
 
 type BottomSheetProps = {
   isOpen: boolean;
@@ -44,12 +45,16 @@ export default function BottomSheet({ isOpen, setOpen, comments, loading }: Bott
         <div className="overflow-y-scroll pb-16">
           <div className="p-4">
             {loading ? (
-              <div className="flex flex-col justify-center items-center h-full">
-                {/* 스켈레톤 컴포넌트 적용 예정 */}
-                <div className="w-full h-6 bg-gray-300 rounded-md animate-pulse mb-4"></div>
-                <div className="w-full h-6 bg-gray-300 rounded-md animate-pulse mb-4"></div>
-                <div className="w-full h-6 bg-gray-300 rounded-md animate-pulse mb-4"></div>
-                <div className="w-full h-6 bg-gray-300 rounded-md animate-pulse mb-4"></div>
+              <div className="space-y-4">
+                {[...Array(5)].map((_, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <Skeleton className="w-10 h-10 rounded-full" />
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-4 w-full" />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : comments.length > 0 ? (
               comments.map((comment) => (
