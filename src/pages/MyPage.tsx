@@ -13,7 +13,7 @@ import { useModal } from '@/hooks/useModal';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];
 
-interface Achievement {
+export interface Achievement {
   icon: IconType;
   title: string;
   description: string;
