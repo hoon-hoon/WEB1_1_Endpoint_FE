@@ -33,6 +33,9 @@ export default function CreateGame() {
   const [difficulty, setDifficulty] = useState<Difficulty | string>('');
   const [quizCount, setQuizCount] = useState(5);
 
+  const [isTopicSelected, setIsTopicSelected] = useState(false);
+  const [isDifficultySelected, setIsDifficultySelected] = useState(false);
+
   const handleCount = (count: React.SetStateAction<number>) => {
     const newCount = typeof count === 'number' ? count : Number(count);
     if (newCount >= 5 && newCount <= 20) {
@@ -41,13 +44,21 @@ export default function CreateGame() {
   };
 
   const createRoom = () => {
-    //connectSocket(); // 웹소캣 연결 시작 + state에 roomId도 추가할 예정
-    navigate('/game/waiting', { state: { topic, difficulty, quizCount } });
+    if (!topic) {
+      setIsTopicSelected(true);
+    }
+    if (!difficulty) {
+      setIsDifficultySelected(true);
+    }
+    if (topic && difficulty) {
+      //connectSocket(); // 웹소캣 연결 시작 + state에 roomId도 추가할 예정
+      navigate('/game/waiting', { state: { topic, difficulty, quizCount } });
+    }
   };
 
   return (
     <FlexBox direction="col">
-      <TopBar leftIcon="left" leftText="게임 방 생성" onClickLeft={() => navigate(-1)} />
+      <TopBar leftIcon="left" leftText="게임 방 생성" onClickLeft={() => navigate('/game')} />
       <Container>
         <Card>
           <div className="pb-8">
@@ -57,6 +68,8 @@ export default function CreateGame() {
               selectedItem={topic}
               setItem={setTopic}
               placeholder="퀴즈 주제를 입력하세요"
+              alert="주제를 입력해주세요"
+              required={isTopicSelected && topic === ''}
             />
           </div>
           <div className="pb-8">
@@ -66,6 +79,8 @@ export default function CreateGame() {
               selectedItem={difficulty}
               setItem={setDifficulty}
               placeholder="난이도를 선택하세요"
+              alert="난이도를 입력해주세요"
+              required={isDifficultySelected && difficulty === ''}
             />
           </div>
           <div>

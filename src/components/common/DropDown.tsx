@@ -6,9 +6,18 @@ type DropDownProps = {
   selectedItem: string;
   setItem: (item: string) => void;
   placeholder?: string;
+  alert?: string;
+  required?: boolean;
 };
 
-const DropDown = ({ items, selectedItem, setItem, placeholder = '' }: DropDownProps) => {
+const DropDown = ({
+  items,
+  selectedItem,
+  setItem,
+  placeholder = '',
+  alert,
+  required,
+}: DropDownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string>(selectedItem);
 
@@ -43,6 +52,12 @@ const DropDown = ({ items, selectedItem, setItem, placeholder = '' }: DropDownPr
               </li>
             ))}
           </ul>
+        </div>
+      )}
+      {required && (
+        <div className="mt-2 flex items-center text-red-500 text-sm">
+          <Icon icon="warning_triangle_filled" className="mr-2" size={16} />
+          {alert}
         </div>
       )}
     </div>
