@@ -13,9 +13,9 @@ interface MenuButtonProps {
 }
 
 export function MenuButton({ icon, label, to, variant = 'default', onClick }: MenuButtonProps) {
-  const baseClasses = 'flex w-full items-center justify-between rounded-lg p-4 border shadow-sm';
+  const baseClasses = 'flex w-full items-center justify-between rounded-lg p-4 border';
   const variantClasses =
-    variant === 'danger' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-white border-gray-300';
+    variant === 'danger' ? 'bg-red-100 border-red-300 text-red-700' : 'bg-white';
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {

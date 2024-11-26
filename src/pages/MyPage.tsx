@@ -74,7 +74,7 @@ export default function MyPage() {
     <Container>
       <TopBar />
       {loading ? (
-        <Card className="border-gray-300">
+        <Card>
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Skeleton className="h-12 w-12 rounded-full" />
@@ -96,7 +96,7 @@ export default function MyPage() {
           </div>
         </Card>
       ) : (
-        <Card className="border-gray-300">
+        <Card>
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Avatar image={defaultImageURL} input="image" />
@@ -123,7 +123,7 @@ export default function MyPage() {
       )}
 
       {loading ? (
-        <Card className="border-gray-300">
+        <Card>
           <div className="space-y-4">
             {[1, 2, 3].map((item) => (
               <div key={item} className="flex items-center gap-4">
@@ -138,7 +138,7 @@ export default function MyPage() {
           <Skeleton className="mt-4 h-12 w-full rounded-lg" />
         </Card>
       ) : (
-        <Card className="border-gray-300">
+        <Card>
           <h3 className="mb-4 text-lg font-medium">업적</h3>
           {achievedAchievements.length > 0 ? (
             <div className="space-y-4">
@@ -157,7 +157,7 @@ export default function MyPage() {
           )}
           <button
             onClick={achievementModal.open}
-            className="mt-4 w-full rounded-lg border border-gray-300 py-3 text-center text-gray-600"
+            className="mt-4 w-full rounded-lg border py-3 text-center text-gray-600"
           >
             전체 업적 조회하기
           </button>

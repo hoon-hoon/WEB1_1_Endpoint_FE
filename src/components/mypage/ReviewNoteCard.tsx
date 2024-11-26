@@ -10,7 +10,7 @@ export default function ReviewNoteCard({
   onDelete: (id: string) => void;
 }) {
   return (
-    <Card className=" border-gray-300 relative">
+    <Card className="relative">
       <button
         onClick={() => onDelete(note.id)}
         className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 rounded-full"
