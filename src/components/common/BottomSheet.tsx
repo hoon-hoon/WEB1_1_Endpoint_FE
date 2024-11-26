@@ -18,7 +18,7 @@ type BottomSheetProps = {
   loading?: boolean;
 };
 
-export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetProps) {
+export default function BottomSheet({ isOpen, setOpen, comments, loading }: BottomSheetProps) {
   const [inputValue, setInputValue] = useState<string>('');
 
   return (
