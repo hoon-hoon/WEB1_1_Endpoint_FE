@@ -81,7 +81,6 @@ export default function OXQuizPage() {
 
     setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
     setToastOpen(true);
-    navigate('/profile');
 
     console.log({
       question,
@@ -91,7 +90,7 @@ export default function OXQuizPage() {
   };
 
   return (
-    <FlexBox direction="col" className="relative">
+    <FlexBox direction="col">
       <Container>
         <TopBar
           leftIcon="left"
@@ -167,16 +166,20 @@ export default function OXQuizPage() {
           />
         </Card>
 
-        <ShadcnButton className="w-full h-12 text-lg" size="default" onClick={handleSubmit}>
+        <ShadcnButton
+          className="w-full h-12 text-lg relative"
+          size="default"
+          onClick={handleSubmit}
+        >
           퀴즈 생성하기
+          <ToastMessage
+            message={toastMessage.message}
+            icon={toastMessage.icon as 'check' | 'warning'}
+            open={toastOpen}
+            setOpen={setToastOpen}
+          />
         </ShadcnButton>
       </Container>
-      <ToastMessage
-        message={toastMessage.message}
-        icon={toastMessage.icon as 'check' | 'warning'}
-        open={toastOpen}
-        setOpen={setToastOpen}
-      />
     </FlexBox>
   );
 }

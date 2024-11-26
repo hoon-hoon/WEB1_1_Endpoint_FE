@@ -103,7 +103,7 @@ export default function ABTestPage() {
   };
 
   return (
-    <FlexBox direction="col" className="relative">
+    <FlexBox direction="col">
       <Container>
         <TopBar
           leftIcon="left"
@@ -234,16 +234,20 @@ export default function ABTestPage() {
           />
         </Card>
 
-        <ShadcnButton className="w-full h-12 text-lg" size="default" onClick={handleSubmit}>
+        <ShadcnButton
+          className="w-full h-12 text-lg relative"
+          size="default"
+          onClick={handleSubmit}
+        >
           퀴즈 생성하기
+          <ToastMessage
+            message={toastMessage.message}
+            icon={toastMessage.icon as 'check' | 'warning'}
+            open={toastOpen}
+            setOpen={setToastOpen}
+          />
         </ShadcnButton>
       </Container>
-      <ToastMessage
-        message={toastMessage.message}
-        icon={toastMessage.icon as 'check' | 'warning'}
-        open={toastOpen}
-        setOpen={setToastOpen}
-      />
     </FlexBox>
   );
 }
