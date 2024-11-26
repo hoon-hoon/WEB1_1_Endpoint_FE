@@ -36,7 +36,7 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   };
 
   return (
-    <div className="flex items-center justify-center h-full">
+    <div className="flex justify-center h-full">
       <div className="w-full p-6 bg-white border border-gray-300 rounded-lg shadow-sm">
         <div className="flex items-center mb-4">
           <Avatar size="S" image={quiz.avatarUrl || '/default-avatar.png'} />
