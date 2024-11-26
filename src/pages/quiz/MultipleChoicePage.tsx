@@ -107,9 +107,9 @@ export default function MultipleChoicePage() {
   };
 
   return (
-    <FlexBox direction="col">
+    <FlexBox direction="col" className="relative">
       <Container>
-        <TopBar leftIcon="left" leftText="퀴즈 만들기" onClickLeft={() => navigate(-1)} />
+        <TopBar leftIcon="left" leftText="객관식 퀴즈 만들기" onClickLeft={() => navigate(-1)} />
         <Card>
           <div className="mb-4">
             <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />
@@ -193,13 +193,13 @@ export default function MultipleChoicePage() {
         <ShadcnButton className="w-full h-12 text-lg" size="default" onClick={handleSubmit}>
           퀴즈 생성하기
         </ShadcnButton>
-        <ToastMessage
-          message={toastMessage.message}
-          icon={toastMessage.icon as 'check' | 'warning'}
-          open={toastOpen}
-          setOpen={setToastOpen}
-        />
       </Container>
+      <ToastMessage
+        message={toastMessage.message}
+        icon={toastMessage.icon as 'check' | 'warning'}
+        open={toastOpen}
+        setOpen={setToastOpen}
+      />
     </FlexBox>
   );
 }
