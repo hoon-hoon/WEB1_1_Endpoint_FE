@@ -10,6 +10,7 @@ import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/shared/Container';
 import Label from '@/shared/Label';
+import ToastMessage from '@/components/common/ToastMessage';
 
 export default function ABTestPage() {
   const navigate = useNavigate();
@@ -27,6 +28,9 @@ export default function ABTestPage() {
     optionB: false,
     explanation: false,
   });
+
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
   useEffect(() => {
     if (location.pathname === '/quiz/ab') {
@@ -69,7 +73,7 @@ export default function ABTestPage() {
     }
   };
 
-  const handleSubmit = () => {
+  const validateFields = () => {
     const updatedErrors = {
       question: question.trim() === '',
       optionA: optionA.trim() === '',
@@ -79,14 +83,23 @@ export default function ABTestPage() {
 
     setFieldErrors(updatedErrors);
 
-    if (
-      !updatedErrors.question &&
-      !updatedErrors.optionA &&
-      !updatedErrors.optionB &&
-      !updatedErrors.explanation
-    ) {
-      console.log({ question, optionA, imageA, optionB, imageB, explanation });
+    // 에러가 있는 경우 false 반환
+    return !Object.values(updatedErrors).some((error) => error);
+  };
+
+  const handleSubmit = () => {
+    const isValid = validateFields();
+
+    if (!isValid) {
+      setToastMessage({ message: '필드를 모두 채워주세요.', icon: 'warning' });
+      setToastOpen(true);
+      return;
     }
+
+    setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
+    setToastOpen(true);
+
+    console.log({ question, optionA, imageA, optionB, imageB, explanation });
   };
 
   return (
@@ -216,9 +229,16 @@ export default function ABTestPage() {
             state={fieldErrors.explanation ? 'error' : 'enable'}
           />
         </Card>
+
         <ShadcnButton className="w-full h-12 text-lg" size="default" onClick={handleSubmit}>
           퀴즈 생성하기
         </ShadcnButton>
+        <ToastMessage
+          message={toastMessage.message}
+          icon={toastMessage.icon as 'check' | 'warning'}
+          open={toastOpen}
+          setOpen={setToastOpen}
+        />
       </Container>
     </FlexBox>
   );
