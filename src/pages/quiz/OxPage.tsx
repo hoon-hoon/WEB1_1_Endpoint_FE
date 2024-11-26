@@ -4,7 +4,6 @@ import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import FlexBox from '@/shared/FlexBox';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
-import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/shared/Container';
