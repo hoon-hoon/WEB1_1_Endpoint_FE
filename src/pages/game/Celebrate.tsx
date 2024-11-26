@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import Card from '@/components/common/Card';
 import { Trophy, Medal, Award, Smile } from 'lucide-react';
-import { Rank } from './Result';
+import { Rank } from '@/types/GameTypes';
 
 interface CelebrateProps {
   rank: Rank;

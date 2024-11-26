@@ -9,7 +9,7 @@ function MainLayout({
   setActiveTab: (tab: string) => void;
 }) {
   return (
-    <div className="pb-16">
+    <div className="h-dvh pb-16">
       <Outlet />
       <BottomNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
