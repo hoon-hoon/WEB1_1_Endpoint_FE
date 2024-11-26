@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 const SearchPage = () => {
   const tags = ['React', 'JavaScript', 'TypeScript', 'Next.js', 'CSS', 'HTML'];
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [, setSelectedTags] = useState<string[]>([]);
 
   const handleTagClick = (selectedTags: string[]) => {
     setSelectedTags(selectedTags);
