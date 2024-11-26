@@ -97,7 +97,11 @@ export default function EditOxQuizPage() {
   return (
     <FlexBox direction="col">
       <Container>
-        <TopBar leftIcon="left" leftText="OX 퀴즈 수정" onClickLeft={() => navigate(-1)} />
+        <TopBar
+          leftIcon="left"
+          leftText="OX 퀴즈 수정"
+          onClickLeft={() => navigate('/profile/quizManagement')}
+        />
         <Card>
           <div className="mb-4">
             <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />

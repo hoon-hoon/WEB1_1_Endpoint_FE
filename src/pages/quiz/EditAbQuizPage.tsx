@@ -131,7 +131,11 @@ export default function EditAbQuizPage() {
   return (
     <FlexBox direction="col">
       <Container>
-        <TopBar leftIcon="left" leftText="AB 테스트 수정" onClickLeft={() => navigate(-1)} />
+        <TopBar
+          leftIcon="left"
+          leftText="AB 테스트 수정"
+          onClickLeft={() => navigate('/profile/quizManagement')}
+        />
         <Card>
           <div className="mb-4">
             <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />

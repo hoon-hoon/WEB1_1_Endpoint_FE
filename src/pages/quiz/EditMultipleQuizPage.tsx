@@ -128,7 +128,11 @@ export default function EditMultipleChoicePage() {
   return (
     <FlexBox direction="col">
       <Container>
-        <TopBar leftIcon="left" leftText="객관식 퀴즈 수정" onClickLeft={() => navigate(-1)} />
+        <TopBar
+          leftIcon="left"
+          leftText="객관식 퀴즈 수정"
+          onClickLeft={() => navigate('/profile/quizManagement')}
+        />
         <Card>
           <div className="mb-4">
             <Label content="문제" />

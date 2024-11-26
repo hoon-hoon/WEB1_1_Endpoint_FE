@@ -105,7 +105,11 @@ export default function ABTestPage() {
   return (
     <FlexBox direction="col" className="relative">
       <Container>
-        <TopBar leftIcon="left" leftText="AB 테스트 만들기" onClickLeft={() => navigate(-1)} />
+        <TopBar
+          leftIcon="left"
+          leftText="AB 테스트 만들기"
+          onClickLeft={() => navigate('/profile')}
+        />
         <Card>
           <div className="mb-4">
             <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />
