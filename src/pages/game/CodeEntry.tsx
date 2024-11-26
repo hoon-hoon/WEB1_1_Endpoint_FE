@@ -20,7 +20,7 @@ export default function CodeEntry() {
 
   return (
     <FlexBox direction="col">
-      <TopBar leftIcon="left" leftText="코드로 참가" onClickLeft={() => navigate(-1)} />
+      <TopBar leftIcon="left" leftText="코드로 참가" onClickLeft={() => navigate('/game')} />
       <Container>
         <Card>
           <form onSubmit={handleSubmit}>

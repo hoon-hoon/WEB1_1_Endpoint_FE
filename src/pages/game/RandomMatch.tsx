@@ -38,7 +38,7 @@ export default function RandomMatching() {
 
   return (
     <div className="flex flex-col">
-      <TopBar leftIcon="left" leftText="랜덤 매칭" onClickLeft={() => navigate(-1)} />
+      <TopBar leftIcon="left" leftText="랜덤 매칭" onClickLeft={() => navigate('/game')} />
       <main className="flex-1 pt-20 pb-6 px-4">
         <Card>
           <div className="flex flex-col items-center justify-center">

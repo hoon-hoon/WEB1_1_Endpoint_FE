@@ -105,7 +105,11 @@ export default function ABTestPage() {
   return (
     <FlexBox direction="col">
       <Container>
-        <TopBar leftIcon="left" leftText="퀴즈 만들기" onClickLeft={() => navigate(-1)} />
+        <TopBar
+          leftIcon="left"
+          leftText="AB 테스트 만들기"
+          onClickLeft={() => navigate('/profile')}
+        />
         <Card>
           <div className="mb-4">
             <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />
@@ -121,7 +125,7 @@ export default function ABTestPage() {
               <Radio
                 alert="퀴즈 유형을 선택해주세요."
                 size="M"
-                state="disabled"
+                state="enable"
                 title="AB 테스트"
                 checked={selectedQuizType === 'ab'}
                 onChange={() => handleQuizTypeChange('ab')}
@@ -230,15 +234,19 @@ export default function ABTestPage() {
           />
         </Card>
 
-        <ShadcnButton className="w-full h-12 text-lg" size="default" onClick={handleSubmit}>
+        <ShadcnButton
+          className="w-full h-12 text-lg relative"
+          size="default"
+          onClick={handleSubmit}
+        >
           퀴즈 생성하기
+          <ToastMessage
+            message={toastMessage.message}
+            icon={toastMessage.icon as 'check' | 'warning'}
+            open={toastOpen}
+            setOpen={setToastOpen}
+          />
         </ShadcnButton>
-        <ToastMessage
-          message={toastMessage.message}
-          icon={toastMessage.icon as 'check' | 'warning'}
-          open={toastOpen}
-          setOpen={setToastOpen}
-        />
       </Container>
     </FlexBox>
   );

@@ -14,6 +14,7 @@ import {
 import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play, Result } from './pages/game';
 import { useState } from 'react';
 import ReviewNote from './pages/profile/ReviewNote';
+import ViewProfile from './pages/profile/ViewProfile';
 import QuizManagement from './pages/profile/QuizManagement';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path="/game" element={<GamePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={<MyPage />} />
+          <Route path="/profile/view" element={<ViewProfile />} />
           <Route path="/profile/reviewNote" element={<ReviewNote />} />
           <Route path="/profile/quizManagement" element={<QuizManagement />} />
           <Route path="/game/create" element={<CreateGame />} />

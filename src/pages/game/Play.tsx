@@ -87,7 +87,6 @@ export default function GameProgress() {
       setShowAnswerResult('correct');
       handleScoreUpdate({ playerId: userId, increment: 10 });
       updateScore(userId, 10);
-      console.log(players);
     } else {
       setShowAnswerResult('incorrect');
     }
@@ -111,7 +110,7 @@ export default function GameProgress() {
         </div>
       </header>
 
-      <Container>
+      <Container className="pb-32">
         {currentQuestionData && (
           <Card className="mb-4 p-4">
             <h2 className="text-xl font-bold mb-4">{currentQuestionData.text}</h2>
