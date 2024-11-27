@@ -95,7 +95,7 @@ export default function MultipleChoicePage() {
     const isValid = validateFields();
 
     if (!isValid) {
-      setToastMessage({ message: '필드를 모두 채워주세요.', icon: 'warning' });
+      setToastMessage({ message: '모든 항목을 작성해주세요.', icon: 'warning' });
       setToastOpen(true);
       return;
     }
