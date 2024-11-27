@@ -32,13 +32,16 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
     setIsCorrect(answer === quiz.answer.content);
   };
 
+  const authorName = quiz.author?.name || 'default';
+  const authorImage = quiz.author?.imagePath || '/';
+
   return (
     <div className="flex justify-center h-full">
       <div className="w-full p-6 bg-white border border-gray-300 rounded-lg shadow-sm">
         <div className="flex items-center mb-4">
-          <Avatar size="S" image={quiz.avatarUrl || '/default-avatar.png'} />
+          <Avatar size="S" image={authorImage} />
           <div className="ml-4">
-            <h4 className="text-md font-bold">{quiz.author || 'default'}</h4>
+            <h4 className="text-md font-bold">{authorName}</h4>
             <p className="text-sm text-gray-500">{quiz.type}</p>
           </div>
         </div>
