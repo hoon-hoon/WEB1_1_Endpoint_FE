@@ -12,34 +12,50 @@ import Card from '@/components/common/Card';
 import Container from '@/shared/Container';
 import Label from '@/shared/Label';
 import ToastMessage from '@/components/common/ToastMessage';
-// Mock 데이터
+// // Mock 데이터
+// const MOCK_DATA = {
+//   type: 'AB',
+//   content: 'AB 퀴즈 내용',
+//   optionA: {
+//     text: 'A 선택지 텍스트',
+//     image: null,
+//   },
+//   optionB: {
+//     text: 'B 선택지 텍스트',
+//     image: null,
+//   },
+//   explanation: 'AB 퀴즈 해설',
+// };
 const MOCK_DATA = {
-  type: 'AB',
-  content: 'AB 퀴즈 내용',
-  optionA: {
-    text: 'A 선택지 텍스트',
-    image: null,
-  },
-  optionB: {
-    text: 'B 선택지 텍스트',
-    image: null,
-  },
-  explanation: 'AB 퀴즈 해설',
+  question: 'AB 테스트 문제.',
+  optionA: 'A 선택지를 입력하세요.',
+  optionB: 'B 선택지를 입력하세요.',
+  imageA: null as File | null,
+  imageB: null as File | null,
+  explanation: '해설 입니다.',
 };
 
 export default function EditAbQuizPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [quizData, setQuizData] = useState({
-    content: '', // 문제
-    optionA: { text: '', image: null as File | null }, // A 선택지
-    optionB: { text: '', image: null as File | null }, // B 선택지
-    explanation: '', // 해설
+  // const [quizData, setQuizData] = useState({
+  //   content: '', // 문제
+  //   optionA: { text: '', image: null as File | null }, // A 선택지
+  //   optionB: { text: '', image: null as File | null }, // B 선택지
+  //   explanation: '', // 해설
+  // });
+  const [formData, setFormData] = useState({
+    question: '',
+    optionA: '',
+    optionB: '',
+    imageA: null as File | null,
+    imageB: null as File | null,
+    explanation: '',
   });
 
   const [fieldErrors, setFieldErrors] = useState({
-    content: false,
+    question: false,
     optionA: false,
     optionB: false,
     explanation: false,
@@ -51,7 +67,7 @@ export default function EditAbQuizPage() {
   useEffect(() => {
     // Mock 데이터 퀴즈로 로드
     console.log('Mock 데이터 로드:', MOCK_DATA);
-    setQuizData(MOCK_DATA);
+    setFormData(MOCK_DATA);
 
     // 서버 연결 시 활성화
     // const fetchQuiz = async () => {
@@ -65,54 +81,43 @@ export default function EditAbQuizPage() {
     // fetchQuiz();
   }, [id]);
 
-  const handleInputChange = (field: string, value: string) => {
-    setQuizData((prev) => ({ ...prev, [field]: value }));
-    setFieldErrors((prev) => ({ ...prev, [field]: false }));
-  };
-
-  const handleOptionChange = (
-    option: 'optionA' | 'optionB',
-    field: 'text' | 'image',
-    value: string | File | null,
-  ) => {
-    setQuizData((prev) => ({
+  const handleInputChange = (field: keyof typeof formData, value: string, maxLength: number) => {
+    setFormData((prev) => ({
       ...prev,
-      [option]: {
-        ...prev[option],
-        [field]: value,
-      },
+      [field]: value.slice(0, maxLength),
     }));
-
-    if (field === 'text') {
-      setFieldErrors((prev) => ({ ...prev, [option]: value === '' }));
-    }
+    setFieldErrors((prev) => ({
+      ...prev,
+      [field]: false,
+    }));
   };
 
   const validateFields = () => {
     const errors = {
-      content: quizData.content.trim() === '',
-      optionA: quizData.optionA.text.trim() === '',
-      optionB: quizData.optionB.text.trim() === '',
-      explanation: quizData.explanation.trim() === '',
+      question: formData.question.trim() === '',
+      optionA: formData.optionA.trim() === '',
+      optionB: formData.optionB.trim() === '',
+      explanation: formData.explanation.trim() === '',
     };
+
     setFieldErrors(errors);
-    return !Object.values(errors).some((err) => err);
+    return !Object.values(errors).some((error) => error);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!validateFields()) {
-      setToastMessage({
-        message: '모든 항목을 작성해주세요.',
-        icon: 'warning',
-      });
+      setToastMessage({ message: '모든 항목을 작성해주세요.', icon: 'warning' });
       setToastOpen(true);
       return;
     }
 
-    console.log('AB 퀴즈 수정 데이터 제출:', quizData);
-
     setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
     setToastOpen(true);
+
+    console.log('제출된 데이터:', formData);
+
+    // 예시: 서버로 수정된 데이터 전송
+    // updateQuizData(id, formData);
 
     // 서버 연결 시 활성화
     // try {
@@ -126,16 +131,45 @@ export default function EditAbQuizPage() {
   };
 
   const handleImageChange = (
-    option: 'optionA' | 'optionB',
+    field: 'imageA' | 'imageB',
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (e.target.files && e.target.files[0]) {
-      handleOptionChange(option, 'image', e.target.files[0]);
+      const file = e.target.files[0];
+
+      // 이미지 크기 제한 (2MB 이하)
+      if (file.size > 2 * 1024 * 1024) {
+        setToastMessage({
+          message: '이미지 크기는 2MB 이하로 업로드해주세요.',
+          icon: 'warning',
+        });
+        setToastOpen(true);
+        return;
+      }
+
+      // 이미지 파일 설정
+      setFormData((prev) => ({
+        ...prev,
+        [field]: file,
+      }));
+      setFieldErrors((prev) => ({
+        ...prev,
+        [field]: false,
+      }));
     }
   };
 
-  const removeImage = (option: 'optionA' | 'optionB') => {
-    handleOptionChange(option, 'image', null);
+  const removeImage = (field: 'imageA' | 'imageB') => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: null,
+    }));
+    const inputElement = document.getElementById(
+      field === 'imageA' ? 'image-a' : 'image-b',
+    ) as HTMLInputElement;
+    if (inputElement) {
+      inputElement.value = ''; // 삭제 시 파일 입력 초기화
+    }
   };
 
   return (
@@ -176,11 +210,11 @@ export default function EditAbQuizPage() {
           <div className="mb-4">
             <Label content="문제" />
             <TextArea
-              value={quizData.content}
-              onChange={(e) => handleInputChange('content', e.target.value)}
+              value={formData.question}
+              onChange={(e) => handleInputChange('question', e.target.value, 42)} // 문제는 42자 제한
               placeholder="문제를 입력하세요."
               size="M"
-              state={fieldErrors.content ? 'error' : 'enable'}
+              state={fieldErrors.question ? 'error' : 'enable'}
             />
           </div>
 
@@ -188,31 +222,31 @@ export default function EditAbQuizPage() {
             <div className="mb-2">
               <Label content="A 선택지" />
               <TextField
-                mode="outlined"
-                value={quizData.optionA.text}
-                onChange={(e) => handleOptionChange('optionA', 'text', e.target.value)}
-                placeholder="A 선택지 텍스트를 입력하세요."
+                value={formData.optionA}
+                onChange={(e) => handleInputChange('optionA', e.target.value, 20)} // 선택지는 20자 제한
+                placeholder="A 선택지를 입력하세요."
                 size="M"
                 state={fieldErrors.optionA ? 'error' : 'enable'}
               />
             </div>
             <Label content="A 이미지 첨부" htmlFor="image-a" className="mb-1" />
             <input
+              id="image-a"
               type="file"
               accept="image/*"
-              onChange={(e) => handleImageChange('optionA', e)}
+              onChange={(e) => handleImageChange('imageA', e)}
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
             />
-            {quizData.optionA.image && (
+            {formData.imageA && (
               <div className="relative mt-2">
                 <img
-                  src={URL.createObjectURL(quizData.optionA.image as File)}
+                  src={URL.createObjectURL(formData.imageA)}
                   alt="A 선택지 이미지"
-                  className="w-full h-20 object-cover rounded border"
+                  className="w-full h-full object-cover rounded border"
                 />
                 <button
                   type="button"
-                  onClick={() => removeImage('optionA')}
+                  onClick={() => removeImage('imageA')}
                   className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
                 >
                   <Icon icon="close" size={20} />
@@ -225,31 +259,31 @@ export default function EditAbQuizPage() {
             <div className="mb-2">
               <Label content="B 선택지" />
               <TextField
-                mode="outlined"
-                value={quizData.optionB.text}
-                onChange={(e) => handleOptionChange('optionB', 'text', e.target.value)}
-                placeholder="B 선택지 텍스트를 입력하세요."
+                value={formData.optionB}
+                onChange={(e) => handleInputChange('optionB', e.target.value, 20)} // 선택지는 20자 제한
+                placeholder="B 선택지를 입력하세요."
                 size="M"
                 state={fieldErrors.optionB ? 'error' : 'enable'}
               />
             </div>
             <Label content="B 이미지 첨부" htmlFor="image-b" className="mb-1" />
             <input
+              id="image-b"
               type="file"
               accept="image/*"
-              onChange={(e) => handleImageChange('optionB', e)}
+              onChange={(e) => handleImageChange('imageB', e)}
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
             />
-            {quizData.optionB.image && (
+            {formData.imageB && (
               <div className="relative mt-2">
                 <img
-                  src={URL.createObjectURL(quizData.optionB.image as File)}
+                  src={URL.createObjectURL(formData.imageB)}
                   alt="B 선택지 이미지"
-                  className="w-full h-20 object-cover rounded border"
+                  className="w-full h-full object-cover rounded border"
                 />
                 <button
                   type="button"
-                  onClick={() => removeImage('optionB')}
+                  onClick={() => removeImage('imageB')}
                   className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
                 >
                   <Icon icon="close" size={20} />
@@ -260,8 +294,8 @@ export default function EditAbQuizPage() {
 
           <Label content="해설" />
           <TextArea
-            value={quizData.explanation}
-            onChange={(e) => handleInputChange('explanation', e.target.value)}
+            value={formData.explanation}
+            onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
             placeholder="해설을 입력하세요."
             size="M"
             state={fieldErrors.explanation ? 'error' : 'enable'}

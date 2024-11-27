@@ -15,9 +15,9 @@ import ToastMessage from '@/components/common/ToastMessage';
 // Mock 데이터
 const MOCK_DATA = {
   type: 'OX',
-  content: 'OX 퀴즈 내용',
-  answer: 'O',
-  explanation: '정답',
+  content: 'OX 퀴즈 내용~~~', // 질문
+  answer: 'O', // 정답
+  explanation: '해설~~~~~~~~~', // 해설
 };
 
 export default function EditOxQuizPage() {
@@ -41,7 +41,6 @@ export default function EditOxQuizPage() {
 
   useEffect(() => {
     // Mock 데이터 로드
-    console.log('Mock 데이터 로드:', MOCK_DATA);
     setQuizData(MOCK_DATA);
 
     // 서버 연결 시 활성화
@@ -56,9 +55,9 @@ export default function EditOxQuizPage() {
     // fetchQuiz();
   }, [id]);
 
-  const handleInputChange = (field: string, value: string) => {
-    setQuizData((prev) => ({ ...prev, [field]: value }));
-    setFieldErrors((prev) => ({ ...prev, [field]: false })); // 입력 시 에러 제거
+  const handleInputChange = (field: keyof typeof quizData, value: string, maxLength: number) => {
+    setQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) })); // 최대 글자 수 제한
+    setFieldErrors((prev) => ({ ...prev, [field]: false }));
   };
 
   const handleAnswerChange = (answer: string) => {
@@ -67,17 +66,17 @@ export default function EditOxQuizPage() {
       ...prev,
       answer: prev.answer === answer ? '' : answer,
     }));
-    setFieldErrors((prev) => ({ ...prev, answer: false })); // 선택 시 에러 제거
+    setFieldErrors((prev) => ({ ...prev, answer: false }));
   };
 
   const validateFields = () => {
     const errors = {
       content: quizData.content.trim() === '',
       explanation: quizData.explanation.trim() === '',
-      answer: quizData.answer === '', // 정답이 비어 있으면 에러
+      answer: quizData.answer === '',
     };
     setFieldErrors(errors);
-    return !Object.values(errors).some((err) => err);
+    return !Object.values(errors).some((err) => err); // 에러가 없으면 true 반환
   };
 
   const handleSubmit = async () => {
@@ -145,7 +144,7 @@ export default function EditOxQuizPage() {
             <Label content="문제" />
             <TextArea
               value={quizData.content}
-              onChange={(e) => handleInputChange('content', e.target.value)}
+              onChange={(e) => handleInputChange('content', e.target.value, 42)}
               placeholder="문제를 입력하세요."
               size="M"
               state={fieldErrors.content ? 'error' : 'enable'}
@@ -181,7 +180,7 @@ export default function EditOxQuizPage() {
           <Label content="해설" />
           <TextArea
             value={quizData.explanation}
-            onChange={(e) => handleInputChange('explanation', e.target.value)}
+            onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
             placeholder="해설을 입력하세요."
             size="M"
             state={fieldErrors.explanation ? 'error' : 'enable'}
@@ -192,7 +191,7 @@ export default function EditOxQuizPage() {
           size="default"
           onClick={handleSubmit}
         >
-          퀴즈 생성하기
+          퀴즈 수정하기
           <ToastMessage
             message={toastMessage.message}
             icon={toastMessage.icon as 'check' | 'warning'}
