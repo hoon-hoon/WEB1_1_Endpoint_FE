@@ -146,6 +146,32 @@ export default function EditMultipleChoicePage() {
         />
         <Card>
           <div className="mb-4">
+            <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />
+            <div className="flex flex-row items-center gap-4">
+              <Radio
+                alert="퀴즈 유형을 선택해주세요."
+                size="M"
+                state="readOnly"
+                title="OX 퀴즈"
+                checked={false}
+              />
+              <Radio
+                alert="퀴즈 유형을 선택해주세요."
+                size="M"
+                state="readOnly"
+                title="AB 테스트"
+                checked={false}
+              />
+              <Radio
+                alert="퀴즈 유형을 선택해주세요."
+                size="M"
+                state="readOnly"
+                title="객관식"
+                checked={true}
+              />
+            </div>
+          </div>
+          <div className="mb-4">
             <Label content="문제" />
             <TextArea
               value={quizData.content}
