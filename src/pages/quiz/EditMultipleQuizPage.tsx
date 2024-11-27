@@ -6,6 +6,7 @@ import FlexBox from '@/shared/FlexBox';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
+import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/shared/Container';
@@ -185,18 +186,22 @@ export default function EditMultipleChoicePage() {
                 />
               ))}
             </div>
+            {fieldErrors.answer && (
+              <div className="mt-2 flex items-center text-red-500 text-sm">
+                <Icon icon="warning_triangle_filled" className="mr-2" size={16} />
+                정답을 선택해주세요.
+              </div>
+            )}
           </div>
 
-          <div className="mb-4">
-            <Label content="해설" />
-            <TextArea
-              value={quizData.explanation}
-              onChange={(e) => handleInputChange('explanation', e.target.value)}
-              placeholder="해설을 입력하세요."
-              size="M"
-              state={fieldErrors.explanation ? 'error' : 'enable'}
-            />
-          </div>
+          <Label content="해설" />
+          <TextArea
+            value={quizData.explanation}
+            onChange={(e) => handleInputChange('explanation', e.target.value)}
+            placeholder="해설을 입력하세요."
+            size="M"
+            state={fieldErrors.explanation ? 'error' : 'enable'}
+          />
         </Card>
         <ShadcnButton
           className="w-full h-12 text-lg relative"

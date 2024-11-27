@@ -5,6 +5,7 @@ import FlexBox from '@/shared/FlexBox';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
+import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/shared/Container';
@@ -184,6 +185,12 @@ export default function MultipleChoicePage() {
                 />
               ))}
             </div>
+            {fieldErrors.answer && (
+              <div className="mt-2 flex items-center text-red-500 text-sm">
+                <Icon icon="warning_triangle_filled" className="mr-2" size={16} />
+                정답을 선택해주세요.
+              </div>
+            )}
           </div>
           <Label content="해설" htmlFor="explanation" className="mb-1" />
           <TextArea
