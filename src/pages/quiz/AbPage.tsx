@@ -57,10 +57,24 @@ export default function ABTestPage() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, option: 'A' | 'B') => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+
+      // 이미지 파일 크기 제한 (2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        setToastMessage({
+          message: '이미지 크기는 2MB 이하로 업로드해주세요.',
+          icon: 'warning',
+        });
+        setToastOpen(true);
+        return;
+      }
+
       if (option === 'A') {
-        setImageA(e.target.files[0]);
+        setImageA(file);
+        setFieldErrors((prev) => ({ ...prev, imageA: false }));
       } else {
-        setImageB(e.target.files[0]);
+        setImageB(file);
+        setFieldErrors((prev) => ({ ...prev, imageB: false }));
       }
     }
   };
@@ -68,8 +82,17 @@ export default function ABTestPage() {
   const removeImage = (option: 'A' | 'B') => {
     if (option === 'A') {
       setImageA(null);
+      // 파일 입력 초기화
+      const inputElement = document.getElementById('image-a') as HTMLInputElement;
+      if (inputElement) {
+        inputElement.value = ''; // 삭제시 남아있던 파일 이름 초기화
+      }
     } else {
       setImageB(null);
+      const inputElement = document.getElementById('image-b') as HTMLInputElement;
+      if (inputElement) {
+        inputElement.value = '';
+      }
     }
   };
 
@@ -144,7 +167,9 @@ export default function ABTestPage() {
             <Label content="문제" htmlFor="quiz-question" className="mb-1" />
             <TextArea
               value={question}
-              onChange={(e) => setQuestion(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 42) setQuestion(e.target.value);
+              }}
               placeholder="문제를 입력하세요."
               size="M"
               state={fieldErrors.question ? 'error' : 'enable'}
@@ -155,7 +180,9 @@ export default function ABTestPage() {
               <Label content="A 선택지" htmlFor="option-a" className="mb-1" />
               <TextField
                 mode="outlined"
-                onChange={(e) => setOptionA(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length <= 20) setOptionA(e.target.value);
+                }}
                 placeholder="A 선택지를 입력하세요."
                 size="M"
                 state={fieldErrors.optionA ? 'error' : 'enable'}
@@ -192,7 +219,9 @@ export default function ABTestPage() {
               <Label content="B 선택지" htmlFor="option-b" className="mb-1" />
               <TextField
                 mode="outlined"
-                onChange={(e) => setOptionB(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length <= 20) setOptionB(e.target.value);
+                }}
                 placeholder="B 선택지를 입력하세요."
                 size="M"
                 state={fieldErrors.optionB ? 'error' : 'enable'}
@@ -227,7 +256,9 @@ export default function ABTestPage() {
           <Label content="해설" htmlFor="explanation" className="mb-1" />
           <TextArea
             value={explanation}
-            onChange={(e) => setExplanation(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length <= 50) setExplanation(e.target.value);
+            }}
             placeholder="해설을 입력하세요."
             size="M"
             state={fieldErrors.explanation ? 'error' : 'enable'}
