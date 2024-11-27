@@ -18,11 +18,8 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [isBottomSheetOpen, setBottomSheetOpen] = useState(false);
 
-  const { comments, loading, fetchComments } = useComments();
-
   const handleCommentsClick = () => {
     setBottomSheetOpen(true);
-    fetchComments(quiz.id);
   };
 
   const handleToggleLike = () => {
@@ -63,12 +60,7 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
           onCommentsClick={handleCommentsClick}
         />
       </div>
-      <BottomSheet
-        isOpen={isBottomSheetOpen}
-        setOpen={setBottomSheetOpen}
-        comments={comments}
-        loading={loading}
-      />
+      <BottomSheet isOpen={isBottomSheetOpen} setOpen={setBottomSheetOpen} quizId={quiz.id} />
     </div>
   );
 }

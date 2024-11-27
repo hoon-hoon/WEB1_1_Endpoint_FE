@@ -20,6 +20,15 @@ export const dummyComments: Comment[] = [
         createdAt: '2024-11-20T11:00:00.000Z',
         updatedAt: '2024-11-20T11:00:00.000Z',
       },
+      {
+        id: 16,
+        quizId: 1,
+        writerId: 2,
+        parentCommentId: 1,
+        content: '저도 그렇게 생각합니다!',
+        createdAt: '2024-11-20T11:00:00.000Z',
+        updatedAt: '2024-11-20T11:00:00.000Z',
+      },
     ],
   },
   {

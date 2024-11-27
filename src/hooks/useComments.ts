@@ -17,6 +17,13 @@ const useComments = () => {
     setLoading(false);
   };
 
+  const addComment = async (commentId: number, writerId: number, parentCommentId: number, Content: string) => {
+    setLoading(true);
+    console.log(Content);
+    
+    setLoading(false);
+  };
+
   const deleteComment = async (commentId: number) => {
     setLoading(true);
 
@@ -41,6 +48,7 @@ const useComments = () => {
     comments,
     loading,
     fetchComments,
+    addComment,
     deleteComment,
     editComment,
   };
