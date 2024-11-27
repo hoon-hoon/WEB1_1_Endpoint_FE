@@ -11,8 +11,9 @@ import FlexBox from '@/shared/FlexBox';
 import WithDrawalModal from '@/components/mypage/WithDrawalModal';
 import { useModal } from '@/hooks/useModal';
 import defaultImageURL from '@/shared/defaultImage';
-import { Skeleton } from '@/shadcn/ui/skeleton';
 import { useEffect, useState } from 'react';
+import ProfileSkeleton from '../components/mypage/skeleton/ProfileSkeleton';
+import AchievementSkeleton from '../components/mypage/skeleton/AchievementSkeleton';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];
 
@@ -74,94 +75,62 @@ export default function MyPage() {
     <Container>
       <TopBar />
       {loading ? (
-        <Card>
-          <div className="mb-6 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Skeleton className="h-12 w-12 rounded-full" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-[150px]" />
-                <Skeleton className="h-3 w-[100px]" />
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4 justify-items-center">
-            <div className="space-y-2 text-center">
-              <Skeleton className="h-3 w-[80px] mx-auto" />
-              <Skeleton className="h-6 w-[60px] mx-auto" />
-            </div>
-            <div className="space-y-2 text-center">
-              <Skeleton className="h-3 w-[80px] mx-auto" />
-              <Skeleton className="h-6 w-[60px] mx-auto" />
-            </div>
-          </div>
-        </Card>
+        <>
+          <ProfileSkeleton />
+          <AchievementSkeleton />
+        </>
       ) : (
-        <Card>
-          <div className="mb-6 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Avatar image={defaultImageURL} input="image" />
+        <>
+          <Card>
+            <div className="mb-6 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Avatar image={defaultImageURL} input="image" />
+                <div>
+                  <h2 className="text-lg font-bold">{profileData!.name}</h2>
+                  <p className="text-sm text-gray-500">레이팅: {profileData!.rating}</p>
+                </div>
+              </div>
+              <button className="text-gray-400" onClick={userModal.open}>
+                <Icon icon="gear" size={24} />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-4 justify-items-center">
               <div>
-                <h2 className="text-lg font-bold">{profileData!.name}</h2>
-                <p className="text-sm text-gray-500">레이팅: {profileData!.rating}</p>
+                <p className="text-sm text-gray-500">푼 문제</p>
+                <p className="text-xl font-bold">250개</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">정답률</p>
+                <p className="text-xl font-bold">75%</p>
               </div>
             </div>
-            <button className="text-gray-400" onClick={userModal.open}>
-              <Icon icon="gear" size={24} />
-            </button>
-          </div>
-          <div className="grid grid-cols-2 gap-4 justify-items-center">
-            <div>
-              <p className="text-sm text-gray-500">푼 문제</p>
-              <p className="text-xl font-bold">250개</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">정답률</p>
-              <p className="text-xl font-bold">75%</p>
-            </div>
-          </div>
-        </Card>
-      )}
+          </Card>
 
-      {loading ? (
-        <Card>
-          <div className="space-y-4">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="flex items-center gap-4">
-                <Skeleton className="h-10 w-10 rounded-full" />
-                <div className="flex-1 space-y-2">
-                  <Skeleton className="h-4 w-[200px]" />
-                  <Skeleton className="h-3 w-[150px]" />
-                </div>
-              </div>
-            ))}
-          </div>
-          <Skeleton className="mt-4 h-12 w-full rounded-lg" />
-        </Card>
-      ) : (
-        <Card>
-          <h3 className="mb-4 text-lg font-medium">업적</h3>
-          {achievedAchievements.length > 0 ? (
-            <div className="space-y-4">
-              {achievedAchievements.map((achievement, index) => (
-                <div key={index} className="flex items-center gap-4">
-                  <Icon icon={achievement.icon} size={24} />
-                  <div>
-                    <p className="font-medium text-gray-800">{achievement.title}</p>
-                    <p className="text-sm text-gray-600">{achievement.description}</p>
+          <Card>
+            <h3 className="mb-4 text-lg font-medium">업적</h3>
+            {achievedAchievements.length > 0 ? (
+              <div className="space-y-4">
+                {achievedAchievements.map((achievement, index) => (
+                  <div key={index} className="flex items-center gap-4">
+                    <Icon icon={achievement.icon} size={24} />
+                    <div>
+                      <p className="font-medium text-gray-800">{achievement.title}</p>
+                      <p className="text-sm text-gray-600">{achievement.description}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500">아직 달성한 업적이 없습니다.</p>
-          )}
-          <button
-            onClick={achievementModal.open}
-            className="mt-4 w-full rounded-lg border py-3 text-center text-gray-600"
-          >
-            전체 업적 조회하기
-          </button>
-        </Card>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500">아직 달성한 업적이 없습니다.</p>
+            )}
+            <button
+              onClick={achievementModal.open}
+              className="mt-4 w-full rounded-lg border py-3 text-center text-gray-600"
+            >
+              전체 업적 조회하기
+            </button>
+          </Card>
+        </>
       )}
 
       <FlexBox direction="col" className="gap-4">
