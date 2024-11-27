@@ -1,10 +1,13 @@
 import Container from '@/shared/Container';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
+type IconType = Parameters<typeof Icon>[0]['icon'];
+
 interface Achievement {
   title: string;
   description: string;
   achieved: boolean;
+  icon: IconType;
 }
 
 interface ModalProps {
@@ -45,12 +48,17 @@ export function AchievementModal({ isOpen, onClose, achievements }: ModalProps) 
                     : 'border-gray-100 bg-gray-25 opacity-50' // 미달성 업적 스타일
                 }`}
               >
-                <h4 className={`${achievement.achieved ? 'font-medium' : 'font-normal'}`}>
-                  {achievement.title}
-                </h4>
-                <p className={`${achievement.achieved ? 'text-gray-600' : 'text-gray-400'}`}>
-                  {achievement.description}
-                </p>
+                <div key={index} className="flex items-center gap-4">
+                  <Icon icon={achievement.icon} size={24} />
+                  <div>
+                    <h4 className={`${achievement.achieved ? 'font-medium' : 'font-normal'}`}>
+                      {achievement.title}
+                    </h4>
+                    <p className={`${achievement.achieved ? 'text-gray-600' : 'text-gray-400'}`}>
+                      {achievement.description}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
