@@ -31,6 +31,60 @@ export const dummyComments: Comment[] = [
     createdAt: '2024-11-20T12:00:00.000Z',
     updatedAt: '2024-11-20T12:00:00.000Z',
   },
+  {
+    id: 10,
+    quizId: 1,
+    writerId: 3,
+    parentCommentId: 0,
+    content: 'Virtual DOM이 항상 빠르지 않은 이유가 궁금합니다.',
+    createdAt: '2024-11-20T12:00:00.000Z',
+    updatedAt: '2024-11-20T12:00:00.000Z',
+  },
+  {
+    id: 11,
+    quizId: 1,
+    writerId: 3,
+    parentCommentId: 0,
+    content: 'Virtual DOM이 항상 빠르지 않은 이유가 궁금합니다.',
+    createdAt: '2024-11-20T12:00:00.000Z',
+    updatedAt: '2024-11-20T12:00:00.000Z',
+  },
+  {
+    id: 12,
+    quizId: 1,
+    writerId: 3,
+    parentCommentId: 0,
+    content: 'Virtual DOM이 항상 빠르지 않은 이유가 궁금합니다.',
+    createdAt: '2024-11-20T12:00:00.000Z',
+    updatedAt: '2024-11-20T12:00:00.000Z',
+  },
+  {
+    id: 13,
+    quizId: 1,
+    writerId: 3,
+    parentCommentId: 0,
+    content: 'Virtual DOM이 항상 빠르지 않은 이유가 궁금합니다.',
+    createdAt: '2024-11-20T12:00:00.000Z',
+    updatedAt: '2024-11-20T12:00:00.000Z',
+  },
+  {
+    id: 14,
+    quizId: 1,
+    writerId: 3,
+    parentCommentId: 0,
+    content: 'Virtual DOM이 항상 빠르지 않은 이유가 궁금합니다.',
+    createdAt: '2024-11-20T12:00:00.000Z',
+    updatedAt: '2024-11-20T12:00:00.000Z',
+  },
+  {
+    id: 15,
+    quizId: 1,
+    writerId: 3,
+    parentCommentId: 0,
+    content: 'Virtual DOM이 항상 빠르지 않은 이유가 궁금합니다.',
+    createdAt: '2024-11-20T12:00:00.000Z',
+    updatedAt: '2024-11-20T12:00:00.000Z',
+  },
 
   // Quiz ID: 2, Comment Count: 1
   {
@@ -65,16 +119,7 @@ export const dummyComments: Comment[] = [
     ],
   },
 
-  // Quiz ID: 4, Comment Count: 1
-  {
-    id: 7,
-    quizId: 4,
-    writerId: 7,
-    parentCommentId: 0,
-    content: 'CSS는 확실히 스타일링 언어죠.',
-    createdAt: '2024-11-20T16:00:00.000Z',
-    updatedAt: '2024-11-20T16:00:00.000Z',
-  },
+  // Quiz ID: 4, Comment Count: 0
 
   // Quiz ID: 5, Comment Count: 2
   {

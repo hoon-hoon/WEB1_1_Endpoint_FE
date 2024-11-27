@@ -18,7 +18,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
     answeredOption: 2,
     count: {
       like: 120,
-      comment: 3,
+      comment: 8,
     },
     liked: true,
   },
@@ -77,7 +77,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
     },
     count: {
       like: 50,
-      comment: 1,
+      comment: 0,
     },
     liked: false,
   },

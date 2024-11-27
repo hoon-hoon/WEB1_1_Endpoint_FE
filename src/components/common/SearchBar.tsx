@@ -2,7 +2,7 @@ import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
 export default function SearchBar() {
   return (
-    <div className="relative">
+    <div className="relative mb-4">
       <input
         type="text"
         placeholder="퀴즈 검색..."

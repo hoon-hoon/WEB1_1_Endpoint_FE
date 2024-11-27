@@ -10,6 +10,7 @@ import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useState } from 'react';
 import { Comment } from '@/types';
+import { Skeleton } from '@/shadcn/ui/skeleton';
 
 type BottomSheetProps = {
   isOpen: boolean;
@@ -18,13 +19,13 @@ type BottomSheetProps = {
   loading?: boolean;
 };
 
-export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetProps) {
+export default function BottomSheet({ isOpen, setOpen, comments, loading }: BottomSheetProps) {
   const [inputValue, setInputValue] = useState<string>('');
 
   return (
     <Drawer open={isOpen} onOpenChange={setOpen}>
       <DrawerContent
-        className="max-h-[80dvh] w-full bg-white border-t-2 flex flex-col"
+        className="min-h-[80dvh] max-h-[80dvh] w-full bg-white border-t-2 flex flex-col"
         aria-describedby="set-positions"
       >
         <DrawerHeader className="relative flex-shrink-0">
@@ -41,10 +42,25 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
           </div>
         </DrawerHeader>
 
-        {/* 스크롤 영역을 flex-1로 설정하여 남은 공간을 모두 차지하도록 함 */}
         <div className="overflow-y-scroll pb-16">
-          <div className="p-4">
-            {comments.length > 0 ? (
+          <div
+            className={`p-4 ${
+              comments.length === 0 && !loading ? 'flex justify-center items-center' : ''
+            }`}
+          >
+            {loading ? (
+              <div className="space-y-4">
+                {[...Array(7)].map((_, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <Skeleton className="w-10 h-10 rounded-full" />
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-4 w-full" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : comments.length > 0 ? (
               comments.map((comment) => (
                 <div key={comment.id} className="mb-4 flex flex-col gap-2">
                   <div className="flex items-start gap-3 border-b pb-2">
@@ -76,22 +92,22 @@ export default function BottomSheet({ isOpen, setOpen, comments }: BottomSheetPr
             )}
           </div>
         </div>
-
-        {/* 입력 영역을 absolute로 설정하여 키보드가 올라올 때 댓글 리스트를 가리도록 함 */}
         <div className="absolute bottom-0 left-0 right-0 border-t-2 bg-white">
           <div className="flex px-4 py-4 gap-4">
-            <TextField
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              size="M"
-              mode="outlined"
-              placeholder="댓글을 입력하세요"
-            />
-            <div
-              className="p-3 bg-black rounded-xl cursor-pointer"
-              onClick={() => console.log('댓글 게시')}
-            >
-              <Icon icon="add" className="fill-white" />
+            <div className="flex items-center w-full bg-white border border-gray-100 rounded-lg overflow-hidden gap-1">
+              <TextField
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                size="M"
+                mode="outlined"
+                placeholder="댓글을 입력하세요"
+              />
+              <div
+                className="p-3 bg-black rounded-xl cursor-pointer"
+                onClick={() => console.log('댓글 게시')}
+              >
+                <Icon icon="add" className="fill-white" />
+              </div>
             </div>
           </div>
         </div>
