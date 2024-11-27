@@ -18,7 +18,8 @@ interface BottomSheetProps {
 }
 
 export default function BottomSheet({ isOpen, setOpen, quizId }: BottomSheetProps) {
-  const { comments, loading, fetchComments, addComment, editComment, deleteComment } = useComments();
+  const { comments, loading, fetchComments, addComment, editComment, deleteComment } =
+    useComments();
 
   useEffect(() => {
     if (isOpen) {

@@ -3,6 +3,7 @@ import { Skeleton } from '@/shadcn/ui/skeleton';
 import { Button } from '@/shadcn/ui/button';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { Comment } from '@/types';
+import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
 interface CommentSectionProps {
   comments: Comment[];
@@ -61,16 +62,12 @@ export default function CommentSection({
                 <div className="text-sm flex justify-between items-center">
                   <span className="font-medium">User {comment.writerId}</span>
                   <div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onEdit(comment.id, comment.content)}
+                    <button
+                      onClick={() => onDelete(comment.id)}
+                      className="flex items-center justify-center pb-1 rounded bg-transparent hover:bg-gray-100 focus:bg-gray-200 active:bg-gray-300"
                     >
-                      수정
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => onDelete(comment.id)}>
-                      삭제
-                    </Button>
+                      <Icon icon="delete" size={20} className="text-gray-500" />
+                    </button>
                   </div>
                 </div>
                 <p className="text-sm text-gray-600">{comment.content}</p>
@@ -96,20 +93,12 @@ export default function CommentSection({
                           <div className="text-sm flex justify-between items-center">
                             <span className="font-medium">User {childComment.writerId}</span>
                             <div>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => onEdit(childComment.id, childComment.content)}
-                              >
-                                수정
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
+                              <button
                                 onClick={() => onDelete(childComment.id)}
+                                className="flex items-center justify-center pb-1 rounded bg-transparent hover:bg-gray-100 focus:bg-gray-200 active:bg-gray-300"
                               >
-                                삭제
-                              </Button>
+                                <Icon icon="delete" size={20} className="text-gray-500" />
+                              </button>
                             </div>
                           </div>
                           <p className="text-sm text-gray-600">{childComment.content}</p>
