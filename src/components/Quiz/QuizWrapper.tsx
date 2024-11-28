@@ -38,7 +38,7 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   const authorImage = quiz.author?.imagePath || '/';
 
   return (
-    <div className="flex justify-center h-full">
+    <div className="flex justify-center">
       <div className="w-full p-6 bg-white border border-gray-300 rounded-lg shadow-sm">
         <div className="flex items-center mb-4">
           <Avatar size="S" image={authorImage} />
