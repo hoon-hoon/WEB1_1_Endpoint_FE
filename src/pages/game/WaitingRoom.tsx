@@ -7,7 +7,7 @@ import { Play, Loader2 } from 'lucide-react';
 import Dialog from '@/components/common/Dialog';
 import TopBar from '@/components/common/TopBar';
 import DragScrollWrapper from '@/components/common/DragScrollWrapper';
-import MemberItem, { Member } from '@/components/MemberItem';
+import MemberItem, { Member } from '@/components/common/MemberItem';
 import Card from '@/components/common/Card';
 import Label from '@/components/common/Label';
 import { Skeleton } from '@/shadcn/ui/skeleton';

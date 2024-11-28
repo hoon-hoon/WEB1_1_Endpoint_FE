@@ -1,7 +1,7 @@
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { AiOutlineCrown } from 'react-icons/ai';
 import defaultImageURL from '@/assets/defaultImage';
-import { Badge } from './common/Badge';
+import { Badge } from './Badge';
 
 export type Member = {
   id: string;
