@@ -105,13 +105,13 @@ export const dummyQuizzes: BaseQuizAPI[] = [
         no: 1,
         content: 'Bottom Navigation',
         selectionRatio: 0.67,
-        imagePath: 'https://example.com/images/bottom-navigation.png',
+        imagePath: null,
       },
       {
         no: 2,
         content: 'Sidebar Navigation',
         selectionRatio: 0.33,
-        imagePath: 'https://example.com/images/sidebar-navigation.png',
+        imagePath: null,
       },
     ],
     answer: {

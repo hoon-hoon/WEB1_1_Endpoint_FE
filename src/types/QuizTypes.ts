@@ -2,7 +2,7 @@ export interface QuizOption {
   no: number; // 옵션 번호
   content: string; // 옵션 내용
   selectionRatio: number; // 선택 비율
-  imagePath?: string; // ABTest에만 옵셔널로 존재.
+  imagePath?: string | null; // ABTest에만 옵셔널로 존재.
 }
 
 export interface QuizAnswer {
