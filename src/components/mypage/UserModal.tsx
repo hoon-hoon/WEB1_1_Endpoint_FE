@@ -1,6 +1,7 @@
 import Container from '@/shared/Container';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import Card from '../common/Card';
+import defaultImageURL from '@/shared/defaultImage';
 
 interface UserModalProps {
   isOpen: boolean;
@@ -34,6 +35,21 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
           </div>
 
           <form className="space-y-4">
+            <div className="flex flex-col items-center">
+              <div className="relative h-24 w-24">
+                <img
+                  src={defaultImageURL}
+                  alt="프로필 이미지"
+                  className="h-24 w-24 rounded-full object-cover border border-gray-300"
+                />
+                <label
+                  htmlFor="profileImage"
+                  className="absolute bottom-0 right-0 h-8 w-8 flex items-center justify-center bg-white text-white rounded-full cursor-pointer opacity-80 hover:bg-gray-100"
+                >
+                  <Icon icon="gear" size={16} />
+                </label>
+              </div>
+            </div>
             <div>
               <label htmlFor="nickname" className="block text-sm font-medium text-gray-700">
                 닉네임
