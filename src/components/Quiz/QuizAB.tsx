@@ -20,7 +20,7 @@ function QuizAB({ quiz }: { quiz: BaseQuizAPI }) {
                 <img
                   src={option.imagePath}
                   alt={option.content}
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-contain rounded-lg"
                 />
               </div>
             )}

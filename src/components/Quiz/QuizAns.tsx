@@ -4,9 +4,10 @@ import ProgressBar from '../common/ProgressBar';
 interface QuizAnsProps {
   isCorrect: boolean;
   explanation: string;
+  answerRate: number;
 }
 
-function QuizAns({ isCorrect, explanation }: QuizAnsProps) {
+function QuizAns({ isCorrect, explanation, answerRate }: QuizAnsProps) {
   return (
     <>
       <div className={`mt-4 p-4 rounded-lg ${isCorrect ? 'bg-green-100' : 'bg-red-100'}`}>
@@ -24,8 +25,8 @@ function QuizAns({ isCorrect, explanation }: QuizAnsProps) {
       <div className="mt-6">
         <p className="mb-2 text-sm font-medium text-gray-700">전체 정답률</p>
         <div className="flex items-center gap-2">
-          <ProgressBar progress={40} colorClass="bg-pastelGreen" />
-          <span className="text-sm font-semibold text-gray-600">40%</span>
+          <ProgressBar progress={answerRate} colorClass="bg-pastelGreen" />
+          <span className="text-sm font-semibold text-gray-600">{answerRate.toFixed(1)}</span>
         </div>
       </div>
     </>

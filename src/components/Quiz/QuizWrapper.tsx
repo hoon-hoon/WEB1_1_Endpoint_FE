@@ -3,7 +3,6 @@ import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useState } from 'react';
 import { QuizAns, QuizFooter, QuizRenderer } from '.';
 import BottomSheet from '../common/BottomSheet';
-import { useComments } from '@/hooks';
 
 interface QuizWrapperProps {
   quiz: BaseQuizAPI;
@@ -32,6 +31,9 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
     setIsCorrect(answer === quiz.answer.content);
   };
 
+  const correctOption = quiz.options.find((option) => option.content === quiz.answer.content);
+  const answerRate = correctOption ? correctOption.selectionRatio * 100 : 0;
+
   const authorName = quiz.author?.name || 'default';
   const authorImage = quiz.author?.imagePath || '/';
 
@@ -52,7 +54,11 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
               isCorrect !== null ? 'max-h-[500px]' : 'max-h-0'
             }`}
           >
-            <QuizAns isCorrect={isCorrect!} explanation={quiz.answer.explanation} />
+            <QuizAns
+              isCorrect={isCorrect!}
+              explanation={quiz.answer.explanation}
+              answerRate={answerRate}
+            />
           </div>
         )}
         <QuizFooter
