@@ -1,6 +1,6 @@
 import { useEffect, useRef, memo } from 'react';
-import CheckIcon from '@/images/check-icon.svg';
-import WarningIcon from '@/images/warning-icon.svg';
+import CheckIcon from '@/assets/check-icon.svg';
+import WarningIcon from '@/assets/warning-icon.svg';
 
 interface ToastMessageProps {
   message: string;
