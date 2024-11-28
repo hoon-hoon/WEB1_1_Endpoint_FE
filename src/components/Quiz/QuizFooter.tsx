@@ -11,7 +11,7 @@ interface QuizFooterProps {
 
 function QuizFooter({ likes, comments, isLiked, onToggleLike, onCommentsClick }: QuizFooterProps) {
   return (
-    <div className="flex mt-4 text-gray-600">
+    <div className="flex mt-2 text-gray-600">
       <button
         className="flex items-center p-2  mr-1 rounded-full hover:bg-gray-100 active:bg-gray-200"
         onClick={onToggleLike}

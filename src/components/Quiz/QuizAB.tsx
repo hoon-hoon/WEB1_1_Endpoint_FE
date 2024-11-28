@@ -11,7 +11,7 @@ function QuizAB({ quiz }: { quiz: BaseQuizAPI }) {
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-4">{quiz.content}</h3>
+      <h3 className="text-md font-semibold mb-4">{quiz.content}</h3>
       <div className="grid grid-cols-2 gap-4">
         {quiz.options.map((option) => (
           <div key={option.no} className="flex flex-col items-center gap-4">
