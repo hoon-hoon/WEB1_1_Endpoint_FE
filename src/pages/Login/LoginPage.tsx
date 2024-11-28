@@ -1,5 +1,5 @@
-import GoogleLoginButton from '@/components/GoogleLoginButton';
-import KakaoLoginButton from '@/components/KakaoLoginButton';
+import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
+import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
 import Container from '@/shared/Container';
 import FlexBox from '@/shared/FlexBox';
 import { SiQuizlet } from 'react-icons/si';
