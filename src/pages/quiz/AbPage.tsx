@@ -7,25 +7,41 @@ import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
+import DropDown from '@/components/common/DropDown';
 import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+
+// 카테고리 목록
+const categories = [
+  '알고리즘',
+  '프로그래밍 언어',
+  '네트워크',
+  '운영체제',
+  '웹 개발',
+  '모바일 개발',
+  '데브옵스/인프라',
+  '데이터베이스',
+  '소프트웨어 공학',
+];
 
 export default function ABTestPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [formData, setFormData] = useState({
-    question: '',
-    optionA: '',
-    optionB: '',
-    imageA: null as File | null,
-    imageB: null as File | null,
-    explanation: '',
+    category: '', // 카테고리
+    question: '', // 문제
+    optionA: '', // A 선택지
+    optionB: '', // B 선택지
+    imageA: null as File | null, // A 이미지
+    imageB: null as File | null, // B 이미지
+    explanation: '', // 해설
   });
 
   const [fieldErrors, setFieldErrors] = useState({
+    category: false,
     question: false,
     optionA: false,
     optionB: false,
@@ -60,7 +76,7 @@ export default function ABTestPage() {
     }
   };
 
-  const handleInputChange = (field: keyof typeof formData, value: string, maxLength: number) => {
+  const handleInputChange = (field: keyof typeof formData, value: string, maxLength?: number) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value.slice(0, maxLength),
@@ -115,6 +131,7 @@ export default function ABTestPage() {
   };
   const validateFields = () => {
     const errors = {
+      category: formData.category.trim() === '',
       question: formData.question.trim() === '',
       optionA: formData.optionA.trim() === '',
       optionB: formData.optionB.trim() === '',
@@ -135,7 +152,18 @@ export default function ABTestPage() {
     setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
     setToastOpen(true);
 
-    console.log(formData);
+    const payload = {
+      category: formData.category,
+      type: 'AB_TEST',
+      content: formData.question,
+      options: [
+        { optionNumber: 1, content: formData.optionA, imageId: null },
+        { optionNumber: 2, content: formData.optionB, imageId: null },
+      ],
+      explanation: formData.explanation,
+    };
+
+    console.log('Payload:', payload);
   };
 
   return (
@@ -175,6 +203,18 @@ export default function ABTestPage() {
                 onChange={() => handleQuizTypeChange('multiple')}
               />
             </div>
+          </div>
+          {/* 카테고리 선택 */}
+          <div className="mb-4">
+            <Label content="주제" htmlFor="category" className="mb-1" />
+            <DropDown
+              items={categories}
+              selectedItem={formData.category}
+              setItem={(value: string) => handleInputChange('category', value)}
+              placeholder="주제를 선택하세요"
+              alert="주제를 선택해주세요."
+              required={fieldErrors.category && formData.category === ''}
+            />
           </div>
           <div className="mb-4">
             <Label content="문제" htmlFor="quiz-question" className="mb-1" />

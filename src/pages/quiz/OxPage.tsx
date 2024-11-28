@@ -8,8 +8,22 @@ import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
+import DropDown from '@/components/common/DropDown';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+
+// 카테고리 목록
+const categories = [
+  '알고리즘',
+  '프로그래밍 언어',
+  '네트워크',
+  '운영체제',
+  '웹 개발',
+  '모바일 개발',
+  '데브옵스/인프라',
+  '데이터베이스',
+  '소프트웨어 공학',
+];
 
 export default function OXQuizPage() {
   const navigate = useNavigate();
@@ -17,12 +31,14 @@ export default function OXQuizPage() {
 
   // 퀴즈 데이터 상태
   const [formData, setFormData] = useState({
+    category: '', // 카테고리
     question: '', // 문제
     selectedAnswer: null as 'O' | 'X' | null, // 정답
     explanation: '', // 해설
   });
 
   const [fieldErrors, setFieldErrors] = useState({
+    category: false,
     question: false,
     explanation: false,
     selectedAnswer: false,
@@ -30,7 +46,6 @@ export default function OXQuizPage() {
 
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
-
   const [selectedQuizType, setSelectedQuizType] = useState('');
 
   useEffect(() => {
@@ -56,7 +71,7 @@ export default function OXQuizPage() {
     }
   };
 
-  const handleInputChange = (field: keyof typeof formData, value: string, maxLength: number) => {
+  const handleInputChange = (field: keyof typeof formData, value: string, maxLength?: number) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value.slice(0, maxLength), // 최대 글자 수 제한
@@ -80,6 +95,7 @@ export default function OXQuizPage() {
 
   const validateFields = () => {
     const updatedErrors = {
+      category: formData.category.trim() === '',
       question: formData.question.trim() === '',
       explanation: formData.explanation.trim() === '',
       selectedAnswer: formData.selectedAnswer === null,
@@ -101,7 +117,19 @@ export default function OXQuizPage() {
     setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
     setToastOpen(true);
 
-    console.log(formData);
+    const payload = {
+      category: formData.category,
+      type: 'OX',
+      content: formData.question,
+      options: [
+        { optionNumber: 1, content: 'O', imageId: null },
+        { optionNumber: 2, content: 'X', imageId: null },
+      ],
+      answer: formData.selectedAnswer,
+      explanation: formData.explanation,
+    };
+
+    console.log('Payload:', payload);
   };
 
   return (
@@ -142,6 +170,19 @@ export default function OXQuizPage() {
                 onChange={() => handleQuizTypeChange('multiple')}
               />
             </div>
+          </div>
+
+          {/* 카테고리 선택 */}
+          <div className="mb-4">
+            <Label content="주제" htmlFor="category" className="mb-1" />
+            <DropDown
+              items={categories}
+              selectedItem={formData.category}
+              setItem={(value: string) => handleInputChange('category', value)}
+              placeholder="주제를 선택하세요"
+              alert="주제를 선택해주세요."
+              required={fieldErrors.category && formData.category === ''}
+            />
           </div>
 
           {/* 문제 입력 */}
