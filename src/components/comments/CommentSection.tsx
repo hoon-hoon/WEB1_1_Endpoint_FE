@@ -8,14 +8,13 @@ import Icon from '@eolluga/eolluga-ui/icon/Icon';
 interface CommentSectionProps {
   comments: Comment[];
   loading?: boolean;
-  onEdit: (commentId: number, newContent: string) => void;
+//   onEdit: (commentId: number, newContent: string) => void;
   onDelete: (commentId: number) => void;
 }
 
 export default function CommentSection({
   comments,
   loading,
-  onEdit,
   onDelete,
 }: CommentSectionProps) {
   const [expandedComments, setExpandedComments] = useState<{ [key: number]: boolean }>({});

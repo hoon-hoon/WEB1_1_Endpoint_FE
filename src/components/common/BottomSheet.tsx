@@ -18,8 +18,7 @@ interface BottomSheetProps {
 }
 
 export default function BottomSheet({ isOpen, setOpen, quizId }: BottomSheetProps) {
-  const { comments, loading, fetchComments, addComment, editComment, deleteComment } =
-    useComments();
+  const { comments, loading, fetchComments, addComment, deleteComment } = useComments();
 
   useEffect(() => {
     if (isOpen) {
@@ -32,9 +31,9 @@ export default function BottomSheet({ isOpen, setOpen, quizId }: BottomSheetProp
     addComment(quizId, writerId, parentCommentId, content);
   };
 
-  const handleEditComment = (commentId: number, newContent: string) => {
-    editComment(commentId, newContent);
-  };
+  // const handleEditComment = (commentId: number, newContent: string) => {
+  //   editComment(commentId, newContent);
+  // };
 
   const handleDeleteComment = (commentId: number) => {
     deleteComment(commentId);
@@ -62,7 +61,7 @@ export default function BottomSheet({ isOpen, setOpen, quizId }: BottomSheetProp
         <CommentSection
           comments={comments}
           loading={loading}
-          onEdit={handleEditComment}
+          // onEdit={handleEditComment}
           onDelete={handleDeleteComment}
         />
         <CommentInput onSubmit={(content) => handleAddComment(content, 0)} />

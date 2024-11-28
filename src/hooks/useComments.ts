@@ -17,10 +17,15 @@ const useComments = () => {
     setLoading(false);
   };
 
-  const addComment = async (commentId: number, writerId: number, parentCommentId: number, Content: string) => {
+  const addComment = async (
+    commentId: number,
+    writerId: number,
+    parentCommentId: number,
+    Content: string,
+  ) => {
     setLoading(true);
-    console.log(Content);
-    
+    console.log(commentId, writerId, parentCommentId, Content);
+
     setLoading(false);
   };
 
