@@ -37,6 +37,7 @@ const useOAuthHandler = (provider: Provider) => {
       } else {
         navigate('/main');
       }
+      return;
     }
 
     if (error) {
