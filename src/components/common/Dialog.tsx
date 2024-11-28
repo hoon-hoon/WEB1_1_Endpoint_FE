@@ -1,5 +1,5 @@
 import Button from './Button/Button';
-import FlexBox from '@/shared/FlexBox';
+import FlexBox from '@/components/layout/FlexBox';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
 export interface DialogProps {

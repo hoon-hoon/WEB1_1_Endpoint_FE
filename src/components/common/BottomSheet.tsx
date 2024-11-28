@@ -4,7 +4,7 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from '../../shared/drawer';
+} from '../../assets/drawer';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';

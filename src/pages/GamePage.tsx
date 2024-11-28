@@ -5,10 +5,10 @@ import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { IoGameControllerOutline, IoTrophyOutline } from 'react-icons/io5';
 import Card from '@/components/common/Card';
 import TopBar from '@/components/common/TopBar';
-import Container from '@/shared/Container';
-import FlexBox from '@/shared/FlexBox';
+import Container from '@/components/layout/Container';
+import FlexBox from '@/components/layout/FlexBox';
 import { Skeleton } from '@/shadcn/ui/skeleton';
-import defaultImageURL from '@/shared/defaultImage';
+import defaultImageURL from '@/assets/defaultImage';
 
 interface UserData {
   name: string;

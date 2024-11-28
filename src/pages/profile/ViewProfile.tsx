@@ -4,9 +4,9 @@ import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
-import FlexBox from '@/shared/FlexBox';
-import Container from '@/shared/Container';
-import defaultImageURL from '@/shared/defaultImage';
+import FlexBox from '@/components/layout/FlexBox';
+import Container from '@/components/layout/Container';
+import defaultImageURL from '@/assets/defaultImage';
 import { Achievement } from '../MyPage';
 
 type UserProfile = {

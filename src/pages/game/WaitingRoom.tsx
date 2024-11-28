@@ -9,7 +9,7 @@ import TopBar from '@/components/common/TopBar';
 import DragScrollWrapper from '@/components/common/DragScrollWrapper';
 import MemberItem, { Member } from '@/components/MemberItem';
 import Card from '@/components/common/Card';
-import Label from '@/shared/Label';
+import Label from '@/components/common/Label';
 import { Skeleton } from '@/shadcn/ui/skeleton';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import ToastMessage from '@/components/common/ToastMessage';
