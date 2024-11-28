@@ -1,4 +1,6 @@
 import { BaseQuizAPI } from '@/types';
+import flatImage from '@/assets/flat.png';
+import materialImage from '@/assets/material.png';
 
 export const dummyQuizzes: BaseQuizAPI[] = [
   {
@@ -31,13 +33,13 @@ export const dummyQuizzes: BaseQuizAPI[] = [
         no: 1,
         content: 'Flat Design',
         selectionRatio: 0.42,
-        imagePath: 'https://example.com/images/flat-design.png',
+        imagePath: flatImage,
       },
       {
         no: 2,
         content: 'Material Design',
         selectionRatio: 0.58,
-        imagePath: 'https://example.com/images/material-design.png',
+        imagePath: materialImage,
       },
     ],
     answer: {
