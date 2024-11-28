@@ -5,6 +5,7 @@ import FlexBox from '@/shared/FlexBox';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
+import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/shared/Container';
@@ -14,29 +15,38 @@ import ToastMessage from '@/components/common/ToastMessage';
 export default function MultipleChoicePage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [selectedQuizType, setSelectedQuizType] = useState('');
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null); // 초기값 null로 설정
-  const [question, setQuestion] = useState('');
-  const [options, setOptions] = useState<string[]>(['', '', '', '']);
-  const [explanation, setExplanation] = useState('');
+
+  // 퀴즈 데이터 상태
+  const [formData, setFormData] = useState({
+    question: '', // 문제
+    options: ['', '', '', ''], // 선택지
+    selectedAnswer: null as number | null, // 정답
+    explanation: '', // 해설
+  });
+
+  // 필드 에러 상태 관리
   const [fieldErrors, setFieldErrors] = useState({
     question: false,
     options: [false, false, false, false],
     explanation: false,
-    answer: false,
+    selectedAnswer: false,
   });
 
+  // 토스트 메시지 상태
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
-  // URL에 따라 선택된 퀴즈 유형 설정
+  // 현재 선택된 퀴즈 유형
+  const [selectedQuizType, setSelectedQuizType] = useState('');
+
+  // URL에 따라 퀴즈 유형 초기화
   useEffect(() => {
     if (location.pathname === '/quiz/multiple') {
       setSelectedQuizType('multiple');
     }
   }, [location.pathname]);
 
-  // 퀴즈 유형 변경 시 URL 변경
+  // 퀴즈 유형 변경
   const handleQuizTypeChange = (selected: string) => {
     setSelectedQuizType(selected);
     switch (selected) {
@@ -54,48 +64,73 @@ export default function MultipleChoicePage() {
     }
   };
 
-  // 정답 선택 시 동일한 값을 다시 클릭하면 선택 해제
-  const handleAnswerChange = (answer: number) => {
-    setSelectedAnswer((prevAnswer) => (prevAnswer === answer ? null : answer));
-    setFieldErrors((prev) => ({ ...prev, answer: false })); // 선택 시 에러 제거
+  // 입력 필드 변경 핸들러
+  const handleInputChange = (field: keyof typeof formData, value: string, maxLength: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value.slice(0, maxLength), // 최대 글자 수 제한
+    }));
+    setFieldErrors((prev) => ({
+      ...prev,
+      [field]: false,
+    }));
   };
 
-  // 선택지 입력 시 입력값 변경
+  // 선택지 변경 핸들러
   const handleOptionChange = (index: number, value: string) => {
-    const updatedOptions = [...options];
-    updatedOptions[index] = value;
-    setOptions(updatedOptions);
+    const updatedOptions = [...formData.options];
+    updatedOptions[index] = value.slice(0, 20); // 선택지 최대 글자 수 제한
+    setFormData((prev) => ({
+      ...prev,
+      options: updatedOptions,
+    }));
 
     const updatedErrors = [...fieldErrors.options];
     updatedErrors[index] = value.trim() === '';
-    setFieldErrors((prev) => ({ ...prev, options: updatedErrors }));
+    setFieldErrors((prev) => ({
+      ...prev,
+      options: updatedErrors,
+    }));
   };
 
+  // 정답 선택 핸들러
+  const handleAnswerChange = (answer: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedAnswer: prev.selectedAnswer === answer ? null : answer,
+    }));
+    setFieldErrors((prev) => ({
+      ...prev,
+      selectedAnswer: false,
+    }));
+  };
+
+  // 유효성 검사
   const validateFields = () => {
     const updatedErrors = {
-      question: question.trim() === '',
-      options: options.map((option) => option.trim() === ''),
-      explanation: explanation.trim() === '',
-      answer: selectedAnswer === null, // 정답 선택 여부 확인
+      question: formData.question.trim() === '',
+      options: formData.options.map((option) => option.trim() === ''),
+      explanation: formData.explanation.trim() === '',
+      selectedAnswer: formData.selectedAnswer === null,
     };
 
     setFieldErrors(updatedErrors);
 
-    // 에러가 있는 경우 false 반환
+    // 에러가 하나라도 있으면 false 반환
     return (
       !updatedErrors.question &&
       !updatedErrors.options.some((err) => err) &&
       !updatedErrors.explanation &&
-      !updatedErrors.answer
+      !updatedErrors.selectedAnswer
     );
   };
 
-  // 제출 버튼 클릭 시 유효성 검사 및 데이터 확인
+  // 제출 버튼 클릭 시 처리
   const handleSubmit = () => {
     const isValid = validateFields();
 
     if (!isValid) {
-      setToastMessage({ message: '필드를 모두 채워주세요.', icon: 'warning' });
+      setToastMessage({ message: '모든 항목을 작성해주세요.', icon: 'warning' });
       setToastOpen(true);
       return;
     }
@@ -103,7 +138,7 @@ export default function MultipleChoicePage() {
     setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
     setToastOpen(true);
 
-    console.log({ question, options, selectedAnswer, explanation });
+    console.log(formData);
   };
 
   return (
@@ -115,6 +150,7 @@ export default function MultipleChoicePage() {
           onClickLeft={() => navigate('/profile')}
         />
         <Card>
+          {/* 퀴즈 유형 선택 */}
           <div className="mb-4">
             <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />
             <div className="flex flex-row items-center gap-4">
@@ -144,56 +180,75 @@ export default function MultipleChoicePage() {
               />
             </div>
           </div>
+
+          {/* 문제 입력 */}
           <div className="mb-4">
             <Label content="문제" htmlFor="quiz-question" className="mb-1" />
             <TextArea
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
+              value={formData.question}
+              onChange={(e) => handleInputChange('question', e.target.value, 42)} // 42글자 제한
               placeholder="문제를 입력하세요."
               size="M"
               state={fieldErrors.question ? 'error' : 'enable'}
             />
           </div>
 
+          {/* 선택지 입력 */}
           <div className="mb-4">
-            {['1번 선택지', '2번 선택지', '3번 선택지', '4번 선택지'].map((label, index) => (
+            {formData.options.map((option, index) => (
               <div key={index} className="mb-2">
-                <Label content={label} htmlFor={`option-${index + 1}`} className="mb-1" />
+                <Label
+                  content={`${index + 1}번 선택지`}
+                  htmlFor={`option-${index + 1}`}
+                  className="mb-1"
+                />
                 <TextField
                   mode="outlined"
+                  value={option}
                   onChange={(e) => handleOptionChange(index, e.target.value)}
-                  placeholder={`${label}를 입력하세요.`}
+                  placeholder={`${index + 1}번 선택지를 입력하세요.`}
                   size="M"
                   state={fieldErrors.options[index] ? 'error' : 'enable'}
-                  value={options[index]}
                 />
               </div>
             ))}
           </div>
+
+          {/* 정답 선택 */}
           <div className="mb-4">
             <Label content="정답" htmlFor="answer" className="mb-1" />
             <div className="flex flex-row items-center gap-4">
-              {options.map((_, index) => (
+              {formData.options.map((_, index) => (
                 <Radio
                   key={index}
                   size="M"
-                  state={fieldErrors.answer ? 'error' : 'enable'}
+                  state={fieldErrors.selectedAnswer ? 'error' : 'enable'}
                   title={`${index + 1}`}
-                  checked={selectedAnswer === index + 1}
+                  checked={formData.selectedAnswer === index + 1}
                   onChange={() => handleAnswerChange(index + 1)}
                 />
               ))}
             </div>
+            {fieldErrors.selectedAnswer && (
+              <div className="mt-2 flex items-center text-red-500 text-sm">
+                <Icon icon="warning_triangle_filled" className="mr-2" size={16} />
+                정답을 선택해주세요.
+              </div>
+            )}
           </div>
+
+          {/* 해설 입력 */}
           <Label content="해설" htmlFor="explanation" className="mb-1" />
           <TextArea
-            value={explanation}
-            onChange={(e) => setExplanation(e.target.value)}
+            value={formData.explanation}
+            onChange={(e) => handleInputChange('explanation', e.target.value, 70)} // 70글자 제한
             placeholder="해설을 입력하세요."
             size="M"
             state={fieldErrors.explanation ? 'error' : 'enable'}
           />
         </Card>
+
+        {/* 제출 버튼 */}
         <ShadcnButton
           className="w-full h-12 text-lg relative"
           size="default"

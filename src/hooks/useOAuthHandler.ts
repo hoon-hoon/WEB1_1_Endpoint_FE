@@ -1,50 +1,56 @@
-import { useEffect, useRef } from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuthStore } from '@/stores/useAuthStore';
-
-type Provider = 'google' | 'kakao';
+import { Provider } from '@/types/AuthType';
 
 const useOAuthHandler = (provider: Provider) => {
   const navigate = useNavigate();
-  const processedRef = useRef(false);
-
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
-  useEffect(() => {
-    if (processedRef.current) return;
+  const handleLogin = useCallback(() => {
+    const redirectURI =
+      provider === 'kakao'
+        ? import.meta.env.VITE_KAKAO_OAUTH_REDIRECT_URI
+        : import.meta.env.VITE_GOOGLE_OAUTH_REDIRECT_URI;
 
-    const searchParams = new URLSearchParams(window.location.search);
-    const code = searchParams.get('code');
-    console.log('code: ', code);
+    // 백엔드 인증 URL로 리다이렉트
+    window.location.href = redirectURI;
+  }, []);
 
-    if (code) {
-      axios
-        .get('/mock-auth.json') // 임시 로그인 정보 mock-auth.json 파일
-
-        // .post(`/api/v1/oauth2/callback/${provider}`, { code }, { withCredentials: true })
-        .then((response) => {
-          console.log('Response data:', response.data.result);
-          const { accessToken } = response.data.result;
-
-          // 액세스 토큰 저장
-          setAccessToken(accessToken, provider);
-
-          // 리다이렉트
-          navigate('/');
-        })
-        .catch((error) => {
-          console.error(`${provider} 로그인 실패:`, error);
-          navigate('/login', { replace: true });
-        });
-    } else {
-      navigate('/', { replace: true });
+  const handleRedirectCallback = useCallback(() => {
+    if (localStorage.getItem('accessToken')) {
+      navigate('/main');
+      return;
     }
 
-    processedRef.current = true;
-  }, [navigate, provider, setAccessToken]);
+    const searchParams = new URLSearchParams(window.location.search);
+    const accessToken = searchParams.get('token');
+    const guest = searchParams.get('guest') === 'true';
+    const error = searchParams.get('error');
 
-  return null;
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken);
+      setAccessToken(accessToken, provider);
+
+      if (guest) {
+        navigate('/interest');
+      } else {
+        navigate('/main');
+      }
+    }
+
+    if (error) {
+      const decodedError = decodeURIComponent(error);
+      console.error('로그인 실패:', decodedError);
+      navigate('/');
+      return;
+    } else {
+      console.error('Access Token이 없습니다.');
+      navigate('/');
+    }
+  }, [setAccessToken, provider]);
+
+  return { handleLogin, handleRedirectCallback };
 };
 
 export default useOAuthHandler;

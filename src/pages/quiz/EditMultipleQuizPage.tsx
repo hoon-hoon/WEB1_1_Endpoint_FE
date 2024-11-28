@@ -6,6 +6,7 @@ import FlexBox from '@/shared/FlexBox';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
+import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/shared/Container';
@@ -65,16 +66,18 @@ export default function EditMultipleChoicePage() {
     // fetchQuiz();
   }, [id]);
 
-  const handleInputChange = (field: string, value: string | number) => {
-    setQuizData((prev) => ({ ...prev, [field]: value }));
+  // 입력 필드 변경 핸들러
+  const handleInputChange = (field: string, value: string, maxLength: number) => {
+    setQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) }));
     if (field !== 'options') {
       setFieldErrors((prev) => ({ ...prev, [field]: false }));
     }
   };
 
+  // 선택지 변경 핸들러
   const handleOptionChange = (optionNumber: number, value: string) => {
     const updatedOptions = quizData.options.map((option) =>
-      option.optionNumber === optionNumber ? { ...option, title: value } : option,
+      option.optionNumber === optionNumber ? { ...option, title: value.slice(0, 20) } : option,
     );
     setQuizData((prev) => ({ ...prev, options: updatedOptions }));
 
@@ -83,8 +86,8 @@ export default function EditMultipleChoicePage() {
     setFieldErrors((prev) => ({ ...prev, options: updatedErrors }));
   };
 
+  // 정답 선택 핸들러
   const handleAnswerChange = (optionNumber: number) => {
-    // 동일한 답변 클릭 시 선택 해제
     setQuizData((prev) => ({
       ...prev,
       answer: prev.answer === optionNumber ? 0 : optionNumber,
@@ -92,6 +95,7 @@ export default function EditMultipleChoicePage() {
     setFieldErrors((prev) => ({ ...prev, answer: false }));
   };
 
+  // 유효성 검사
   const validateFields = () => {
     const errors = {
       content: quizData.content.trim() === '',
@@ -111,16 +115,18 @@ export default function EditMultipleChoicePage() {
 
   const handleSubmit = async () => {
     if (!validateFields()) {
-      setToastMessage({ message: '필드를 모두 채워주세요.', icon: 'warning' });
+      setToastMessage({
+        message: '모든 항목을 작성해주세요.',
+        icon: 'warning',
+      });
       setToastOpen(true);
       return;
     }
 
-    console.log('객관식 퀴즈 수정 데이터 제출:', quizData);
-
     setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
     setToastOpen(true);
 
+    console.log('객관식 퀴즈 수정 데이터 제출:', quizData);
     // 서버 연결 시 활성화
     // try {
     //   await axios.put(`/api/quiz/${id}`, quizData);
@@ -142,16 +148,44 @@ export default function EditMultipleChoicePage() {
         />
         <Card>
           <div className="mb-4">
+            <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />
+            <div className="flex flex-row items-center gap-4">
+              <Radio
+                alert="퀴즈 유형을 선택해주세요."
+                size="M"
+                state="readOnly"
+                title="OX 퀴즈"
+                checked={false}
+              />
+              <Radio
+                alert="퀴즈 유형을 선택해주세요."
+                size="M"
+                state="readOnly"
+                title="AB 테스트"
+                checked={false}
+              />
+              <Radio
+                alert="퀴즈 유형을 선택해주세요."
+                size="M"
+                state="readOnly"
+                title="객관식"
+                checked={true}
+              />
+            </div>
+          </div>
+          {/* 문제 입력 */}
+          <div className="mb-4">
             <Label content="문제" />
             <TextArea
               value={quizData.content}
-              onChange={(e) => handleInputChange('content', e.target.value)}
+              onChange={(e) => handleInputChange('content', e.target.value, 42)}
               placeholder="문제를 입력하세요."
               size="M"
               state={fieldErrors.content ? 'error' : 'enable'}
             />
           </div>
 
+          {/* 선택지 입력 */}
           <div className="mb-4">
             {quizData.options.map((option) => (
               <div key={option.optionNumber} className="mb-2">
@@ -168,6 +202,7 @@ export default function EditMultipleChoicePage() {
             ))}
           </div>
 
+          {/* 정답 선택 */}
           <div className="mb-4">
             <Label content="정답" />
             <div className="flex flex-row items-center gap-4">
@@ -182,25 +217,32 @@ export default function EditMultipleChoicePage() {
                 />
               ))}
             </div>
+            {fieldErrors.answer && (
+              <div className="mt-2 flex items-center text-red-500 text-sm">
+                <Icon icon="warning_triangle_filled" className="mr-2" size={16} />
+                정답을 선택해주세요.
+              </div>
+            )}
           </div>
 
-          <div className="mb-4">
-            <Label content="해설" />
-            <TextArea
-              value={quizData.explanation}
-              onChange={(e) => handleInputChange('explanation', e.target.value)}
-              placeholder="해설을 입력하세요."
-              size="M"
-              state={fieldErrors.explanation ? 'error' : 'enable'}
-            />
-          </div>
+          {/* 해설 입력 */}
+          <Label content="해설" />
+          <TextArea
+            value={quizData.explanation}
+            onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
+            placeholder="해설을 입력하세요."
+            size="M"
+            state={fieldErrors.explanation ? 'error' : 'enable'}
+          />
         </Card>
+
+        {/* 제출 버튼 */}
         <ShadcnButton
           className="w-full h-12 text-lg relative"
           size="default"
           onClick={handleSubmit}
         >
-          퀴즈 생성하기
+          퀴즈 수정하기
           <ToastMessage
             message={toastMessage.message}
             icon={toastMessage.icon as 'check' | 'warning'}
