@@ -1,4 +1,4 @@
-import Container from '@/shared/Container';
+import Container from '@/components/layout/Container';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];

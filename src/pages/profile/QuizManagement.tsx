@@ -3,8 +3,8 @@ import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import { Button } from '@/shadcn/ui/button';
 import { useNavigate } from 'react-router-dom';
-import Container from '@/shared/Container';
-import FlexBox from '@/shared/FlexBox';
+import Container from '@/components/layout/Container';
+import FlexBox from '@/components/layout/FlexBox';
 
 interface Quiz {
   id: number;

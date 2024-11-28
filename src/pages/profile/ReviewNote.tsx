@@ -3,8 +3,8 @@ import TopBar from '@/components/common/TopBar';
 import ReviewNoteCard from '@/components/mypage/ReviewNoteCard';
 import { ReviewNoteItem } from '@/types/MyPageTpyes';
 import { useNavigate } from 'react-router-dom';
-import Container from '@/shared/Container';
-import FlexBox from '@/shared/FlexBox';
+import Container from '@/components/layout/Container';
+import FlexBox from '@/components/layout/FlexBox';
 
 export default function ReviewNote() {
   const navigate = useNavigate();

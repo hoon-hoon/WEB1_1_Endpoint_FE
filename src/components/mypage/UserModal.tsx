@@ -1,4 +1,4 @@
-import Container from '@/shared/Container';
+import Container from '@/components/layout/Container';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import Card from '../common/Card';
 

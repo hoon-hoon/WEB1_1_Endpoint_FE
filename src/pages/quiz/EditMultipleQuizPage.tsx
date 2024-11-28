@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 // import axios from 'axios'; // 서버 연결 시 다시 활성화
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
-import FlexBox from '@/shared/FlexBox';
+import FlexBox from '@/components/layout/FlexBox';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
-import Container from '@/shared/Container';
-import Label from '@/shared/Label';
+import Container from '@/components/layout/Container';
+import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
 // Mock 데이터
 const MOCK_DATA = {

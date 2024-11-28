@@ -7,8 +7,8 @@ import { SiQuizlet } from 'react-icons/si';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shadcn/ui/popover';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import Dialog from './Dialog';
-import defaultImageURL from '@/shared/defaultImage';
-import FlexBox from '@/shared/FlexBox';
+import defaultImageURL from '@/assets/defaultImage';
+import FlexBox from '@/components/layout/FlexBox';
 
 type TopBarProps = {
   title?: string;

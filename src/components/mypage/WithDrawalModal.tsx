@@ -1,7 +1,7 @@
-import Container from '@/shared/Container';
+import Container from '@/components/layout/Container';
 import Card from '../common/Card';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
-import FlexBox from '@/shared/FlexBox';
+import FlexBox from '@/components/layout/FlexBox';
 
 interface WitdhDrawalProps {
   isOpen: boolean;

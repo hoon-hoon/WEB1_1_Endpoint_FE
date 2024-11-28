@@ -1,3 +1,14 @@
+export type Topic =
+  | '알고리즘'
+  | '프로그래밍 언어'
+  | '네트워크'
+  | '운영체제'
+  | '웹 개발'
+  | '모바일 개발'
+  | '데브옵스/인프라'
+  | '데이터베이스'
+  | '소프트웨어 공학';
+
 export type Player = {
   id: number;
   name: string;

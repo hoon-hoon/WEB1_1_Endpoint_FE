@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { BottomNavBar } from '../components';
+import { BottomNavBar } from '..';
 
 function MainLayout({
   activeTab,
