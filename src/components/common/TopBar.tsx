@@ -7,8 +7,9 @@ import { SiQuizlet } from 'react-icons/si';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shadcn/ui/popover';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import Dialog from './Dialog';
-import defaultImageURL from '@/shared/defaultImage';
-import FlexBox from '@/shared/FlexBox';
+import defaultImageURL from '@/assets/defaultImage';
+import FlexBox from '@/components/layout/FlexBox';
+import axiosInstance from '@/api/axiosInstance';
 
 type TopBarProps = {
   title?: string;
@@ -30,8 +31,16 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
     });
   };
   // 로그아웃
-  const handleLogout = () => {
-    dispatch({ type: 'LOGOUT' });
+  const handleLogout = async () => {
+    try {
+      const response = await axiosInstance.post('/auth/logout');
+      console.log(response.data.result);
+      localStorage.removeItem('accessToken');
+      dispatch({ type: 'LOGOUT' });
+      //dispatch({ type: 'CLOSE' });
+    } catch (error) {
+      console.log('로그아웃 실패:', error);
+    }
   };
 
   const handleExit = () => {
@@ -90,7 +99,7 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
           description="정말 로그아웃 하시겠습니까?"
           leftText="예"
           rightText="아니요"
-          leftOnClick={() => dispatch({ type: 'CLOSE' })}
+          leftOnClick={() => handleLogout()}
           rightOnClick={() => dispatch({ type: 'CLOSE' })}
         />
         <Dialog

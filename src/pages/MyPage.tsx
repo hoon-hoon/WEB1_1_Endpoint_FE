@@ -1,19 +1,19 @@
 import TopBar from '@/components/common/TopBar';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
-import Container from '@/shared/Container';
 import Card from '@/components/common/Card';
-import FlexBox from '@/shared/FlexBox';
-import defaultImageURL from '@/shared/defaultImage';
+import Container from '@/components/layout/Container';
+import defaultImageURL from '@/assets/defaultImage';
 import { MenuButton } from '@/components/mypage/MenuButton';
+import { useModal } from '@/hooks/useModal';
 import { AchievementModal } from '@/components/mypage/AchievementModal';
-import WithDrawalModal from '@/components/mypage/WithDrawalModal';
 import UserModal from '@/components/mypage/UserModal';
+import WithDrawalModal from '@/components/mypage/WithDrawalModal';
 import ProfileSkeleton from '../components/mypage/skeleton/ProfileSkeleton';
 import AchievementSkeleton from '../components/mypage/skeleton/AchievementSkeleton';
 
-import { useModal } from '@/hooks/useModal';
 import { useEffect, useState } from 'react';
+import FlexBox from '@/components/layout/FlexBox';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];
 

@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
-import FlexBox from '@/shared/FlexBox';
+import FlexBox from '@/components/layout/FlexBox';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
-import Container from '@/shared/Container';
-import Label from '@/shared/Label';
+import Container from '@/components/layout/Container';
+import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
 
 export default function ABTestPage() {

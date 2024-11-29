@@ -4,7 +4,7 @@ import TopBar from '@/components/common/TopBar';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import Card from '@/components/common/Card';
 import { CheckCircle2, XCircle, ArrowRight, Medal } from 'lucide-react';
-import Container from '@/shared/Container';
+import Container from '@/components/layout/Container';
 import Celebrate from './Celebrate';
 import { Rank } from '@/types/GameTypes';
 import { useGameStore } from '@/stores/useGameStore';

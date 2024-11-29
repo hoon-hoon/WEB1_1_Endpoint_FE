@@ -1,26 +1,27 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import { useSocketStore } from '@/stores/useSocketStore';
+import axiosInstance from '@/api/axiosInstance';
+import { useGameStore } from '@/stores/useGameStore';
 import TopBar from '@/components/common/TopBar';
 import DropDown from '@/components/common/DropDown';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
-import Container from '@/shared/Container';
-import FlexBox from '@/shared/FlexBox';
-import Label from '@/shared/Label';
+import Container from '@/components/layout/Container';
+import FlexBox from '@/components/layout/FlexBox';
+import Label from '@/components/common/Label';
 import Card from '@/components/common/Card';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
+import { Topic } from '@/types/GameTypes';
 
-const topics = [
-  'JavaScript',
-  'React',
-  'Node.js',
-  'Python',
-  'Machine Learning',
-  'Data Structures',
-  'Algorithms',
-  'Web Development',
-  'Mobile Development',
-  'Database Systems',
+const topics: Topic[] = [
+  '알고리즘',
+  '프로그래밍 언어',
+  '네트워크',
+  '운영체제',
+  '웹 개발',
+  '모바일 개발',
+  '데브옵스/인프라',
+  '데이터베이스',
+  '소프트웨어 공학',
 ];
 
 type Difficulty = '하' | '중' | '상';
@@ -28,8 +29,9 @@ const difficulties: Difficulty[] = ['하', '중', '상'];
 
 export default function CreateGame() {
   const navigate = useNavigate();
+  const { updateId } = useGameStore();
   //const connectSocket = useSocketStore((state) => state.connect);
-  const [topic, setTopic] = useState<string>('');
+  const [topic, setTopic] = useState<Topic | string>('');
   const [difficulty, setDifficulty] = useState<Difficulty | string>('');
   const [quizCount, setQuizCount] = useState(5);
 
@@ -43,7 +45,7 @@ export default function CreateGame() {
     }
   };
 
-  const createRoom = () => {
+  const createRoom = async () => {
     if (!topic) {
       setIsTopicSelected(true);
     }
@@ -51,8 +53,16 @@ export default function CreateGame() {
       setIsDifficultySelected(true);
     }
     if (topic && difficulty) {
+      const requestData = {
+        subject: topic,
+        level: difficulty,
+        quizCount: quizCount,
+      };
+      const response = await axiosInstance.post('/game/private', requestData);
+      const { id, inviteCode } = response.data.result;
       //connectSocket(); // 웹소캣 연결 시작 + state에 roomId도 추가할 예정
-      navigate('/game/waiting', { state: { topic, difficulty, quizCount } });
+      updateId(id);
+      navigate('/game/waiting', { state: { inviteCode, topic, difficulty, quizCount } });
     }
   };
 

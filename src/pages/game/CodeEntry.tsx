@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import TopBar from '@/components/common/TopBar';
-import FlexBox from '@/shared/FlexBox';
-import Label from '@/shared/Label';
+import FlexBox from '@/components/layout/FlexBox';
+import Label from '@/components/common/Label';
 import { ArrowRight } from 'lucide-react';
-import Container from '@/shared/Container';
+import Container from '@/components/layout/Container';
 import Card from '@/components/common/Card';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 

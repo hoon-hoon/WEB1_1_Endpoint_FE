@@ -4,7 +4,7 @@ import 'swiper/css/pagination';
 
 import TopBar from '@/components/common/TopBar';
 import { dummyQuizzes } from '@/data/dummyQuiz';
-import Container from '@/shared/Container';
+import Container from '@/components/layout/Container';
 import QuizCard from './QuizCard';
 
 const MainPage = () => {

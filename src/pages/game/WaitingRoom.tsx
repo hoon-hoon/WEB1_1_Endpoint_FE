@@ -7,12 +7,13 @@ import { Play, Loader2 } from 'lucide-react';
 import Dialog from '@/components/common/Dialog';
 import TopBar from '@/components/common/TopBar';
 import DragScrollWrapper from '@/components/common/DragScrollWrapper';
-import MemberItem, { Member } from '@/components/MemberItem';
+import MemberItem, { Member } from '@/components/common/MemberItem';
 import Card from '@/components/common/Card';
-import Label from '@/shared/Label';
+import Label from '@/components/common/Label';
 import { Skeleton } from '@/shadcn/ui/skeleton';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import ToastMessage from '@/components/common/ToastMessage';
+//import { useGameStore } from '@/stores/useGameStore';
 
 const Members: Member[] = [
   { id: 'a', nickName: '플레이어1', isHost: true, rating: 2000 },
@@ -22,26 +23,19 @@ const Members: Member[] = [
   { id: 'e', nickName: '플레이어5', isHost: false, rating: 1500 },
 ];
 
-const inviteCode = 'QUIZ123';
+//const inviteCode = 'QUIZ123';
 
 const WaitingRoom = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  //const { gameId } = useGameStore();
+  const { inviteCode, topic = '네트워크', difficulty = '하', quizCount = 5 } = location.state || {};
   const [members] = useState<Member[]>(Members);
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
   const [userLoading] = useState(true);
-
-  const {
-    topic: defaultTopic = '네트워크',
-    difficulty: defaultDifficulty = '하',
-    quizCount,
-  } = location.state || {};
-
-  const topic = defaultTopic === '' ? '네트워크' : defaultTopic;
-  const difficulty = defaultDifficulty === '' ? '하' : defaultDifficulty;
 
   const copyInviteCode = () => {
     navigator.clipboard.writeText(inviteCode).then(() => {
@@ -75,7 +69,6 @@ const WaitingRoom = () => {
           </div>
         </div>
       )}
-
       {openDialog && (
         <Dialog
           open={openDialog}

@@ -7,9 +7,9 @@ import { Progress } from '@/shadcn/ui/progress';
 import { LogOut, CheckCircle, XCircle } from 'lucide-react';
 import DragScrollWrapper from '@/components/common/DragScrollWrapper';
 import Dialog from '@/components/common/Dialog';
-import FlexBox from '@/shared/FlexBox';
-import Container from '@/shared/Container';
-import defaultImageURL from '@/shared/defaultImage';
+import FlexBox from '@/components/layout/FlexBox';
+import Container from '@/components/layout/Container';
+import defaultImageURL from '@/assets/defaultImage';
 import { Question, ScoreUpdateMessage } from '@/types/GameTypes';
 import { useGameStore } from '@/stores/useGameStore';
 

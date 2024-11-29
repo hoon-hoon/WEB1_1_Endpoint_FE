@@ -1,7 +1,7 @@
-import Container from '@/shared/Container';
+import Container from '@/components/layout/Container';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import Card from '../common/Card';
-import defaultImageURL from '@/shared/defaultImage';
+import defaultImageURL from '@/assets/defaultImage';
 
 interface UserModalProps {
   isOpen: boolean;
