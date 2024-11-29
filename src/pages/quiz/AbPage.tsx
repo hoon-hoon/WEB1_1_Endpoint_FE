@@ -12,6 +12,7 @@ import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import { uploadImage } from '@/services/quiz/uploadImage';
 
 // 카테고리 목록
 const categories = [
@@ -35,8 +36,10 @@ export default function ABTestPage() {
     question: '', // 문제
     optionA: '', // A 선택지
     optionB: '', // B 선택지
-    imageA: null as File | null, // A 이미지
-    imageB: null as File | null, // B 이미지
+    imageA: null as File | null, // A 이미지 파일
+    imageB: null as File | null, // B 이미지 파일
+    imageAId: null as number | null, // A 이미지 ID
+    imageBId: null as number | null, // B 이미지 ID
     explanation: '', // 해설
   });
 
@@ -87,33 +90,31 @@ export default function ABTestPage() {
     }));
   };
 
-  const handleImageChange = (
+  const handleImageChange = async (
     field: 'imageA' | 'imageB',
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
 
-      // 이미지 파일 크기 제한 (2MB)
       if (file.size > 2 * 1024 * 1024) {
-        setToastMessage({
-          message: '이미지 크기는 2MB 이하로 업로드해주세요.',
-          icon: 'warning',
-        });
+        setToastMessage({ message: '이미지 크기는 2MB 이하로 업로드해주세요.', icon: 'warning' });
         setToastOpen(true);
         return;
       }
 
-      // 이미지 업데이트
-      setFormData((prev) => ({
-        ...prev,
-        [field]: file,
-      }));
-
-      setFieldErrors((prev) => ({
-        ...prev,
-        [field]: false, // 에러 상태 초기화
-      }));
+      try {
+        const imageId = await uploadImage(file); // 이미지 업로드 후 ID 반환
+        console.log('업로드된 이미지 ID:', imageId);
+        setFormData((prev) => ({
+          ...prev,
+          [field]: file,
+          [`${field}Id`]: imageId,
+        }));
+      } catch (error) {
+        setToastMessage({ message: '이미지 업로드에 실패했습니다.', icon: 'warning' });
+        setToastOpen(true);
+      }
     }
   };
 
@@ -121,12 +122,13 @@ export default function ABTestPage() {
     setFormData((prev) => ({
       ...prev,
       [field]: null,
+      [`${field}Id`]: null,
     }));
     const inputElement = document.getElementById(
       field === 'imageA' ? 'image-a' : 'image-b',
     ) as HTMLInputElement;
     if (inputElement) {
-      inputElement.value = ''; // 삭제 시 파일 입력 초기화
+      inputElement.value = '';
     }
   };
   const validateFields = () => {
@@ -149,7 +151,7 @@ export default function ABTestPage() {
       return;
     }
 
-    setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
+    setToastMessage({ message: '퀴즈가 수정되었습니다!', icon: 'check' });
     setToastOpen(true);
 
     const payload = {
@@ -157,8 +159,8 @@ export default function ABTestPage() {
       type: 'AB_TEST',
       content: formData.question,
       options: [
-        { optionNumber: 1, content: formData.optionA, imageId: null },
-        { optionNumber: 2, content: formData.optionB, imageId: null },
+        { optionNumber: 1, content: formData.optionA, imageId: formData.imageAId },
+        { optionNumber: 2, content: formData.optionB, imageId: formData.imageBId },
       ],
       explanation: formData.explanation,
     };
