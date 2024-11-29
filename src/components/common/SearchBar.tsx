@@ -8,7 +8,7 @@ interface SearchBarProps {
 
 export default function SearchBar({ value, onChange, onSearch }: SearchBarProps) {
   return (
-    <div className="relative mb-4">
+    <div className="relative mb-2">
       <input
         type="text"
         placeholder="퀴즈 검색..."
