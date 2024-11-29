@@ -33,18 +33,14 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
   // 로그아웃
   const handleLogout = async () => {
     try {
-      const response = await axiosInstance.post('/auth/logout');
+      const response = await axiosInstance.get('/auth/logout');
       console.log(response.data.result);
       localStorage.removeItem('accessToken');
-      dispatch({ type: 'LOGOUT' });
-      //dispatch({ type: 'CLOSE' });
+      dispatch({ type: 'CLOSE' });
+      window.location.href = '/';
     } catch (error) {
       console.log('로그아웃 실패:', error);
     }
-  };
-
-  const handleExit = () => {
-    dispatch({ type: 'EXIT' });
   };
 
   return (
@@ -76,7 +72,7 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
               <ShadcnButton
                 variant="ghost"
                 className="w-full py-4 font-semibold text-lg border-b"
-                onClick={handleLogout}
+                onClick={() => dispatch({ type: 'LOGOUT' })}
               >
                 <MdLogout size={32} />
                 로그아웃
@@ -84,7 +80,7 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
               <ShadcnButton
                 variant="ghost"
                 className="w-full py-4 font-semibold text-lg text-red-400"
-                onClick={handleExit}
+                onClick={() => dispatch({ type: 'EXIT' })}
               >
                 <Icon icon="close_circle" size={32} />
                 탈퇴하기
