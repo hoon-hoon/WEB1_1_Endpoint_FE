@@ -30,10 +30,12 @@ export type ScoreUpdateMessage = {
 
 export type Rank = 1 | 2 | 3 | 4 | 5 | null;
 
-export interface SocketStore {
+export interface GameStore {
+  gameId: string;
   players: Player[];
   currentQuestion: number;
   timeLeft: number;
+  updateId: (gameId: string) => void;
   updateScore: (playerId: number, increment: number) => void;
   getMyRank: (playerId: number) => { rank: Rank; score: number };
 }
