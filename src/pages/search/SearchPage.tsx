@@ -7,6 +7,7 @@ import { useState } from 'react';
 import QuizSkeleton from './QuizSkeleton';
 import DropDown from '@/components/common/DropDown';
 import { BaseQuizAPI } from '@/types';
+import axiosInstance from '@/api/axiosInstance';
 
 const SearchPage = () => {
   const tags = ['React', 'JavaScript', 'TypeScript', 'Next.js', 'CSS', 'HTML'];
@@ -27,29 +28,33 @@ const SearchPage = () => {
     setLoading(true);
     const isUnansweredOnly = filterType === '안 푼 문제';
 
-    const endpoint = isUnansweredOnly
-      ? `/api/quiz/search/unanswered?keyword=${keyword}&page=0&size=10&sort=${
-          sort === '인기순' ? 'TRENDING' : 'NEW'
-        }`
-      : `/api/quiz/search?keyword=${keyword}&page=0&size=10&sort=${
-          sort === '인기순' ? 'TRENDING' : 'NEW'
-        }`;
+    const endpoint = isUnansweredOnly ? `/quiz/search/unanswered` : `/quiz/search`;
 
-    console.log(endpoint);
+    try {
+      console.log('Request URL:', endpoint);
+      console.log('Query Params:', {
+        keyword,
+        page: 0,
+        size: 10,
+        sort: sort === '인기순' ? 'TRENDING' : 'NEW',
+      });
+      const { data } = await axiosInstance.get(endpoint, {
+        params: {
+          keyword,
+          page: 0,
+          size: 10,
+          sort: sort === '인기순' ? 'TRENDING' : 'NEW',
+        },
+      });
+      console.log('Response Data:', data);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // const response = await fetch(endpoint);
-    // const data = await response.json();
-    // setFilteredQuizzes(data);
-
-    // 임시 더미데이터로 검색 기능
-    const filtered = dummyQuizzes.filter((quiz) =>
-      quiz.content.toLowerCase().includes(keyword.toLowerCase()),
-    );
-    setFilteredQuizzes(filtered);
-
-    setLoading(false);
+      setFilteredQuizzes(data.result || []);
+    } catch (error) {
+      console.error('검색 API 호출 실패:', error);
+      setFilteredQuizzes([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
