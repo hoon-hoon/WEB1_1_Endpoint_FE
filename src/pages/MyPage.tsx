@@ -3,7 +3,6 @@ import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
-import defaultImageURL from '@/assets/defaultImage';
 import { MenuButton } from '@/components/mypage/MenuButton';
 import { useModal } from '@/hooks/useModal';
 import { AchievementModal } from '@/components/mypage/AchievementModal';
@@ -12,9 +11,9 @@ import WithDrawalModal from '@/components/mypage/WithDrawalModal';
 import ProfileSkeleton from '../components/mypage/skeleton/ProfileSkeleton';
 import AchievementSkeleton from '../components/mypage/skeleton/AchievementSkeleton';
 
-import { useEffect, useState } from 'react';
 import FlexBox from '@/components/layout/FlexBox';
 import axiosInstance from '@/api/axiosInstance';
+import { useUserData } from '@/hooks/useUserData';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];
 
@@ -25,17 +24,11 @@ export interface Achievement {
   achieved: boolean;
 }
 
-interface UserData {
-  name: string;
-  rating: number;
-}
-
 export default function MyPage() {
-  const [loading, setLoading] = useState(true);
-  const [profileData, setProfileData] = useState<UserData | null>(null);
   const userModal = useModal();
   const achievementModal = useModal();
   const withdrawalModal = useModal();
+  const { data: profileData, isLoading } = useUserData();
 
   const achievements: Achievement[] = [
     {
@@ -62,19 +55,9 @@ export default function MyPage() {
     .filter((achievement) => achievement.achieved)
     .slice(0, 3);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setProfileData({
-        name: '장원석님',
-        rating: 1500,
-      });
-      setLoading(false);
-    }, 2000); // 2초 딜레이
-  }, []);
-
   const fetchUserData = async () => {
     try {
-      const response = await axiosInstance.get('/api/user/me');
+      const response = await axiosInstance.get('/user/me');
       console.log('User data:', response.data);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -86,7 +69,7 @@ export default function MyPage() {
   return (
     <Container>
       <TopBar />
-      {loading ? (
+      {isLoading ? (
         <>
           <ProfileSkeleton />
           <AchievementSkeleton />
@@ -96,7 +79,7 @@ export default function MyPage() {
           <Card>
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <Avatar image={defaultImageURL} input="image" />
+                <Avatar image={profileData?.profileImageUrl} input="image" />
                 <div>
                   <h2 className="text-lg font-bold">{profileData!.name}</h2>
                   <p className="text-sm text-gray-500">레이팅: {profileData!.rating}</p>
@@ -109,11 +92,13 @@ export default function MyPage() {
             <div className="grid grid-cols-2 gap-4 justify-items-center">
               <div>
                 <p className="text-sm text-gray-500">푼 문제</p>
-                <p className="text-xl font-bold">250개</p>
+                <p className="text-xl font-bold text-center">{profileData?.solvedProblems || 0}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">정답률</p>
-                <p className="text-xl font-bold">75%</p>
+                <p className="text-xl font-bold text-center">
+                  {profileData?.correctAnswerRate || 0}%
+                </p>
               </div>
             </div>
           </Card>
