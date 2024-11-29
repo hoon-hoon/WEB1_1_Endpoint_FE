@@ -1,7 +1,6 @@
 import { QuizWrapper, TagList } from '@/components';
 import SearchBar from '@/components/common/SearchBar';
 import TopBar from '@/components/common/TopBar';
-import { dummyQuizzes } from '@/data/dummyQuiz';
 import Container from '@/components/layout/Container';
 import { useState } from 'react';
 import QuizSkeleton from './QuizSkeleton';
