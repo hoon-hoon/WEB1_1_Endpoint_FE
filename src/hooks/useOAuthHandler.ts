@@ -18,11 +18,6 @@ const useOAuthHandler = (provider: Provider) => {
   }, []);
 
   const handleRedirectCallback = useCallback(() => {
-    if (localStorage.getItem('accessToken')) {
-      navigate('/main');
-      return;
-    }
-
     const searchParams = new URLSearchParams(window.location.search);
     const accessToken = searchParams.get('token');
     const guest = searchParams.get('guest') === 'true';
@@ -33,11 +28,10 @@ const useOAuthHandler = (provider: Provider) => {
       setAccessToken(accessToken, provider);
 
       if (guest) {
-        navigate('/interest');
+        navigate('/main');
       } else {
         navigate('/main');
       }
-      return;
     }
 
     if (error) {
@@ -45,9 +39,6 @@ const useOAuthHandler = (provider: Provider) => {
       console.error('로그인 실패:', decodedError);
       navigate('/');
       return;
-    } else {
-      console.error('Access Token이 없습니다.');
-      navigate('/');
     }
   }, [setAccessToken, provider]);
 
