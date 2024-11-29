@@ -20,7 +20,7 @@ function QuizMul({ quiz, onAnswerSelect }: QuizMulProps) {
 
   return (
     <div>
-      <h3 className="text-lg font-semibold">{quiz.content}</h3>
+      <h3 className="text-md font-semibold">{quiz.content}</h3>
       <ul className="space-y-2 mt-4">
         {quiz.options.map((option) => {
           let color: '#A0E2B0' | '#FAA4A3' | 'gray' = 'gray';

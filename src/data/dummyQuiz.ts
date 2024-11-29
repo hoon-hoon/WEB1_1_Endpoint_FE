@@ -1,12 +1,13 @@
 import { BaseQuizAPI } from '@/types';
+import flatImage from '@/assets/flat.png';
+import materialImage from '@/assets/material.png';
 
 export const dummyQuizzes: BaseQuizAPI[] = [
   {
     id: 1,
     content: 'React의 Virtual DOM은 항상 빠릅니까?',
     type: 'OX 퀴즈',
-    author: 'React Expert',
-    avatarUrl: 'avatarUrl',
+    author: { name: 'React Expert', imagePath: 'https://example.com/avatar/react-expert.png' },
     options: [
       { no: 1, content: 'O', selectionRatio: 0.34 },
       { no: 2, content: 'X', selectionRatio: 0.66 },
@@ -15,7 +16,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
       content: 'X',
       explanation: 'Virtual DOM이 항상 빠른 것은 아닙니다.',
     },
-    answeredOption: 2,
+    answeredOption: 'X',
     count: {
       like: 120,
       comment: 8,
@@ -26,16 +27,26 @@ export const dummyQuizzes: BaseQuizAPI[] = [
     id: 2,
     content: '어떤 버튼 디자인이 더 좋으신가요?',
     type: 'ABTest',
-    author: 'UI Designer',
-    avatarUrl: 'avatarUrl',
+    author: { name: 'UI Designer', imagePath: 'https://example.com/avatar/ui-designer.png' },
     options: [
-      { no: 1, content: 'Flat Design', selectionRatio: 0.42 },
-      { no: 2, content: 'Material Design', selectionRatio: 0.58 },
+      {
+        no: 1,
+        content: 'Flat Design',
+        selectionRatio: 0.42,
+        imagePath: flatImage,
+      },
+      {
+        no: 2,
+        content: 'Material Design',
+        selectionRatio: 0.58,
+        imagePath: materialImage,
+      },
     ],
     answer: {
       content: '',
       explanation: '',
     },
+    answeredOption: 'Material Design',
     count: {
       like: 80,
       comment: 1,
@@ -46,6 +57,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
     id: 3,
     content: 'JavaScript에서 가장 널리 사용되는 ES6 기능은 무엇입니까?',
     type: '객관식',
+    author: { name: 'JavaScript Guru', imagePath: 'https://example.com/avatar/js-guru.png' },
     options: [
       { no: 1, content: 'Arrow Functions', selectionRatio: 0.55 },
       { no: 2, content: 'Classes', selectionRatio: 0.25 },
@@ -56,7 +68,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
       content: 'Arrow Functions',
       explanation: 'Arrow Functions는 간결하고 강력합니다.',
     },
-    answeredOption: 1,
+    answeredOption: 'Arrow Functions',
     count: {
       like: 95,
       comment: 2,
@@ -67,6 +79,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
     id: 4,
     content: 'CSS는 프로그래밍 언어입니까?',
     type: 'OX 퀴즈',
+    author: { name: 'Web Dev', imagePath: 'https://example.com/avatar/web-dev.png' },
     options: [
       { no: 1, content: 'O', selectionRatio: 0.15 },
       { no: 2, content: 'X', selectionRatio: 0.85 },
@@ -75,6 +88,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
       content: 'X',
       explanation: 'CSS는 스타일링 언어로, 프로그래밍 언어로 간주되지 않습니다.',
     },
+    answeredOption: 'O',
     count: {
       like: 50,
       comment: 0,
@@ -85,16 +99,26 @@ export const dummyQuizzes: BaseQuizAPI[] = [
     id: 5,
     content: '모바일 네비게이션에서 더 나은 UI는 무엇인가요?',
     type: 'ABTest',
-    author: 'Frontend Developer',
-    avatarUrl: 'avatarUrl',
+    author: { name: null, imagePath: null },
     options: [
-      { no: 1, content: 'Bottom Navigation', selectionRatio: 0.67 },
-      { no: 2, content: 'Sidebar Navigation', selectionRatio: 0.33 },
+      {
+        no: 1,
+        content: 'Bottom Navigation',
+        selectionRatio: 0.67,
+        imagePath: null,
+      },
+      {
+        no: 2,
+        content: 'Sidebar Navigation',
+        selectionRatio: 0.33,
+        imagePath: null,
+      },
     ],
     answer: {
       content: '',
       explanation: '',
     },
+    answeredOption: 'Bottom Navigation',
     count: {
       like: 110,
       comment: 2,
