@@ -3,7 +3,7 @@ import { QuizAB, QuizMul, QuizOX } from '.';
 
 interface QuizRendererProps {
   quiz: BaseQuizAPI;
-  onAnswerSelect: (answer: string) => void;
+  onAnswerSelect: (answer: number) => void;
 }
 
 const QuizRenderer = ({ quiz, onAnswerSelect }: QuizRendererProps) => {

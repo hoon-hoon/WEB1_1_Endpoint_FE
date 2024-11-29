@@ -4,18 +4,20 @@ import { Button } from '../common/Button';
 
 interface QuizMulProps {
   quiz: BaseQuizAPI;
-  onAnswerSelect: (answer: string) => void;
+  onAnswerSelect: (answer: number) => void;
 }
 
 function QuizMul({ quiz, onAnswerSelect }: QuizMulProps) {
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [, setIsCorrect] = useState<boolean | null>(null);
 
-  const handleAnswerSelect = (optionContent: string) => {
-    if (selectedAnswer) return;
-    setSelectedAnswer(optionContent);
-    setIsCorrect(optionContent === quiz.answer.content);
-    onAnswerSelect(optionContent);
+  const handleAnswerSelect = (optionNo: number) => {
+    if (selectedAnswer !== null) return;
+
+    const correctAnswer = quiz.answer?.answerNumber ?? null;
+    setSelectedAnswer(optionNo);
+    setIsCorrect(correctAnswer !== null && optionNo === correctAnswer);
+    onAnswerSelect(optionNo);
   };
 
   return (
@@ -26,11 +28,11 @@ function QuizMul({ quiz, onAnswerSelect }: QuizMulProps) {
           let color: '#A0E2B0' | '#FAA4A3' | 'gray' = 'gray';
           let variant: 'fill' | 'unfill' = 'unfill';
 
-          if (selectedAnswer) {
-            if (option.content === quiz.answer.content) {
+          if (selectedAnswer !== null) {
+            if (option.no === quiz.answer?.answerNumber) {
               color = '#A0E2B0';
               variant = 'fill';
-            } else if (option.content === selectedAnswer) {
+            } else if (option.no === selectedAnswer) {
               color = '#FAA4A3';
               variant = 'fill';
             }
@@ -40,7 +42,7 @@ function QuizMul({ quiz, onAnswerSelect }: QuizMulProps) {
             <li key={option.no}>
               <Button
                 label={option.content}
-                onClick={() => handleAnswerSelect(option.content)}
+                onClick={() => handleAnswerSelect(option.no)}
                 color={color}
                 variant={variant}
                 size="long"
