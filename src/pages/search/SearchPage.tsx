@@ -47,7 +47,7 @@ const SearchPage = () => {
       });
       console.log('Response Data:', data);
 
-      setFilteredQuizzes(data.result || []);
+      setFilteredQuizzes(data.result.quizzes || []);
     } catch (error) {
       console.error('검색 API 호출 실패:', error);
       setFilteredQuizzes([]);
