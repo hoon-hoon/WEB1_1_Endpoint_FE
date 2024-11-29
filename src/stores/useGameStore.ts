@@ -1,13 +1,9 @@
 import { create } from 'zustand';
-import { Rank, SocketStore } from '@/types/GameTypes';
-/*
-import { io, Socket } from 'socket.io-client';
+import { Rank, GameStore } from '@/types/GameTypes';
 
-const SOCKET_SERVER_URL = 'http://localhost:3000/api/socket';
-*/
-
-export const useGameStore = create<SocketStore>((set, get) => ({
+export const useGameStore = create<GameStore>((set, get) => ({
   socket: null,
+  gameId: '',
   players: [
     { id: 1, name: 'Player 1', avatar: '/placeholder.svg', score: 0 },
     { id: 2, name: 'Player 2', avatar: '/placeholder.svg', score: 0 },
@@ -17,40 +13,13 @@ export const useGameStore = create<SocketStore>((set, get) => ({
   ],
   currentQuestion: 0,
   timeLeft: 10,
-  /*
-  connect: () => {
-    const socket = io(SOCKET_SERVER_URL);
-    set({ socket });
 
-    socket.on('connect', () => {
-      console.log('Socket connected:', socket.id);
-    });
-
-    socket.on('scoreUpdate', ({ playerId, increment }: { playerId: number; increment: number }) => {
-      console.log('Score update received from server:', { playerId, increment });
-      get().updateScore(playerId, increment);
-    });
-
-    socket.on('disconnect', () => {
-      console.log('Socket disconnected');
-      set({ socket: null });
-    });
+  updateId: (gameId: string) => {
+    set(() => ({
+      gameId,
+    }));
   },
-  disconnect: () => {
-    const socket = get().socket;
-    if (socket) {
-      socket.disconnect();
-    }
-    set({ socket: null });
-  },
-  */
   updateScore: (playerId, increment) => {
-    /*
-    const socket = get().socket;
-    if (socket) {
-      socket.emit('answerCorrect', { playerId, increment });
-    }
-      */
     set((state) => ({
       players: state.players.map((player) =>
         player.id === playerId ? { ...player, score: player.score + increment } : player,

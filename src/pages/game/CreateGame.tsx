@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '@/api/axiosInstance';
-//import { useSocketStore } from '@/stores/useSocketStore';
+import { useGameStore } from '@/stores/useGameStore';
 import TopBar from '@/components/common/TopBar';
 import DropDown from '@/components/common/DropDown';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
@@ -26,14 +26,10 @@ const topics: Topic[] = [
 
 type Difficulty = '하' | '중' | '상';
 const difficulties: Difficulty[] = ['하', '중', '상'];
-const difficultyMap = {
-  하: 'EASY',
-  중: 'NORMAL',
-  상: 'HARD',
-};
 
 export default function CreateGame() {
   const navigate = useNavigate();
+  const { updateId } = useGameStore();
   //const connectSocket = useSocketStore((state) => state.connect);
   const [topic, setTopic] = useState<Topic | string>('');
   const [difficulty, setDifficulty] = useState<Difficulty | string>('');
@@ -58,14 +54,15 @@ export default function CreateGame() {
     }
     if (topic && difficulty) {
       const requestData = {
-        subject: 'SPRING',
-        level: difficultyMap[difficulty as Difficulty],
+        subject: topic,
+        level: difficulty,
         quizCount: quizCount,
       };
-      const response = await axiosInstance.post('/api/game/private', requestData);
-      console.log(response.data);
+      const response = await axiosInstance.post('/game/private', requestData);
+      const { id, inviteCode } = response.data.result;
       //connectSocket(); // 웹소캣 연결 시작 + state에 roomId도 추가할 예정
-      navigate('/game/waiting', { state: { topic, difficulty, quizCount } });
+      updateId(id);
+      navigate('/game/waiting', { state: { inviteCode, topic, difficulty, quizCount } });
     }
   };
 

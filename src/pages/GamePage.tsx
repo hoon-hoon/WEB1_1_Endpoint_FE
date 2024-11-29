@@ -57,7 +57,6 @@ export default function Game() {
             )}
           </div>
         </Card>
-
         <FlexBox direction="col" className="gap-4">
           <button
             className="w-full flex h-16 text-lg justify-between items-center p-4 bg-white border rounded-lg focus:bg-gray-100"

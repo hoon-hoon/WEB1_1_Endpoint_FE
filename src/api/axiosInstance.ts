@@ -3,11 +3,11 @@ import axios from 'axios';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const axiosInstance = axios.create({
-  baseURL: BACKEND_URL,
-  timeout: 10000,
+  baseURL: BACKEND_URL + '/api',
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
@@ -24,31 +24,24 @@ axiosInstance.interceptors.request.use(
 );
 
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-
       try {
+        // 원래 요청 재시도
         const refreshResponse = await axios.post(
           `${BACKEND_URL}/auth/reissue`,
           {},
           { withCredentials: true },
         );
-        const { accessToken } = refreshResponse.data;
-
+        const { accessToken } = refreshResponse.data.result;
         localStorage.setItem('accessToken', accessToken);
-        // 원래 요청에 새로운 토큰 설정
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        console.error('Token refresh failed:', refreshError);
-        window.location.href = '/';
-        return Promise.reject(refreshError);
+      } catch (retryError) {
+        console.error('재요청 실패:', retryError);
+        return Promise.reject(retryError);
       }
     }
 
