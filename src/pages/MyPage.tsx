@@ -14,6 +14,7 @@ import AchievementSkeleton from '../components/mypage/skeleton/AchievementSkelet
 
 import { useEffect, useState } from 'react';
 import FlexBox from '@/components/layout/FlexBox';
+import axiosInstance from '@/api/axiosInstance';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];
 
@@ -70,6 +71,17 @@ export default function MyPage() {
       setLoading(false);
     }, 2000); // 2초 딜레이
   }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await axiosInstance.get('/api/user/me');
+      console.log('User data:', response.data);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  fetchUserData();
 
   return (
     <Container>
