@@ -5,6 +5,9 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [react(), visualizer()],
+  define: {
+    global: 'window',
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
