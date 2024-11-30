@@ -38,12 +38,6 @@ export default function GameProgress() {
     },
   ];
 
-  /*
-  useEffect(() => {
-    connect();
-  }, [connect, disconnect]);
-  */
-
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
@@ -158,14 +152,14 @@ export default function GameProgress() {
           <DragScrollWrapper>
             {players.map((player) => (
               <FlexBox
-                key={player.id}
+                key={player.user.id}
                 direction="col"
                 className="items-center justify-between text-center relative"
               >
                 <Avatar input="image" size="S" image={defaultImageURL} />
-                <div className="mt-1 text-sm font-medium whitespace-nowrap">{player.name}</div>
+                <div className="mt-1 text-sm font-medium whitespace-nowrap">{player.user.name}</div>
                 <div className="mt-1 text-lg font-bold">{player.score}</div>
-                {animateScore[player.id] && (
+                {animateScore[player.user.id] && (
                   <span className="absolute top-0 left-2 text-green-500 font-bold animate-bounce text-xl">
                     +10
                   </span>
