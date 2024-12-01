@@ -12,6 +12,7 @@ import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import TagInput from '@/components/common/TagInput';
 import useUploadImage from '@/api/quiz/useUploadImage';
 import useCreateQuiz from '@/api/quiz/useCreateQuiz';
 import { toEnglishCategory } from '@/utils/categoryConverter';
@@ -44,7 +45,7 @@ export default function ABTestPage() {
     imageB: null as File | null, // B 이미지 파일
     imageAId: null as number | null, // A 이미지 ID
     imageBId: null as number | null, // B 이미지 ID
-    tags: '',
+    tags: [] as string[], // 태그
   });
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -160,7 +161,7 @@ export default function ABTestPage() {
       category: englishCategory,
       type: 'AB_TEST',
       content: formData.question,
-      tags: formData.tags ? formData.tags.split(',').map((tag) => tag.trim()) : [],
+      tags: formData.tags,
       options: [
         { optionNumber: 1, content: formData.optionA, imageId: formData.imageAId },
         { optionNumber: 2, content: formData.optionB, imageId: formData.imageBId },
@@ -217,6 +218,16 @@ export default function ABTestPage() {
               />
             </div>
           </div>
+
+          {/* 태그 입력 */}
+          <div className="mb-4">
+            <Label content="태그" htmlFor="tags" className="mb-1" />
+            <TagInput
+              tags={formData.tags}
+              setTags={(tags) => setFormData((prev) => ({ ...prev, tags }))}
+            />
+          </div>
+
           {/* 카테고리 선택 */}
           <div className="mb-4">
             <Label content="주제" htmlFor="category" className="mb-1" />

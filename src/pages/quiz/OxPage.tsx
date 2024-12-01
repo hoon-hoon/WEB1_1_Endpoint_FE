@@ -11,6 +11,7 @@ import Container from '@/components/layout/Container';
 import DropDown from '@/components/common/DropDown';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import TagInput from '@/components/common/TagInput';
 import useCreateQuiz from '@/api/quiz/useCreateQuiz';
 import { toEnglishCategory } from '@/utils/categoryConverter';
 
@@ -38,7 +39,7 @@ export default function OXQuizPage() {
     question: '', // 문제
     selectedAnswer: null as 'O' | 'X' | null, // 정답
     explanation: '', // 해설
-    tags: '', // 태그
+    tags: [] as string[], // 태그
   });
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -124,7 +125,7 @@ export default function OXQuizPage() {
       category: englishCategory,
       type: 'OX',
       content: formData.question,
-      tags: formData.tags ? formData.tags.split(',').map((tag) => tag.trim()) : [],
+      tags: formData.tags,
       options: [
         { optionNumber: 1, content: 'O', imageId: null },
         { optionNumber: 2, content: 'X', imageId: null },
@@ -183,6 +184,15 @@ export default function OXQuizPage() {
                 onChange={() => handleQuizTypeChange('multiple')}
               />
             </div>
+          </div>
+
+          {/* 태그 입력 */}
+          <div className="mb-4">
+            <Label content="태그" htmlFor="tags" className="mb-1" />
+            <TagInput
+              tags={formData.tags}
+              setTags={(tags) => setFormData((prev) => ({ ...prev, tags }))}
+            />
           </div>
 
           {/* 카테고리 선택 */}

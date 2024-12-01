@@ -12,6 +12,7 @@ import Container from '@/components/layout/Container';
 import DropDown from '@/components/common/DropDown';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import TagInput from '@/components/common/TagInput';
 import useCreateQuiz from '@/api/quiz/useCreateQuiz';
 import { toEnglishCategory } from '@/utils/categoryConverter';
 
@@ -40,7 +41,7 @@ export default function MultipleChoicePage() {
     options: ['', '', '', ''], // 선택지
     selectedAnswer: null as number | null, // 정답
     explanation: '', // 해설
-    tags: '', // 태그
+    tags: [] as string[], // 태그
   });
 
   // 필드 에러 상태 관리
@@ -165,7 +166,7 @@ export default function MultipleChoicePage() {
       category: englishCategory,
       type: 'MULTIPLE_CHOICE',
       content: formData.question,
-      tags: formData.tags ? formData.tags.split(',').map((tag) => tag.trim()) : [],
+      tags: formData.tags,
       options: formData.options.map((option, index) => ({
         optionNumber: index + 1,
         content: option,
@@ -225,6 +226,15 @@ export default function MultipleChoicePage() {
                 onChange={() => handleQuizTypeChange('multiple')}
               />
             </div>
+          </div>
+
+          {/* 태그 입력 */}
+          <div className="mb-4">
+            <Label content="태그" htmlFor="tags" className="mb-1" />
+            <TagInput
+              tags={formData.tags}
+              setTags={(tags) => setFormData((prev) => ({ ...prev, tags }))}
+            />
           </div>
 
           {/* 카테고리 선택 */}
