@@ -12,7 +12,7 @@ import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
-import { uploadImage } from '@/services/quiz/uploadImage';
+import { uploadImage } from '@/api/quiz/useUploadImage';
 
 // 카테고리 목록
 const categories = [
@@ -40,7 +40,6 @@ export default function ABTestPage() {
     imageB: null as File | null, // B 이미지 파일
     imageAId: null as number | null, // A 이미지 ID
     imageBId: null as number | null, // B 이미지 ID
-    explanation: '', // 해설
   });
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -48,7 +47,6 @@ export default function ABTestPage() {
     question: false,
     optionA: false,
     optionB: false,
-    explanation: false,
   });
 
   const [toastOpen, setToastOpen] = useState(false);
@@ -119,7 +117,6 @@ export default function ABTestPage() {
       question: formData.question.trim() === '',
       optionA: formData.optionA.trim() === '',
       optionB: formData.optionB.trim() === '',
-      explanation: formData.explanation.trim() === '',
     };
 
     setFieldErrors(errors);
@@ -144,7 +141,6 @@ export default function ABTestPage() {
         { optionNumber: 1, content: formData.optionA, imageId: formData.imageAId },
         { optionNumber: 2, content: formData.optionB, imageId: formData.imageBId },
       ],
-      explanation: formData.explanation,
     };
 
     console.log('Payload:', payload);
@@ -244,7 +240,7 @@ export default function ABTestPage() {
             )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-2">
             <div className="mb-2">
               <Label content="B 선택지" />
               <TextField
@@ -280,15 +276,6 @@ export default function ABTestPage() {
               </div>
             )}
           </div>
-
-          <Label content="해설" />
-          <TextArea
-            value={formData.explanation}
-            onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
-            placeholder="해설을 입력하세요."
-            size="M"
-            state={fieldErrors.explanation ? 'error' : 'enable'}
-          />
         </Card>
         <ShadcnButton
           className="w-full h-12 text-lg relative"
