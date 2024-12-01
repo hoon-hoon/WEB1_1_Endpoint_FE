@@ -11,6 +11,8 @@ import Container from '@/components/layout/Container';
 import DropDown from '@/components/common/DropDown';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import useCreateQuiz from '@/api/quiz/useCreateQuiz';
+import { toEnglishCategory } from '@/utils/categoryConverter';
 
 // 카테고리 목록
 const categories = [
@@ -28,6 +30,7 @@ const categories = [
 export default function OXQuizPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { mutate: createQuizMutate } = useCreateQuiz();
 
   // 퀴즈 데이터 상태
   const [formData, setFormData] = useState({
@@ -35,6 +38,7 @@ export default function OXQuizPage() {
     question: '', // 문제
     selectedAnswer: null as 'O' | 'X' | null, // 정답
     explanation: '', // 해설
+    tags: '', // 태그
   });
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -114,22 +118,31 @@ export default function OXQuizPage() {
       return;
     }
 
-    setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
-    setToastOpen(true);
-
+    const englishCategory = toEnglishCategory(formData.category);
+    const answerNumber = formData.selectedAnswer === 'O' ? 1 : 2;
     const payload = {
-      category: formData.category,
+      category: englishCategory,
       type: 'OX',
       content: formData.question,
+      tags: formData.tags ? formData.tags.split(',').map((tag) => tag.trim()) : [],
       options: [
         { optionNumber: 1, content: 'O', imageId: null },
         { optionNumber: 2, content: 'X', imageId: null },
       ],
-      answer: formData.selectedAnswer,
+      answerNumber,
       explanation: formData.explanation,
     };
 
-    console.log('Payload:', payload);
+    createQuizMutate(payload, {
+      onSuccess: () => {
+        setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
+        setToastOpen(true);
+      },
+      onError: () => {
+        setToastMessage({ message: '퀴즈 생성에 실패했습니다.', icon: 'warning' });
+        setToastOpen(true);
+      },
+    });
   };
 
   return (

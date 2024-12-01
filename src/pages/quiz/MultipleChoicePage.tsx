@@ -12,6 +12,8 @@ import Container from '@/components/layout/Container';
 import DropDown from '@/components/common/DropDown';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import useCreateQuiz from '@/api/quiz/useCreateQuiz';
+import { toEnglishCategory } from '@/utils/categoryConverter';
 
 // 카테고리 목록
 const categories = [
@@ -29,6 +31,7 @@ const categories = [
 export default function MultipleChoicePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { mutate: createQuizMutate } = useCreateQuiz();
 
   // 퀴즈 데이터 상태
   const [formData, setFormData] = useState({
@@ -37,6 +40,7 @@ export default function MultipleChoicePage() {
     options: ['', '', '', ''], // 선택지
     selectedAnswer: null as number | null, // 정답
     explanation: '', // 해설
+    tags: '', // 태그
   });
 
   // 필드 에러 상태 관리
@@ -156,19 +160,31 @@ export default function MultipleChoicePage() {
     setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
     setToastOpen(true);
 
+    const englishCategory = toEnglishCategory(formData.category);
     const payload = {
-      category: formData.category,
+      category: englishCategory,
       type: 'MULTIPLE_CHOICE',
       content: formData.question,
+      tags: formData.tags ? formData.tags.split(',').map((tag) => tag.trim()) : [],
       options: formData.options.map((option, index) => ({
         optionNumber: index + 1,
-        title: option,
+        content: option,
+        imageId: null,
       })),
-      answer: formData.selectedAnswer,
+      answerNumber: formData.selectedAnswer,
       explanation: formData.explanation,
     };
 
-    console.log('Payload:', payload);
+    createQuizMutate(payload, {
+      onSuccess: () => {
+        setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
+        setToastOpen(true);
+      },
+      onError: () => {
+        setToastMessage({ message: '퀴즈 생성에 실패했습니다.', icon: 'warning' });
+        setToastOpen(true);
+      },
+    });
   };
 
   return (

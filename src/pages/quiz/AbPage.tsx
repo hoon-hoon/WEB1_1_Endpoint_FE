@@ -12,7 +12,9 @@ import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
-import { uploadImage } from '@/services/quiz/uploadImage';
+import useUploadImage from '@/api/quiz/useUploadImage';
+import useCreateQuiz from '@/api/quiz/useCreateQuiz';
+import { toEnglishCategory } from '@/utils/categoryConverter';
 
 // 카테고리 목록
 const categories = [
@@ -30,6 +32,8 @@ const categories = [
 export default function ABTestPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { mutate: uploadImageMutate } = useUploadImage();
+  const { mutate: createQuizMutate } = useCreateQuiz();
 
   const [formData, setFormData] = useState({
     category: '', // 카테고리
@@ -40,7 +44,7 @@ export default function ABTestPage() {
     imageB: null as File | null, // B 이미지 파일
     imageAId: null as number | null, // A 이미지 ID
     imageBId: null as number | null, // B 이미지 ID
-    explanation: '', // 해설
+    tags: '',
   });
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -48,7 +52,6 @@ export default function ABTestPage() {
     question: false,
     optionA: false,
     optionB: false,
-    explanation: false,
   });
 
   const [toastOpen, setToastOpen] = useState(false);
@@ -103,18 +106,20 @@ export default function ABTestPage() {
         return;
       }
 
-      try {
-        const imageId = await uploadImage(file); // 이미지 업로드 후 ID 반환
-        console.log('업로드된 이미지 ID:', imageId);
-        setFormData((prev) => ({
-          ...prev,
-          [field]: file,
-          [`${field}Id`]: imageId,
-        }));
-      } catch (error) {
-        setToastMessage({ message: '이미지 업로드에 실패했습니다.', icon: 'warning' });
-        setToastOpen(true);
-      }
+      uploadImageMutate(file, {
+        onSuccess: (imageId) => {
+          console.log('업로드된 이미지 ID:', imageId);
+          setFormData((prev) => ({
+            ...prev,
+            [field]: file,
+            [`${field}Id`]: imageId,
+          }));
+        },
+        onError: () => {
+          setToastMessage({ message: '이미지 업로드에 실패했습니다.', icon: 'warning' });
+          setToastOpen(true);
+        },
+      });
     }
   };
 
@@ -137,35 +142,41 @@ export default function ABTestPage() {
       question: formData.question.trim() === '',
       optionA: formData.optionA.trim() === '',
       optionB: formData.optionB.trim() === '',
-      explanation: formData.explanation.trim() === '',
     };
 
     setFieldErrors(errors);
     return !Object.values(errors).some((error) => error);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateFields()) {
       setToastMessage({ message: '모든 항목을 작성해주세요.', icon: 'warning' });
       setToastOpen(true);
       return;
     }
 
-    setToastMessage({ message: '퀴즈가 수정되었습니다!', icon: 'check' });
-    setToastOpen(true);
-
+    const englishCategory = toEnglishCategory(formData.category); // 카테고리 변환
     const payload = {
-      category: formData.category,
+      category: englishCategory,
       type: 'AB_TEST',
       content: formData.question,
+      tags: formData.tags ? formData.tags.split(',').map((tag) => tag.trim()) : [],
       options: [
         { optionNumber: 1, content: formData.optionA, imageId: formData.imageAId },
         { optionNumber: 2, content: formData.optionB, imageId: formData.imageBId },
       ],
-      explanation: formData.explanation,
     };
 
-    console.log('Payload:', payload);
+    createQuizMutate(payload, {
+      onSuccess: () => {
+        setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
+        setToastOpen(true);
+      },
+      onError: () => {
+        setToastMessage({ message: '퀴즈 생성에 실패했습니다.', icon: 'warning' });
+        setToastOpen(true);
+      },
+    });
   };
 
   return (
@@ -265,7 +276,7 @@ export default function ABTestPage() {
               </div>
             )}
           </div>
-          <div className="mb-4">
+          <div className="mb-2">
             <div className="mb-2">
               <Label content="B 선택지" htmlFor="option-b" className="mb-1" />
               <TextField
@@ -302,14 +313,6 @@ export default function ABTestPage() {
               </div>
             )}
           </div>
-          <Label content="해설" htmlFor="explanation" className="mb-1" />
-          <TextArea
-            value={formData.explanation}
-            onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
-            placeholder="해설을 입력하세요."
-            size="M"
-            state={fieldErrors.explanation ? 'error' : 'enable'}
-          />
         </Card>
 
         <ShadcnButton
