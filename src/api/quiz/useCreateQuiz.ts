@@ -38,7 +38,6 @@ function useCreateQuiz() {
     mutationFn: (requestData: CreateQuizRequest) => createQuiz(requestData),
     onError: (error) => {
       console.error('퀴즈 등록 실패:', error);
-      alert('퀴즈 등록에 실패했습니다.');
     },
   });
 

@@ -31,7 +31,6 @@ function useUploadImage() {
     mutationFn: (file: File) => uploadImage(file),
     onError: (error) => {
       console.error('이미지 업로드 실패:', error);
-      alert('이미지 업로드에 실패했습니다.');
     },
   });
 

@@ -38,9 +38,6 @@ function useUpdateQuiz() {
   return useMutation({
     mutationKey: ['updateQuiz'],
     mutationFn: (requestData: UpdateQuizRequest) => updateQuiz(requestData),
-    onSuccess: () => {
-      alert('퀴즈가 성공적으로 수정되었습니다.');
-    },
     onError: (error) => {
       console.error('퀴즈 수정 실패:', error);
     },
