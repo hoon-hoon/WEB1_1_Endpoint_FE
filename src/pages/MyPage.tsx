@@ -12,7 +12,7 @@ import ProfileSkeleton from '../components/mypage/skeleton/ProfileSkeleton';
 import AchievementSkeleton from '../components/mypage/skeleton/AchievementSkeleton';
 
 import FlexBox from '@/components/layout/FlexBox';
-import { useUserData } from '@/hooks/useUserData';
+import { useUserData } from '@/hooks/mypage/useUserData';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];
 
