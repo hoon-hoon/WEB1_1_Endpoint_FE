@@ -4,6 +4,7 @@ import { Badge } from '@/shadcn/ui/badge';
 import { X } from 'lucide-react';
 
 const MAX_HASHTAGS = 3;
+const MAX_TAG_LENGTH = 15;
 
 export default function TagInput({
   tags,
@@ -15,7 +16,7 @@ export default function TagInput({
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    setInputValue(e.target.value.slice(0, MAX_TAG_LENGTH));
   };
 
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
