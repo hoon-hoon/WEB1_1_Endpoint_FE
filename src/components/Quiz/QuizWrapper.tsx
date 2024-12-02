@@ -1,6 +1,6 @@
 import { BaseQuizAPI } from '@/types';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { QuizAns, QuizFooter, QuizRenderer } from '.';
 import BottomSheet from '../common/BottomSheet';
 
@@ -10,21 +10,24 @@ interface QuizWrapperProps {
 
 function QuizWrapper({ quiz }: QuizWrapperProps) {
   const [isLiked, setIsLiked] = useState(quiz.liked || false);
-  const [likes, setLikes] = useState(quiz.count.like);
+  const [likes] = useState(quiz.count.like);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(quiz.answeredOption ?? null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [isBottomSheetOpen, setBottomSheetOpen] = useState(false);
+  const [isAnswerVisible, setIsAnswerVisible] = useState(false);
 
-  const handleCommentsClick = () => {
-    setBottomSheetOpen(true);
-  };
+  useEffect(() => {
+    if (selectedAnswer !== null) {
+      setIsCorrect(selectedAnswer === quiz.answer?.answerNumber);
 
-  const handleToggleLike = () => {
-    setIsLiked(!isLiked);
-    setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
-  };
+      const timer = setTimeout(() => setIsAnswerVisible(true), 50);
+      return () => clearTimeout(timer);
+    }
+    setIsAnswerVisible(false);
+  }, [selectedAnswer]);
 
   const handleAnswerSelect = (answer: number) => {
+    if (selectedAnswer !== null) return;
     setSelectedAnswer(answer);
     if (quiz.answer) {
       setIsCorrect(answer === quiz.answer.answerNumber);
@@ -50,11 +53,15 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
             <p className="text-sm text-gray-500">{quiz.type}</p>
           </div>
         </div>
-        <QuizRenderer quiz={quiz} onAnswerSelect={handleAnswerSelect} />
-        {selectedAnswer !== null && (
+        <QuizRenderer
+          quiz={quiz}
+          selectedAnswer={selectedAnswer}
+          onAnswerSelect={handleAnswerSelect}
+        />
+        {selectedAnswer !== null && quiz.answer && (
           <div
             className={`transition-all duration-500 ease-in-out overflow-hidden ${
-              isCorrect !== null ? 'max-h-[500px]' : 'max-h-0'
+              isAnswerVisible ? 'max-h-[500px]' : 'max-h-0'
             }`}
           >
             <QuizAns
@@ -68,8 +75,8 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
           likes={likes}
           comments={quiz.count.comment}
           isLiked={isLiked}
-          onToggleLike={handleToggleLike}
-          onCommentsClick={handleCommentsClick}
+          onToggleLike={() => setIsLiked(!isLiked)}
+          onCommentsClick={() => setBottomSheetOpen(true)}
         />
       </div>
       <BottomSheet isOpen={isBottomSheetOpen} setOpen={setBottomSheetOpen} quizId={quiz.id} />

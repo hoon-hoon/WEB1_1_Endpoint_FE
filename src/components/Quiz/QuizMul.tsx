@@ -1,21 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { BaseQuizAPI } from '@/types';
 import { Button } from '../common/Button';
 
 interface QuizMulProps {
   quiz: BaseQuizAPI;
   onAnswerSelect: (answer: number) => void;
+  selectedAnswer: number | null;
 }
 
-function QuizMul({ quiz, onAnswerSelect }: QuizMulProps) {
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+function QuizMul({ quiz, onAnswerSelect, selectedAnswer }: QuizMulProps) {
+  const [currentAnswer, setCurrentAnswer] = useState<number | null>(selectedAnswer);
   const [, setIsCorrect] = useState<boolean | null>(null);
 
-  const handleAnswerSelect = (optionNo: number) => {
-    if (selectedAnswer !== null) return;
+  useEffect(() => {
+    if (selectedAnswer !== null) {
+      setCurrentAnswer(selectedAnswer);
+      setIsCorrect(selectedAnswer === quiz.answer?.answerNumber);
+    }
+  }, [selectedAnswer, quiz.answer?.answerNumber]);
 
+  const handleAnswerSelect = (optionNo: number) => {
+    if (currentAnswer !== null) return;
     const correctAnswer = quiz.answer?.answerNumber ?? null;
-    setSelectedAnswer(optionNo);
+    setCurrentAnswer(optionNo);
     setIsCorrect(correctAnswer !== null && optionNo === correctAnswer);
     onAnswerSelect(optionNo);
   };
@@ -28,11 +35,11 @@ function QuizMul({ quiz, onAnswerSelect }: QuizMulProps) {
           let color: '#A0E2B0' | '#FAA4A3' | 'gray' = 'gray';
           let variant: 'fill' | 'unfill' = 'unfill';
 
-          if (selectedAnswer !== null) {
+          if (currentAnswer !== null) {
             if (option.no === quiz.answer?.answerNumber) {
               color = '#A0E2B0';
               variant = 'fill';
-            } else if (option.no === selectedAnswer) {
+            } else if (option.no === currentAnswer) {
               color = '#FAA4A3';
               variant = 'fill';
             }

@@ -16,7 +16,6 @@ export const dummyQuizzes: BaseQuizAPI[] = [
       answerNumber: 2,
       explanation: 'Virtual DOM이 항상 빠른 것은 아닙니다.',
     },
-    answeredOption: 2,
     count: {
       like: 120,
       comment: 8,
@@ -64,7 +63,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
       answerNumber: 1,
       explanation: 'Arrow Functions는 간결하고 강력합니다.',
     },
-    answeredOption: 1,
+    answeredOption: 2,
     count: {
       like: 95,
       comment: 2,
