@@ -1,4 +1,4 @@
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from 'react-icons/ai';
 import { FaRegComment } from 'react-icons/fa';
 
 interface QuizFooterProps {
@@ -28,7 +28,7 @@ function QuizFooter({ likes, comments, isLiked, onToggleLike, onCommentsClick }:
         className="flex items-center p-2 rounded-full hover:bg-gray-100 active:bg-gray-200"
         onClick={onCommentsClick}
       >
-        <FaRegComment className="w-6 h-6" />
+        <AiOutlineMessage className="w-6 h-6" />
         <span className="ml-1">{comments}</span>
       </button>
     </div>
