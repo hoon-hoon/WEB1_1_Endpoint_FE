@@ -12,7 +12,6 @@ import ProfileSkeleton from '../components/mypage/skeleton/ProfileSkeleton';
 import AchievementSkeleton from '../components/mypage/skeleton/AchievementSkeleton';
 
 import FlexBox from '@/components/layout/FlexBox';
-import axiosInstance from '@/api/axiosInstance';
 import { useUserData } from '@/hooks/useUserData';
 
 type IconType = Parameters<typeof Icon>[0]['icon'];
@@ -54,17 +53,6 @@ export default function MyPage() {
   const achievedAchievements = achievements
     .filter((achievement) => achievement.achieved)
     .slice(0, 3);
-
-  const fetchUserData = async () => {
-    try {
-      const response = await axiosInstance.get('/user/me');
-      console.log('User data:', response.data);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
-
-  fetchUserData();
 
   return (
     <Container>
