@@ -1,5 +1,4 @@
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from 'react-icons/ai';
-import { FaRegComment } from 'react-icons/fa';
 
 interface QuizFooterProps {
   likes: number;
