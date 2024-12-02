@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import type { BaseQuizAPI } from '@/types';
 
-function QuizAB({ quiz }: { quiz: BaseQuizAPI }) {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+interface QuizABProps {
+  quiz: BaseQuizAPI;
+  selectedAnswer: number | null;
+}
 
-  const handleOptionClick = (optionContent: string) => {
-    if (selectedOption !== null) return;
-    setSelectedOption(optionContent);
+function QuizAB({ quiz, selectedAnswer }: QuizABProps) {
+  const [currentAnswer, setCurrentAnswer] = useState<number | null>(selectedAnswer);
+
+  const handleOptionClick = (optionNo: number) => {
+    if (currentAnswer !== null) return;
+    setCurrentAnswer(optionNo);
   };
 
   return (
@@ -26,30 +31,28 @@ function QuizAB({ quiz }: { quiz: BaseQuizAPI }) {
             )}
             <div
               className={`p-4 rounded-lg border text-sm font-medium cursor-pointer text-center w-full ${
-                selectedOption === null ? 'hover:bg-gray-100' : ''
+                currentAnswer === null ? 'hover:bg-gray-100' : ''
               }`}
-              onClick={() => handleOptionClick(option.content)}
+              onClick={() => handleOptionClick(option.no)}
               style={{
                 background:
-                  selectedOption !== null
+                  currentAnswer !== null
                     ? `linear-gradient(to right, ${
-                        selectedOption === option.content ? '#FDBA94' : '#FEF2EA'
+                        currentAnswer === option.no ? '#FDBA94' : '#FEF2EA'
                       } ${option.selectionRatio * 100}%, #FFFFFF ${option.selectionRatio * 100}%)`
                     : '',
                 color:
-                  selectedOption !== null && selectedOption !== option.content
-                    ? '#6B7280'
-                    : '#000000',
+                  currentAnswer !== null && currentAnswer !== option.no ? '#6B7280' : '#000000',
                 borderColor:
-                  selectedOption !== null
-                    ? selectedOption === option.content
+                  currentAnswer !== null
+                    ? currentAnswer === option.no
                       ? '#FDBA94'
                       : '#E5E7EB'
                     : '#D1D5DB',
               }}
             >
               {option.content}
-              {selectedOption !== null && (
+              {currentAnswer !== null && (
                 <span className="block mt-2 font-semibold">
                   {(option.selectionRatio * 100).toFixed(1)}% (
                   {Math.round(option.selectionRatio * 100)}명)
