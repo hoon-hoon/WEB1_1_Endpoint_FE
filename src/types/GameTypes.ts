@@ -9,10 +9,20 @@ export type Topic =
   | '데이터베이스'
   | '소프트웨어 공학';
 
-export type Player = {
+export type User = {
   id: number;
   name: string;
-  avatar: string;
+  imgPath: string;
+  rating: number;
+};
+
+export type Player = {
+  user: User;
+  guest: boolean;
+  waiting: boolean;
+  role: 'HOST' | 'PLAYER';
+  status: 'JOINED' | 'LEFT';
+  host: boolean;
   score: number;
 };
 
@@ -31,11 +41,14 @@ export type ScoreUpdateMessage = {
 export type Rank = 1 | 2 | 3 | 4 | 5 | null;
 
 export interface GameStore {
-  gameId: string;
+  gameId: number;
   players: Player[];
   currentQuestion: number;
   timeLeft: number;
-  updateId: (gameId: string) => void;
-  updateScore: (playerId: number, increment: number) => void;
-  getMyRank: (playerId: number) => { rank: Rank; score: number };
+  inviteCode: string;
+  updateId: (gameId: number) => void;
+  updatePlayers: (members: Player[]) => void;
+  updateScore: (memberId: number, increment: number) => void;
+  updateInviteCode: (inviteCode: string) => void;
+  getMyRank: (memberId: number) => { rank: Rank; score: number };
 }

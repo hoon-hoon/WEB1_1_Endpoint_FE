@@ -33,7 +33,7 @@ const useOAuthHandler = (provider: Provider) => {
         navigate('/main');
       }
     }
-
+    //console.log(error);
     if (error) {
       const decodedError = decodeURIComponent(error);
       console.error('로그인 실패:', decodedError);

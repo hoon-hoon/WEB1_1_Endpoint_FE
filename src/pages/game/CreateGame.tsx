@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '@/api/axiosInstance';
 import { useGameStore } from '@/stores/useGameStore';
+import useCreateGame, { CreateGameResponse } from '@/api/game/useCreateGame';
 import TopBar from '@/components/common/TopBar';
 import DropDown from '@/components/common/DropDown';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
@@ -11,6 +11,7 @@ import Label from '@/components/common/Label';
 import Card from '@/components/common/Card';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import { Topic } from '@/types/GameTypes';
+import { useStompStore } from '@/api/game/useStompStore';
 
 const topics: Topic[] = [
   '알고리즘',
@@ -29,8 +30,10 @@ const difficulties: Difficulty[] = ['하', '중', '상'];
 
 export default function CreateGame() {
   const navigate = useNavigate();
-  const { updateId } = useGameStore();
-  //const connectSocket = useSocketStore((state) => state.connect);
+  const { mutate: createGame } = useCreateGame();
+  const { updateInviteCode, updatePlayers, updateSubject, updateLevel } = useGameStore();
+  const { connect, subscribeToGame } = useStompStore();
+
   const [topic, setTopic] = useState<Topic | string>('');
   const [difficulty, setDifficulty] = useState<Difficulty | string>('');
   const [quizCount, setQuizCount] = useState(5);
@@ -53,16 +56,24 @@ export default function CreateGame() {
       setIsDifficultySelected(true);
     }
     if (topic && difficulty) {
-      const requestData = {
-        subject: topic,
-        level: difficulty,
-        quizCount: quizCount,
-      };
-      const response = await axiosInstance.post('/game/private', requestData);
-      const { id, inviteCode } = response.data.result;
-      //connectSocket(); // 웹소캣 연결 시작 + state에 roomId도 추가할 예정
-      updateId(id);
-      navigate('/game/waiting', { state: { inviteCode, topic, difficulty, quizCount } });
+      createGame(
+        {
+          subject: topic,
+          level: difficulty,
+          quizCount: quizCount,
+        },
+        {
+          onSuccess: (res: CreateGameResponse) => {
+            connect(); // 소캣 연결
+            subscribeToGame(res.result.id); // 게임관련 메시지 구독
+            updatePlayers(res.result.players);
+            updateSubject(res.result.subject);
+            updateLevel(res.result.level);
+            updateInviteCode(res.result.inviteCode);
+            navigate('/game/waiting');
+          },
+        },
+      );
     }
   };
 
@@ -105,7 +116,7 @@ export default function CreateGame() {
           </div>
         </Card>
 
-        <ShadcnButton className="w-full h-14 text-lg" size="lg" onClick={createRoom}>
+        <ShadcnButton className="w-full h-14 text-lg" size="lg" onClick={() => createRoom()}>
           방 생성하기
         </ShadcnButton>
       </Container>

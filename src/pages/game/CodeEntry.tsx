@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useStompStore } from '@/api/game/useStompStore';
+import useJoinGame from '@/api/game/useJoinGame';
+import { useGameStore } from '@/stores/useGameStore';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import TopBar from '@/components/common/TopBar';
 import FlexBox from '@/components/layout/FlexBox';
@@ -11,11 +14,34 @@ import { Button as ShadcnButton } from '@/shadcn/ui/button';
 
 export default function CodeEntry() {
   const navigate = useNavigate();
+  const { mutate: joinGame } = useJoinGame();
+  const { connect, subscribeToGame } = useStompStore();
+  const { updateId, updatePlayers, updateSubject, updateLevel, updateInviteCode } = useGameStore();
   const [inviteCode, setInviteCode] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Submitted code:', inviteCode);
+    if (!inviteCode) {
+      alert('초대 코드를 입력해주세요.');
+      return;
+    }
+
+    joinGame(inviteCode, {
+      onSuccess: (res) => {
+        connect();
+        subscribeToGame(res.result.id);
+        updateId(res.result.id);
+        console.log(res.result, res.result.id);
+        updatePlayers(res.result.players);
+        updateSubject(res.result.subject);
+        updateLevel(res.result.level);
+        updateInviteCode(res.result.inviteCode);
+        navigate('/game/waiting'); // 성공 시 리다이렉트
+      },
+      onError: () => {
+        alert('방 참여에 실패했습니다. 초대 코드를 확인해주세요.');
+      },
+    });
   };
 
   return (

@@ -26,7 +26,7 @@ export default function Game() {
         rating: 1500,
       });
       setLoading(false);
-    }, 2000); // 2초 딜레이
+    }, 1000);
   }, []);
 
   return (

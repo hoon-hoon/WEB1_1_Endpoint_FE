@@ -33,8 +33,7 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
   // 로그아웃
   const handleLogout = async () => {
     try {
-      const response = await axiosInstance.get('/auth/logout');
-      console.log(response.data.result);
+      await axiosInstance.post('/auth/logout');
       localStorage.removeItem('accessToken');
       dispatch({ type: 'CLOSE' });
       window.location.href = '/';

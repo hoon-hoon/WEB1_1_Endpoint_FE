@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useGameStore } from '@/stores/useGameStore';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
@@ -7,35 +8,29 @@ import { Play, Loader2 } from 'lucide-react';
 import Dialog from '@/components/common/Dialog';
 import TopBar from '@/components/common/TopBar';
 import DragScrollWrapper from '@/components/common/DragScrollWrapper';
-import MemberItem, { Member } from '@/components/common/MemberItem';
+import MemberItem from '@/components/common/MemberItem';
+import { Player } from '@/types/GameTypes';
 import Card from '@/components/common/Card';
 import Label from '@/components/common/Label';
-import { Skeleton } from '@/shadcn/ui/skeleton';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import ToastMessage from '@/components/common/ToastMessage';
-//import { useGameStore } from '@/stores/useGameStore';
-
-const Members: Member[] = [
-  { id: 'a', nickName: '플레이어1', isHost: true, rating: 2000 },
-  { id: 'b', nickName: '플레이어2', isHost: false, rating: 1500 },
-  { id: 'c', nickName: '플레이어3', isHost: false, rating: 1500 },
-  { id: 'd', nickName: '플레이어4', isHost: false, rating: 1500 },
-  { id: 'e', nickName: '플레이어5', isHost: false, rating: 1500 },
-];
-
-//const inviteCode = 'QUIZ123';
+import LoadingSpinner from '@/components/game/LoadingSpinner';
+import LoadingPlayer from '@/components/game/LoadingPlayer';
 
 const WaitingRoom = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  //const { gameId } = useGameStore();
-  const { inviteCode, topic = '네트워크', difficulty = '하', quizCount = 5 } = location.state || {};
-  const [members] = useState<Member[]>(Members);
+  const { subject, level, quizCount, inviteCode, players } = useGameStore();
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
-  const [userLoading] = useState(true);
+  const [userLoading] = useState(false);
+
+  useEffect(() => {
+    if (players.length > 0) {
+      console.log('새로운 플레이어 입장:', players);
+    }
+  }, [players]);
 
   const copyInviteCode = () => {
     navigator.clipboard.writeText(inviteCode).then(() => {
@@ -59,16 +54,7 @@ const WaitingRoom = () => {
   return (
     <div className="flex flex-col">
       <TopBar leftIcon="left" leftText="게임 대기방" onClickLeft={() => navigate('/game/create')} />
-
-      {isLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-            <Loader2 className="h-12 w-12 animate-spin text-blue-500 mx-auto mb-4" />
-            <p className="text-lg font-semibold">게임 시작 중...</p>
-            <p className="text-sm text-gray-500">퀴즈를 불러오고 있습니다</p>
-          </div>
-        </div>
-      )}
+      {isLoading && <LoadingSpinner />}
       {openDialog && (
         <Dialog
           open={openDialog}
@@ -84,23 +70,14 @@ const WaitingRoom = () => {
         <Card>
           <label className="block text-xl font-bold text-gray-700 mb-2">참여자</label>
           <DragScrollWrapper>
-            <MemberItem member={members[0]} key={members[0].id} handleExit={handleDialog} />
-            {members.slice(1).map((member: Member) =>
-              userLoading ? (
-                <div
-                  key={member.id}
-                  className="flex flex-col space-y-1 items-center justify-between text-center"
-                >
-                  <div className="flex flex-col gap-2">
-                    <Skeleton className="w-12 h-12 rounded-full" />
-                    <Skeleton className="h-4 w-16 mb-1" />
-                    <Skeleton className="h-4 w-12 mb-1 rounded-lg" />
-                  </div>
-                </div>
-              ) : (
-                <MemberItem key={member.id} member={member} handleExit={handleDialog} />
-              ),
-            )}
+            {players &&
+              players.map((player: Player) =>
+                userLoading ? (
+                  <LoadingPlayer key={player.user.id} />
+                ) : (
+                  <MemberItem key={player.user.id} member={player} handleExit={handleDialog} />
+                ),
+              )}
           </DragScrollWrapper>
         </Card>
       </section>
@@ -109,14 +86,14 @@ const WaitingRoom = () => {
           <div className="pb-4">
             <Label className="block mb-2" content="퀴즈 주제" />
             <div className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm">
-              <span>{topic}</span>
+              <span>{subject}</span>
             </div>
           </div>
 
           <div className="pb-4">
             <Label className="block mb-2" content="난이도" />
             <div className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm">
-              <span>{difficulty}</span>
+              <span>{level}</span>
             </div>
           </div>
 
