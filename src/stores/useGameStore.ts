@@ -1,36 +1,90 @@
+import { Player, Topic } from '@/types/GameTypes';
 import { create } from 'zustand';
-import { Rank, GameStore } from '@/types/GameTypes';
+
+export type GameStore = {
+  gameId: number;
+  players: Player[];
+  subject: Topic | null;
+  level: string;
+  quizCount: number;
+  currentQuestion: number;
+  timeLeft: number;
+  inviteCode: string;
+
+  updateId: (gameId: number) => void;
+  updatePlayers: (players: Player[]) => void;
+  updateSubject: (subject: Topic) => void;
+  updateLevel: (level: string) => void;
+  updateQuizCount: (count: number) => void;
+  updateScore: (playerId: number, increment: number) => void;
+  updateInviteCode: (inviteCode: string) => void;
+  getMyRank: (playerId: number) => { rank: number; score: number };
+};
 
 export const useGameStore = create<GameStore>((set, get) => ({
-  socket: null,
-  gameId: '',
-  players: [
-    { id: 1, name: 'Player 1', avatar: '/placeholder.svg', score: 0 },
-    { id: 2, name: 'Player 2', avatar: '/placeholder.svg', score: 0 },
-    { id: 3, name: 'Player 3', avatar: '/placeholder.svg', score: 0 },
-    { id: 4, name: 'Player 4', avatar: '/placeholder.svg', score: 0 },
-    { id: 5, name: 'Player 5', avatar: '/placeholder.svg', score: 0 },
-  ],
+  gameId: 0,
+  players: [],
+  subject: null,
+  level: '',
+  quizCount: 5,
   currentQuestion: 0,
   timeLeft: 10,
+  inviteCode: '',
 
-  updateId: (gameId: string) => {
+  updateId: (gameId) => {
     set(() => ({
       gameId,
     }));
   },
+
+  // 플레이어 목록 업데이트
+  updatePlayers: (players) => {
+    set(() => ({
+      players,
+    }));
+  },
+
+  updateSubject: (subject: Topic) => {
+    set(() => ({
+      subject,
+    }));
+  },
+
+  updateLevel: (level: string) => {
+    set(() => ({
+      level,
+    }));
+  },
+
+  updateQuizCount: (count: number) => {
+    set(() => ({
+      quizCount: count,
+    }));
+  },
+
+  // 점수 업데이트
   updateScore: (playerId, increment) => {
     set((state) => ({
       players: state.players.map((player) =>
-        player.id === playerId ? { ...player, score: player.score + increment } : player,
+        player.user.id === playerId
+          ? { ...player, score: (player.score || 0) + increment }
+          : player,
       ),
     }));
   },
-  getMyRank: (playerId: number) => {
+
+  updateInviteCode: (inviteCode) => {
+    set(() => ({
+      inviteCode,
+    }));
+  },
+
+  // 플레이어의 순위 계산
+  getMyRank: (playerId) => {
     const players = get().players;
-    const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
-    const rank = (sortedPlayers.findIndex((player) => player.id === playerId) + 1) as Rank;
-    const score = players.find((player) => player.id === playerId)?.score || 0;
+    const sortedPlayers = [...players].sort((a, b) => (b.score || 0) - (a.score || 0));
+    const rank = sortedPlayers.findIndex((player) => player.user.id === playerId) + 1;
+    const score = players.find((player) => player.user.id === playerId)?.score || 0;
 
     return { rank, score };
   },

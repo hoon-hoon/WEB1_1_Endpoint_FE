@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-// import axios from 'axios'; // 서버 연결 시 다시 활성화
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import FlexBox from '@/components/layout/FlexBox';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
@@ -12,27 +11,42 @@ import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import DropDown from '@/components/common/DropDown';
+
 // Mock 데이터
 const MOCK_DATA = {
   id: 2,
   type: 'Multiple',
+  category: '프로그래밍 언어',
   content: '객관식 문제 내용',
-  tags: ['일상', '태그', '테스트'],
   options: [
-    { optionNumber: 1, title: 'react' },
-    { optionNumber: 2, title: 'notion' },
-    { optionNumber: 3, title: 'github' },
-    { optionNumber: 4, title: 'jira' },
+    { optionNumber: 1, title: 'React' },
+    { optionNumber: 2, title: 'Node.js' },
+    { optionNumber: 3, title: 'Python' },
+    { optionNumber: 4, title: 'Java' },
   ],
-  answer: 4,
-  explanation: '객관식 퀴즈 해설',
+  answer: 2,
+  explanation: '이 문제의 정답은 Node.js입니다.',
 };
+
+const categories = [
+  '알고리즘',
+  '프로그래밍 언어',
+  '네트워크',
+  '운영체제',
+  '웹 개발',
+  '모바일 개발',
+  '데브옵스/인프라',
+  '데이터베이스',
+  '소프트웨어 공학',
+];
 
 export default function EditMultipleChoicePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const [quizData, setQuizData] = useState({
+    category: '',
     content: '',
     options: [] as { optionNumber: number; title: string }[],
     answer: 0, // 정답 번호 (0 = 선택 안 됨)
@@ -40,6 +54,7 @@ export default function EditMultipleChoicePage() {
   });
 
   const [fieldErrors, setFieldErrors] = useState({
+    category: false,
     content: false,
     options: [false, false, false, false],
     answer: false,
@@ -51,7 +66,6 @@ export default function EditMultipleChoicePage() {
 
   useEffect(() => {
     // Mock 데이터 로드
-    console.log('Mock 데이터 로드:', MOCK_DATA);
     setQuizData(MOCK_DATA);
 
     // 서버 연결 시 활성화
@@ -67,7 +81,7 @@ export default function EditMultipleChoicePage() {
   }, [id]);
 
   // 입력 필드 변경 핸들러
-  const handleInputChange = (field: string, value: string, maxLength: number) => {
+  const handleInputChange = (field: string, value: string, maxLength?: number) => {
     setQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) }));
     if (field !== 'options') {
       setFieldErrors((prev) => ({ ...prev, [field]: false }));
@@ -95,9 +109,16 @@ export default function EditMultipleChoicePage() {
     setFieldErrors((prev) => ({ ...prev, answer: false }));
   };
 
+  // 카테고리 선택 핸들러
+  const handleCategoryChange = (category: string) => {
+    setQuizData((prev) => ({ ...prev, category }));
+    setFieldErrors((prev) => ({ ...prev, category: false }));
+  };
+
   // 유효성 검사
   const validateFields = () => {
     const errors = {
+      category: quizData.category.trim() === '',
       content: quizData.content.trim() === '',
       options: quizData.options.map((option) => option.title.trim() === ''),
       answer: quizData.answer === 0, // 정답 번호가 없으면 error
@@ -106,6 +127,7 @@ export default function EditMultipleChoicePage() {
 
     setFieldErrors(errors);
     return (
+      !errors.category &&
       !errors.content &&
       !errors.explanation &&
       !errors.answer &&
@@ -123,13 +145,24 @@ export default function EditMultipleChoicePage() {
       return;
     }
 
+    const payload = {
+      id: id,
+      type: 'Multiple',
+      category: quizData.category,
+      content: quizData.content,
+      options: quizData.options,
+      answer: quizData.answer,
+      explanation: quizData.explanation,
+    };
+
+    console.log('Payload for submission:', payload);
+
     setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
     setToastOpen(true);
 
-    console.log('객관식 퀴즈 수정 데이터 제출:', quizData);
     // 서버 연결 시 활성화
     // try {
-    //   await axios.put(`/api/quiz/${id}`, quizData);
+    //   await axios.put(`/api/quiz/${id}`, payload);
     //   alert('퀴즈가 성공적으로 수정되었습니다.');
     //   navigate('/profile/quizManagement');
     // } catch (error) {
@@ -173,6 +206,19 @@ export default function EditMultipleChoicePage() {
               />
             </div>
           </div>
+          {/* 카테고리 선택 */}
+          <div className="mb-4">
+            <Label content="카테고리" />
+            <DropDown
+              items={categories}
+              selectedItem={quizData.category}
+              setItem={handleCategoryChange}
+              placeholder="카테고리를 선택하세요."
+              alert="카테고리를 선택해주세요."
+              required={fieldErrors.category}
+            />
+          </div>
+
           {/* 문제 입력 */}
           <div className="mb-4">
             <Label content="문제" />

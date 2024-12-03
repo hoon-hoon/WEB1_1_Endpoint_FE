@@ -7,29 +7,52 @@ import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
+import DropDown from '@/components/common/DropDown';
 import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import TagInput from '@/components/common/TagInput';
+import useUploadImage from '@/api/quiz/useUploadImage';
+import useCreateQuiz from '@/api/quiz/useCreateQuiz';
+import { toEnglishCategory } from '@/utils/categoryConverter';
+
+// 카테고리 목록
+const categories = [
+  '알고리즘',
+  '프로그래밍 언어',
+  '네트워크',
+  '운영체제',
+  '웹 개발',
+  '모바일 개발',
+  '데브옵스/인프라',
+  '데이터베이스',
+  '소프트웨어 공학',
+];
 
 export default function ABTestPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { mutate: uploadImageMutate } = useUploadImage();
+  const { mutate: createQuizMutate } = useCreateQuiz();
 
   const [formData, setFormData] = useState({
-    question: '',
-    optionA: '',
-    optionB: '',
-    imageA: null as File | null,
-    imageB: null as File | null,
-    explanation: '',
+    category: '', // 카테고리
+    question: '', // 문제
+    optionA: '', // A 선택지
+    optionB: '', // B 선택지
+    imageA: null as File | null, // A 이미지 파일
+    imageB: null as File | null, // B 이미지 파일
+    imageAId: null as number | null, // A 이미지 ID
+    imageBId: null as number | null, // B 이미지 ID
+    tags: [] as string[], // 태그
   });
 
   const [fieldErrors, setFieldErrors] = useState({
+    category: false,
     question: false,
     optionA: false,
     optionB: false,
-    explanation: false,
   });
 
   const [toastOpen, setToastOpen] = useState(false);
@@ -60,7 +83,7 @@ export default function ABTestPage() {
     }
   };
 
-  const handleInputChange = (field: keyof typeof formData, value: string, maxLength: number) => {
+  const handleInputChange = (field: keyof typeof formData, value: string, maxLength?: number) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value.slice(0, maxLength),
@@ -71,33 +94,33 @@ export default function ABTestPage() {
     }));
   };
 
-  const handleImageChange = (
+  const handleImageChange = async (
     field: 'imageA' | 'imageB',
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
 
-      // 이미지 파일 크기 제한 (2MB)
       if (file.size > 2 * 1024 * 1024) {
-        setToastMessage({
-          message: '이미지 크기는 2MB 이하로 업로드해주세요.',
-          icon: 'warning',
-        });
+        setToastMessage({ message: '이미지 크기는 2MB 이하로 업로드해주세요.', icon: 'warning' });
         setToastOpen(true);
         return;
       }
 
-      // 이미지 업데이트
-      setFormData((prev) => ({
-        ...prev,
-        [field]: file,
-      }));
-
-      setFieldErrors((prev) => ({
-        ...prev,
-        [field]: false, // 에러 상태 초기화
-      }));
+      uploadImageMutate(file, {
+        onSuccess: (imageId) => {
+          console.log('업로드된 이미지 ID:', imageId);
+          setFormData((prev) => ({
+            ...prev,
+            [field]: file,
+            [`${field}Id`]: imageId,
+          }));
+        },
+        onError: () => {
+          setToastMessage({ message: '이미지 업로드에 실패했습니다.', icon: 'warning' });
+          setToastOpen(true);
+        },
+      });
     }
   };
 
@@ -105,37 +128,56 @@ export default function ABTestPage() {
     setFormData((prev) => ({
       ...prev,
       [field]: null,
+      [`${field}Id`]: null,
     }));
     const inputElement = document.getElementById(
       field === 'imageA' ? 'image-a' : 'image-b',
     ) as HTMLInputElement;
     if (inputElement) {
-      inputElement.value = ''; // 삭제 시 파일 입력 초기화
+      inputElement.value = '';
     }
   };
   const validateFields = () => {
     const errors = {
+      category: formData.category.trim() === '',
       question: formData.question.trim() === '',
       optionA: formData.optionA.trim() === '',
       optionB: formData.optionB.trim() === '',
-      explanation: formData.explanation.trim() === '',
     };
 
     setFieldErrors(errors);
     return !Object.values(errors).some((error) => error);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateFields()) {
       setToastMessage({ message: '모든 항목을 작성해주세요.', icon: 'warning' });
       setToastOpen(true);
       return;
     }
 
-    setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
-    setToastOpen(true);
+    const englishCategory = toEnglishCategory(formData.category); // 카테고리 변환
+    const payload = {
+      category: englishCategory,
+      type: 'AB_TEST',
+      content: formData.question,
+      tags: formData.tags,
+      options: [
+        { optionNumber: 1, content: formData.optionA, imageId: formData.imageAId },
+        { optionNumber: 2, content: formData.optionB, imageId: formData.imageBId },
+      ],
+    };
 
-    console.log(formData);
+    createQuizMutate(payload, {
+      onSuccess: () => {
+        setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
+        setToastOpen(true);
+      },
+      onError: () => {
+        setToastMessage({ message: '퀴즈 생성에 실패했습니다.', icon: 'warning' });
+        setToastOpen(true);
+      },
+    });
   };
 
   return (
@@ -175,6 +217,28 @@ export default function ABTestPage() {
                 onChange={() => handleQuizTypeChange('multiple')}
               />
             </div>
+          </div>
+
+          {/* 태그 입력 */}
+          <div className="mb-4">
+            <Label content="태그" htmlFor="tags" className="mb-1" />
+            <TagInput
+              tags={formData.tags}
+              setTags={(tags) => setFormData((prev) => ({ ...prev, tags }))}
+            />
+          </div>
+
+          {/* 카테고리 선택 */}
+          <div className="mb-4">
+            <Label content="주제" htmlFor="category" className="mb-1" />
+            <DropDown
+              items={categories}
+              selectedItem={formData.category}
+              setItem={(value: string) => handleInputChange('category', value)}
+              placeholder="주제를 선택하세요"
+              alert="주제를 선택해주세요."
+              required={fieldErrors.category && formData.category === ''}
+            />
           </div>
           <div className="mb-4">
             <Label content="문제" htmlFor="quiz-question" className="mb-1" />
@@ -223,7 +287,7 @@ export default function ABTestPage() {
               </div>
             )}
           </div>
-          <div className="mb-4">
+          <div className="mb-2">
             <div className="mb-2">
               <Label content="B 선택지" htmlFor="option-b" className="mb-1" />
               <TextField
@@ -260,14 +324,6 @@ export default function ABTestPage() {
               </div>
             )}
           </div>
-          <Label content="해설" htmlFor="explanation" className="mb-1" />
-          <TextArea
-            value={formData.explanation}
-            onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
-            placeholder="해설을 입력하세요."
-            size="M"
-            state={fieldErrors.explanation ? 'error' : 'enable'}
-          />
         </Card>
 
         <ShadcnButton

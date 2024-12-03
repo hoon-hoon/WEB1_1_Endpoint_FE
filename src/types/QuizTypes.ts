@@ -6,7 +6,7 @@ export interface QuizOption {
 }
 
 export interface QuizAnswer {
-  content: string; // 정답 내용
+  answerNumber: number; // 정답 번호
   explanation: string; // 정답 해설
 }
 
@@ -26,8 +26,8 @@ export interface BaseQuizAPI {
   type: 'OX 퀴즈' | 'ABTest' | '객관식'; // 퀴즈 타입
   author?: QuizAuthor; // 없다면 default
   options: QuizOption[]; // 선택지
-  answer: QuizAnswer; // 정답 내용, 해설 담는 객체
+  answer?: QuizAnswer; // 정답 내용, 해설 담는 객체
   count: QuizCount; // 좋아요와 댓글 수 담는 객체
   liked?: boolean; // 사용자의 좋아요 여부 (검색페이지에서만 사용)
-  answeredOption?: string; // 사용자가 선택한 옵션 번호 (검색페이지에서만 사용)
+  answeredOption?: number; // 사용자가 선택한 옵션 번호 (검색페이지에서만 사용)
 }

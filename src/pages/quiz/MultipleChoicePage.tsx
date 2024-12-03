@@ -9,23 +9,44 @@ import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
+import DropDown from '@/components/common/DropDown';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import TagInput from '@/components/common/TagInput';
+import useCreateQuiz from '@/api/quiz/useCreateQuiz';
+import { toEnglishCategory } from '@/utils/categoryConverter';
+
+// 카테고리 목록
+const categories = [
+  '알고리즘',
+  '프로그래밍 언어',
+  '네트워크',
+  '운영체제',
+  '웹 개발',
+  '모바일 개발',
+  '데브옵스/인프라',
+  '데이터베이스',
+  '소프트웨어 공학',
+];
 
 export default function MultipleChoicePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { mutate: createQuizMutate } = useCreateQuiz();
 
   // 퀴즈 데이터 상태
   const [formData, setFormData] = useState({
+    category: '', // 카테고리
     question: '', // 문제
     options: ['', '', '', ''], // 선택지
     selectedAnswer: null as number | null, // 정답
     explanation: '', // 해설
+    tags: [] as string[], // 태그
   });
 
   // 필드 에러 상태 관리
   const [fieldErrors, setFieldErrors] = useState({
+    category: false,
     question: false,
     options: [false, false, false, false],
     explanation: false,
@@ -65,7 +86,7 @@ export default function MultipleChoicePage() {
   };
 
   // 입력 필드 변경 핸들러
-  const handleInputChange = (field: keyof typeof formData, value: string, maxLength: number) => {
+  const handleInputChange = (field: keyof typeof formData, value: string, maxLength?: number) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value.slice(0, maxLength), // 최대 글자 수 제한
@@ -108,6 +129,7 @@ export default function MultipleChoicePage() {
   // 유효성 검사
   const validateFields = () => {
     const updatedErrors = {
+      category: formData.category.trim() === '',
       question: formData.question.trim() === '',
       options: formData.options.map((option) => option.trim() === ''),
       explanation: formData.explanation.trim() === '',
@@ -118,6 +140,7 @@ export default function MultipleChoicePage() {
 
     // 에러가 하나라도 있으면 false 반환
     return (
+      !updatedErrors.category &&
       !updatedErrors.question &&
       !updatedErrors.options.some((err) => err) &&
       !updatedErrors.explanation &&
@@ -138,7 +161,31 @@ export default function MultipleChoicePage() {
     setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
     setToastOpen(true);
 
-    console.log(formData);
+    const englishCategory = toEnglishCategory(formData.category);
+    const payload = {
+      category: englishCategory,
+      type: 'MULTIPLE_CHOICE',
+      content: formData.question,
+      tags: formData.tags,
+      options: formData.options.map((option, index) => ({
+        optionNumber: index + 1,
+        content: option,
+        imageId: null,
+      })),
+      answerNumber: formData.selectedAnswer,
+      explanation: formData.explanation,
+    };
+
+    createQuizMutate(payload, {
+      onSuccess: () => {
+        setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
+        setToastOpen(true);
+      },
+      onError: () => {
+        setToastMessage({ message: '퀴즈 생성에 실패했습니다.', icon: 'warning' });
+        setToastOpen(true);
+      },
+    });
   };
 
   return (
@@ -179,6 +226,28 @@ export default function MultipleChoicePage() {
                 onChange={() => handleQuizTypeChange('multiple')}
               />
             </div>
+          </div>
+
+          {/* 태그 입력 */}
+          <div className="mb-4">
+            <Label content="태그" htmlFor="tags" className="mb-1" />
+            <TagInput
+              tags={formData.tags}
+              setTags={(tags) => setFormData((prev) => ({ ...prev, tags }))}
+            />
+          </div>
+
+          {/* 카테고리 선택 */}
+          <div className="mb-4">
+            <Label content="주제" htmlFor="category" className="mb-1" />
+            <DropDown
+              items={categories}
+              selectedItem={formData.category}
+              setItem={(value: string) => handleInputChange('category', value)}
+              placeholder="주제를 선택하세요"
+              alert="주제를 선택해주세요."
+              required={fieldErrors.category && formData.category === ''}
+            />
           </div>
 
           {/* 문제 입력 */}

@@ -33,7 +33,7 @@ export default function Result() {
     }, 3500);
   });
   const gameResult: GameResult = {
-    rank: rank,
+    rank: rank as Rank,
     totalPlayers: 5,
     problems: [
       {
@@ -91,7 +91,7 @@ export default function Result() {
     <div className="flex flex-col">
       <TopBar />
       {showCelebrate ? (
-        <Celebrate rank={rank} show={show} setShow={setShow} />
+        <Celebrate rank={rank as Rank} show={show} setShow={setShow} />
       ) : (
         <Container>
           <Card>

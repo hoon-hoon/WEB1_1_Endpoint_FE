@@ -1,87 +1,64 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-// import axios from 'axios'; // 서버와 연결 시 활성화
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import FlexBox from '@/components/layout/FlexBox';
-import Radio from '@eolluga/eolluga-ui/Input/Radio';
-import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
+import TextField from '@eolluga/eolluga-ui/Input/TextField';
+import DropDown from '@/components/common/DropDown';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
+import Radio from '@eolluga/eolluga-ui/Input/Radio';
 import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
-// // Mock 데이터
-// const MOCK_DATA = {
-//   type: 'AB',
-//   content: 'AB 퀴즈 내용',
-//   optionA: {
-//     text: 'A 선택지 텍스트',
-//     image: null,
-//   },
-//   optionB: {
-//     text: 'B 선택지 텍스트',
-//     image: null,
-//   },
-//   explanation: 'AB 퀴즈 해설',
-// };
-const MOCK_DATA = {
-  question: 'AB 테스트 문제.',
-  optionA: 'A 선택지를 입력하세요.',
-  optionB: 'B 선택지를 입력하세요.',
-  imageA: null as File | null,
-  imageB: null as File | null,
-  explanation: '해설 입니다.',
-};
+import { uploadImage } from '@/api/quiz/useUploadImage';
 
-export default function EditAbQuizPage() {
-  const { id } = useParams<{ id: string }>();
+// 카테고리 목록
+const categories = [
+  '알고리즘',
+  '프로그래밍 언어',
+  '네트워크',
+  '운영체제',
+  '웹 개발',
+  '모바일 개발',
+  '데브옵스/인프라',
+  '데이터베이스',
+  '소프트웨어 공학',
+];
+
+export default function ABTestPage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // const [quizData, setQuizData] = useState({
-  //   content: '', // 문제
-  //   optionA: { text: '', image: null as File | null }, // A 선택지
-  //   optionB: { text: '', image: null as File | null }, // B 선택지
-  //   explanation: '', // 해설
-  // });
   const [formData, setFormData] = useState({
-    question: '',
-    optionA: '',
-    optionB: '',
-    imageA: null as File | null,
-    imageB: null as File | null,
-    explanation: '',
+    category: '', // 카테고리
+    question: '', // 문제
+    optionA: '', // A 선택지
+    optionB: '', // B 선택지
+    imageA: null as File | null, // A 이미지 파일
+    imageB: null as File | null, // B 이미지 파일
+    imageAId: null as number | null, // A 이미지 ID
+    imageBId: null as number | null, // B 이미지 ID
   });
 
   const [fieldErrors, setFieldErrors] = useState({
+    category: false,
     question: false,
     optionA: false,
     optionB: false,
-    explanation: false,
   });
 
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
   useEffect(() => {
-    // Mock 데이터 퀴즈로 로드
-    console.log('Mock 데이터 로드:', MOCK_DATA);
-    setFormData(MOCK_DATA);
+    if (location.pathname === '/quiz/ab') {
+      console.log('AB 테스트 페이지입니다.');
+    }
+  }, [location.pathname]);
 
-    // 서버 연결 시 활성화
-    // const fetchQuiz = async () => {
-    //   try {
-    //     const response = await axios.get(`/api/quiz/${id}`);
-    //     setQuizData(response.data.result);
-    //   } catch (error) {
-    //     console.error('퀴즈 데이터를 불러오는 중 오류 발생:', error);
-    //   }
-    // };
-    // fetchQuiz();
-  }, [id]);
-
-  const handleInputChange = (field: keyof typeof formData, value: string, maxLength: number) => {
+  const handleInputChange = (field: keyof typeof formData, value: string, maxLength?: number) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value.slice(0, maxLength),
@@ -92,12 +69,54 @@ export default function EditAbQuizPage() {
     }));
   };
 
+  const handleImageChange = async (
+    field: 'imageA' | 'imageB',
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+
+      if (file.size > 2 * 1024 * 1024) {
+        setToastMessage({ message: '이미지 크기는 2MB 이하로 업로드해주세요.', icon: 'warning' });
+        setToastOpen(true);
+        return;
+      }
+
+      try {
+        const imageId = await uploadImage(file);
+        console.log('업로드한 이미지 ID:', imageId);
+        setFormData((prev) => ({
+          ...prev,
+          [field]: file,
+          [`${field}Id`]: imageId, // 예: imageAId, imageBId
+        }));
+      } catch (error) {
+        setToastMessage({ message: '이미지 업로드에 실패했습니다.', icon: 'warning' });
+        setToastOpen(true);
+      }
+    }
+  };
+
+  const removeImage = (field: 'imageA' | 'imageB') => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: null,
+      [`${field}Id`]: null,
+    }));
+    const inputElement = document.getElementById(
+      field === 'imageA' ? 'image-a' : 'image-b',
+    ) as HTMLInputElement;
+    if (inputElement) {
+      inputElement.value = '';
+    }
+  };
+
   const validateFields = () => {
     const errors = {
+      category: formData.category.trim() === '',
       question: formData.question.trim() === '',
       optionA: formData.optionA.trim() === '',
       optionB: formData.optionB.trim() === '',
-      explanation: formData.explanation.trim() === '',
     };
 
     setFieldErrors(errors);
@@ -111,65 +130,20 @@ export default function EditAbQuizPage() {
       return;
     }
 
-    setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
+    setToastMessage({ message: '퀴즈가 수정되었습니다!', icon: 'check' });
     setToastOpen(true);
 
-    console.log('제출된 데이터:', formData);
+    const payload = {
+      category: formData.category,
+      type: 'AB_TEST',
+      content: formData.question,
+      options: [
+        { optionNumber: 1, content: formData.optionA, imageId: formData.imageAId },
+        { optionNumber: 2, content: formData.optionB, imageId: formData.imageBId },
+      ],
+    };
 
-    // 예시: 서버로 수정된 데이터 전송
-    // updateQuizData(id, formData);
-
-    // 서버 연결 시 활성화
-    // try {
-    //   await axios.put(`/api/quiz/${id}`, quizData);
-    //   alert('퀴즈가 성공적으로 수정되었습니다.');
-    //   navigate('/profile/quizManagement');
-    // } catch (error) {
-    //   console.error('퀴즈 수정 중 오류 발생:', error);
-    //   alert('퀴즈 수정 중 오류가 발생했습니다.');
-    // }
-  };
-
-  const handleImageChange = (
-    field: 'imageA' | 'imageB',
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-
-      // 이미지 크기 제한 (2MB 이하)
-      if (file.size > 2 * 1024 * 1024) {
-        setToastMessage({
-          message: '이미지 크기는 2MB 이하로 업로드해주세요.',
-          icon: 'warning',
-        });
-        setToastOpen(true);
-        return;
-      }
-
-      // 이미지 파일 설정
-      setFormData((prev) => ({
-        ...prev,
-        [field]: file,
-      }));
-      setFieldErrors((prev) => ({
-        ...prev,
-        [field]: false,
-      }));
-    }
-  };
-
-  const removeImage = (field: 'imageA' | 'imageB') => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: null,
-    }));
-    const inputElement = document.getElementById(
-      field === 'imageA' ? 'image-a' : 'image-b',
-    ) as HTMLInputElement;
-    if (inputElement) {
-      inputElement.value = ''; // 삭제 시 파일 입력 초기화
-    }
+    console.log('Payload:', payload);
   };
 
   return (
@@ -206,6 +180,17 @@ export default function EditAbQuizPage() {
                 checked={false}
               />
             </div>
+          </div>
+          <div className="mb-4">
+            <Label content="카테고리" />
+            <DropDown
+              items={categories}
+              selectedItem={formData.category}
+              setItem={(value: string) => handleInputChange('category', value)}
+              placeholder="카테고리를 선택하세요."
+              alert="카테고리를 선택해주세요."
+              required={fieldErrors.category}
+            />
           </div>
           <div className="mb-4">
             <Label content="문제" />
@@ -255,7 +240,7 @@ export default function EditAbQuizPage() {
             )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-2">
             <div className="mb-2">
               <Label content="B 선택지" />
               <TextField
@@ -291,15 +276,6 @@ export default function EditAbQuizPage() {
               </div>
             )}
           </div>
-
-          <Label content="해설" />
-          <TextArea
-            value={formData.explanation}
-            onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
-            placeholder="해설을 입력하세요."
-            size="M"
-            state={fieldErrors.explanation ? 'error' : 'enable'}
-          />
         </Card>
         <ShadcnButton
           className="w-full h-12 text-lg relative"

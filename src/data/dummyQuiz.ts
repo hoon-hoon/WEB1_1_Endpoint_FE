@@ -13,10 +13,9 @@ export const dummyQuizzes: BaseQuizAPI[] = [
       { no: 2, content: 'X', selectionRatio: 0.66 },
     ],
     answer: {
-      content: 'X',
+      answerNumber: 2,
       explanation: 'Virtual DOM이 항상 빠른 것은 아닙니다.',
     },
-    answeredOption: 'X',
     count: {
       like: 120,
       comment: 8,
@@ -42,11 +41,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
         imagePath: materialImage,
       },
     ],
-    answer: {
-      content: '',
-      explanation: '',
-    },
-    answeredOption: 'Material Design',
+    answeredOption: 2,
     count: {
       like: 80,
       comment: 1,
@@ -65,10 +60,10 @@ export const dummyQuizzes: BaseQuizAPI[] = [
       { no: 4, content: 'Template Literals', selectionRatio: 0.05 },
     ],
     answer: {
-      content: 'Arrow Functions',
+      answerNumber: 1,
       explanation: 'Arrow Functions는 간결하고 강력합니다.',
     },
-    answeredOption: 'Arrow Functions',
+    answeredOption: 2,
     count: {
       like: 95,
       comment: 2,
@@ -85,10 +80,10 @@ export const dummyQuizzes: BaseQuizAPI[] = [
       { no: 2, content: 'X', selectionRatio: 0.85 },
     ],
     answer: {
-      content: 'X',
+      answerNumber: 2,
       explanation: 'CSS는 스타일링 언어로, 프로그래밍 언어로 간주되지 않습니다.',
     },
-    answeredOption: 'O',
+    answeredOption: 1,
     count: {
       like: 50,
       comment: 0,
@@ -114,11 +109,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
         imagePath: null,
       },
     ],
-    answer: {
-      content: '',
-      explanation: '',
-    },
-    answeredOption: 'Bottom Navigation',
+    answeredOption: 1,
     count: {
       like: 110,
       comment: 2,

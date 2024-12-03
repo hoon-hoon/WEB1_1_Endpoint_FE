@@ -9,28 +9,45 @@ import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
+import DropDown from '@/components/common/DropDown';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
 
 // Mock 데이터
 const MOCK_DATA = {
+  category: '알고리즘', // 카테고리
   type: 'OX',
   content: 'OX 퀴즈 내용~~~', // 질문
   answer: 'O', // 정답
   explanation: '해설~~~~~~~~~', // 해설
 };
 
+// 카테고리 목록
+const categories = [
+  '알고리즘',
+  '프로그래밍 언어',
+  '네트워크',
+  '운영체제',
+  '웹 개발',
+  '모바일 개발',
+  '데브옵스/인프라',
+  '데이터베이스',
+  '소프트웨어 공학',
+];
+
 export default function EditOxQuizPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const [quizData, setQuizData] = useState({
+    category: '', // 카테고리
     content: '', // 질문
     answer: '', // 정답
     explanation: '', // 해설
   });
 
   const [fieldErrors, setFieldErrors] = useState({
+    category: false,
     content: false,
     explanation: false,
     answer: false,
@@ -55,7 +72,7 @@ export default function EditOxQuizPage() {
     // fetchQuiz();
   }, [id]);
 
-  const handleInputChange = (field: keyof typeof quizData, value: string, maxLength: number) => {
+  const handleInputChange = (field: keyof typeof quizData, value: string, maxLength?: number) => {
     setQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) })); // 최대 글자 수 제한
     setFieldErrors((prev) => ({ ...prev, [field]: false }));
   };
@@ -71,6 +88,7 @@ export default function EditOxQuizPage() {
 
   const validateFields = () => {
     const errors = {
+      category: quizData.category.trim() === '',
       content: quizData.content.trim() === '',
       explanation: quizData.explanation.trim() === '',
       answer: quizData.answer === '',
@@ -89,14 +107,27 @@ export default function EditOxQuizPage() {
       return;
     }
 
-    console.log('OX 퀴즈 수정 데이터 제출:', quizData);
+    const payload = {
+      id: id, // 퀴즈 ID
+      category: quizData.category,
+      type: 'OX',
+      content: quizData.content,
+      options: [
+        { optionNumber: 1, content: 'O', imageId: null },
+        { optionNumber: 2, content: 'X', imageId: null },
+      ],
+      answer: quizData.answer,
+      explanation: quizData.explanation,
+    };
+
+    console.log('Payload for submission:', payload);
 
     setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
     setToastOpen(true);
 
     // 서버 연결 시 활성화
     // try {
-    //   await axios.put(`/api/quiz/${id}`, quizData);
+    //   await axios.put(`/api/quiz/${id}`, payload);
     //   alert('퀴즈가 성공적으로 수정되었습니다.');
     //   navigate('/profile/quizManagement');
     // } catch (error) {
@@ -114,6 +145,7 @@ export default function EditOxQuizPage() {
           onClickLeft={() => navigate('/profile/quizManagement')}
         />
         <Card>
+          {/* 퀴즈 유형 */}
           <div className="mb-4">
             <Label content="퀴즈 유형" htmlFor="quiz-type" className="mb-1" />
             <div className="flex flex-row items-center gap-4">
@@ -140,6 +172,20 @@ export default function EditOxQuizPage() {
               />
             </div>
           </div>
+
+          {/* 카테고리 선택 */}
+          <div className="mb-4">
+            <Label content="카테고리" htmlFor="category" className="mb-1" />
+            <DropDown
+              items={categories}
+              selectedItem={quizData.category}
+              setItem={(value: string) => handleInputChange('category', value)}
+              placeholder="카테고리를 선택하세요"
+              alert="카테고리를 선택해주세요."
+              required={fieldErrors.category && quizData.category === ''}
+            />
+          </div>
+
           <div className="mb-4">
             <Label content="문제" />
             <TextArea
