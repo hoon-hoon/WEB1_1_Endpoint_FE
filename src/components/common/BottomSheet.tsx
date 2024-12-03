@@ -7,9 +7,10 @@ import {
 } from '@/shadcn/ui/drawer';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import CommentSection from '../comments/CommentSection';
-import CommentInput from '../comments/CommentInput';
-import { useComments } from '@/hooks';
 import { useEffect } from 'react';
+import CommentInput from '../comments/CommentInput';
+import useFetchComments from '@/api/comments/fetchComments';
+import useAddComment from '@/api/comments/addComments';
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -18,25 +19,21 @@ interface BottomSheetProps {
 }
 
 export default function BottomSheet({ isOpen, setOpen, quizId }: BottomSheetProps) {
-  const { comments, loading, fetchComments, addComment, deleteComment } = useComments();
+  const { comments, loading, fetchComments } = useFetchComments(quizId);
+  const addCommentMutation = useAddComment(quizId);
 
   useEffect(() => {
     if (isOpen) {
-      fetchComments(quizId);
+      console.log(`fetchComments 호출 ${quizId}`);
+      fetchComments()
+        .then(() => console.log('댓글 데이터 로드 완료'))
+        .catch((err) => console.error('댓글 데이터 로드 실패:', err));
     }
-  }, [isOpen, quizId]);
+  }, [isOpen, fetchComments]);
 
   const handleAddComment = (content: string, parentCommentId: number) => {
-    const writerId = 1; // 예시 작성자 ID
-    addComment(quizId, writerId, parentCommentId, content);
-  };
-
-  // const handleEditComment = (commentId: number, newContent: string) => {
-  //   editComment(commentId, newContent);
-  // };
-
-  const handleDeleteComment = (commentId: number) => {
-    deleteComment(commentId);
+    const writerId = 1;
+    addCommentMutation.mutate({ writerId, parentCommentId, content });
   };
 
   return (
@@ -58,13 +55,8 @@ export default function BottomSheet({ isOpen, setOpen, quizId }: BottomSheetProp
             </button>
           </div>
         </DrawerHeader>
-        <CommentSection
-          comments={comments}
-          loading={loading}
-          // onEdit={handleEditComment}
-          onDelete={handleDeleteComment}
-        />
         <CommentInput onSubmit={(content) => handleAddComment(content, 0)} />
+        <CommentSection comments={comments} loading={loading} onDelete={() => {}} />
       </DrawerContent>
     </Drawer>
   );
