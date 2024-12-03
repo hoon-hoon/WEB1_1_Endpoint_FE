@@ -23,7 +23,7 @@ export interface QuizAuthor {
 export interface BaseQuizAPI {
   id: number; // 퀴즈 ID
   content: string; // 퀴즈 내용
-  type: 'OX 퀴즈' | 'ABTest' | '객관식'; // 퀴즈 타입
+  type: 'OX 퀴즈' | 'AB 테스트' | '객관식'; // 퀴즈 타입
   author?: QuizAuthor; // 없다면 default
   options: QuizOption[]; // 선택지
   answer?: QuizAnswer; // 정답 내용, 해설 담는 객체
