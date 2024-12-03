@@ -25,7 +25,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
   {
     id: 2,
     content: '어떤 버튼 디자인이 더 좋으신가요?',
-    type: 'ABTest',
+    type: 'AB 테스트',
     author: { name: 'UI Designer', imagePath: 'https://example.com/avatar/ui-designer.png' },
     options: [
       {
@@ -93,7 +93,7 @@ export const dummyQuizzes: BaseQuizAPI[] = [
   {
     id: 5,
     content: '모바일 네비게이션에서 더 나은 UI는 무엇인가요?',
-    type: 'ABTest',
+    type: 'AB 테스트',
     author: { name: null, imagePath: null },
     options: [
       {
