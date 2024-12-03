@@ -7,9 +7,12 @@ import QuizSkeleton from './QuizSkeleton';
 import DropDown from '@/components/common/DropDown';
 import { BaseQuizAPI } from '@/types';
 import axiosInstance from '@/api/axiosInstance';
+import useGetTags from '@/api/search/fetchTags';
+import TagSkeleton from './TagSkeleton';
 
 const SearchPage = () => {
-  const tags = ['React', 'JavaScript', 'TypeScript', 'Next.js', 'CSS', 'HTML'];
+  const { data: tags = [], isLoading: tagsLoading, error: tagsError } = useGetTags();
+
   const [, setSelectedTags] = useState<string[]>([]);
   const [keyword, setKeyword] = useState('');
   const [filteredQuizzes, setFilteredQuizzes] = useState<BaseQuizAPI[]>([]);
@@ -83,7 +86,13 @@ const SearchPage = () => {
             />
           </div>
         </div>
-        <TagList tags={tags} onTagClick={handleTagClick} />
+        {tagsLoading ? (
+          <TagSkeleton />
+        ) : tagsError ? (
+          <p className="text-gray-600">인기 태그를 불러오지 못했습니다.</p>
+        ) : (
+          <TagList tags={tags} onTagClick={handleTagClick} />
+        )}
         {!filteredQuizzes.length && !loading ? (
           <div className="text-center text-gray-500 mt-16">
             원하는 검색어와 필터로 퀴즈를 검색해보세요.
