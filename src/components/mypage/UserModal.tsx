@@ -1,30 +1,30 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import defaultImageURL from '@/assets/defaultImage';
 import axiosInstance from '@/api/axiosInstance';
 import Container from '../layout/Container';
 import Card from '../common/Card';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
+import { useUserData } from '@/api/mypage/useUserData';
 
 interface UserModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentNickname?: string;
-  currentProfileImage?: string;
 }
 
-export default function UserModal({
-  isOpen,
-  onClose,
-  currentNickname = '',
-  currentProfileImage = defaultImageURL,
-}: UserModalProps) {
+export default function UserModal({ isOpen, onClose }: UserModalProps) {
+  const { data: profileData } = useUserData();
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [nickname, setNickname] = useState(currentNickname);
+  const [nickname, setNickname] = useState('');
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string>(currentProfileImage);
+  const [previewImage, setPreviewImage] = useState('');
+
+  useEffect(() => {
+    if (profileData) {
+      setPreviewImage(profileData.profileImageUrl);
+    }
+  }, [profileData]);
 
   const updateProfileMutation = useMutation({
     mutationFn: async () => {
