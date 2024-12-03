@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 type TagListProps = {
   tags: string[];
@@ -10,9 +10,7 @@ const TagList = ({ tags, onTagClick }: TagListProps) => {
 
   const handleTagClick = (tag: string) => {
     const isSelected = selectedTags.includes(tag);
-    const updatedTags = isSelected
-      ? selectedTags.filter((t) => t !== tag)
-      : [...selectedTags, tag]; 
+    const updatedTags = isSelected ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag];
 
     setSelectedTags(updatedTags);
     onTagClick?.(updatedTags);
@@ -27,12 +25,10 @@ const TagList = ({ tags, onTagClick }: TagListProps) => {
             key={tag}
             onClick={() => handleTagClick(tag)}
             className={`px-3 py-1 rounded-full cursor-pointer text-sm font-medium ${
-              isSelected
-                ? "bg-gray-400 text-white"
-                : "bg-gray-200"
+              isSelected ? 'bg-gray-400 text-white' : 'bg-gray-200'
             }`}
           >
-            #{tag}
+            {tag}
           </span>
         );
       })}

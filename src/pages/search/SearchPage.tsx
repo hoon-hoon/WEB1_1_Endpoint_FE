@@ -13,17 +13,17 @@ import TagSkeleton from './TagSkeleton';
 const SearchPage = () => {
   const { data: tags = [], isLoading: tagsLoading, error: tagsError } = useGetTags();
 
-  const [, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [keyword, setKeyword] = useState('');
   const [filteredQuizzes, setFilteredQuizzes] = useState<BaseQuizAPI[]>([]);
   const [loading, setLoading] = useState(false);
   const [filterType, setFilterType] = useState<string>('전체 문제');
   const [sort, setSort] = useState<string>('인기순');
 
-  const handleTagClick = (selectedTags: string[]) => {
-    setSelectedTags(selectedTags);
-    console.log('Selected Tags:', selectedTags);
-    // TODO: 검색 필터 로직
+  const handleTagClick = (updatedTags: string[]) => {
+    const tagsWithoutHash = updatedTags.map((tag) => tag.replace(/^#/, ''));
+    setSelectedTags(tagsWithoutHash);
+    setKeyword(tagsWithoutHash.join(' '));
   };
 
   const handleSearch = async () => {
