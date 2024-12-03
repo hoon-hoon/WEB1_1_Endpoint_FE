@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useStartGame from '@/api/game/useStartGame';
 import { useGameStore } from '@/stores/useGameStore';
+import { useStompStore } from '@/api/game/useStompStore';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import { Play, Loader2 } from 'lucide-react';
-import Dialog from '@/components/common/Dialog';
 import TopBar from '@/components/common/TopBar';
 import DragScrollWrapper from '@/components/common/DragScrollWrapper';
 import MemberItem from '@/components/common/MemberItem';
@@ -15,22 +16,23 @@ import Label from '@/components/common/Label';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import ToastMessage from '@/components/common/ToastMessage';
 import LoadingSpinner from '@/components/game/LoadingSpinner';
-import LoadingPlayer from '@/components/game/LoadingPlayer';
 
 const WaitingRoom = () => {
   const navigate = useNavigate();
-  const { subject, level, quizCount, inviteCode, players } = useGameStore();
+  const { mutate: startGame } = useStartGame();
+  const { gameId, subject, level, quiz, quizCount, inviteCode, players } = useGameStore();
+  const { isLoading, setIsLoading, exitGame, kickPlayer } = useStompStore();
   const [copied, setCopied] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const [userLoading] = useState(false);
+  const [kicked, setKicked] = useState(false);
 
   useEffect(() => {
-    if (players.length > 0) {
-      console.log('새로운 플레이어 입장:', players);
+    if (quiz !== null) {
+      setTimeout(() => {
+        navigate('/game/play');
+        setIsLoading(false);
+      }, 2000);
     }
-  }, [players]);
+  }, [quiz]);
 
   const copyInviteCode = () => {
     navigator.clipboard.writeText(inviteCode).then(() => {
@@ -39,49 +41,44 @@ const WaitingRoom = () => {
     });
   };
 
-  const handleDialog = () => {
-    setOpenDialog(!openDialog);
+  const handleGameStart = async () => {
+    setIsLoading(true);
+    startGame(gameId);
   };
 
-  const startGame = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate('/game/play');
-    }, 2000);
+  const exitGameRoom = () => {
+    exitGame(gameId);
+    navigate('/game/create');
   };
+
+  const kickUser = (playerId: number) => {
+    kickPlayer(gameId, playerId);
+  };
+
+  const hostPlayer = players.filter((player) => player.host === true);
+  const isHost = hostPlayer[0].host;
 
   return (
     <div className="flex flex-col">
-      <TopBar leftIcon="left" leftText="게임 대기방" onClickLeft={() => navigate('/game/create')} />
+      <TopBar leftIcon="left" leftText="게임 대기방" onClickLeft={exitGameRoom} />
       {isLoading && <LoadingSpinner />}
-      {openDialog && (
-        <Dialog
-          open={openDialog}
-          title="해당 플레이어를 강퇴시키겠습니까?"
-          leftText="예"
-          rightText="아니요"
-          leftOnClick={handleDialog}
-          rightOnClick={handleDialog}
-          onClose={handleDialog}
-        />
-      )}
+
       <section className="pt-20 px-4">
         <Card>
           <label className="block text-xl font-bold text-gray-700 mb-2">참여자</label>
           <DragScrollWrapper>
-            {players &&
-              players.map((player: Player) =>
-                userLoading ? (
-                  <LoadingPlayer key={player.user.id} />
-                ) : (
-                  <MemberItem key={player.user.id} member={player} handleExit={handleDialog} />
-                ),
-              )}
+            {players.map((player: Player) => (
+              <MemberItem
+                key={player.name}
+                member={player}
+                handleExit={() => kickUser(player.id)}
+              />
+            ))}
           </DragScrollWrapper>
         </Card>
       </section>
-      <section className="px-4">
+
+      <section className="px-4 pb-24">
         <Card>
           <div className="pb-4">
             <Label className="block mb-2" content="퀴즈 주제" />
@@ -126,11 +123,14 @@ const WaitingRoom = () => {
             </ShadcnButton>
           </div>
         </Card>
-        <div className="max-w-xl mx-auto mb-8">
+      </section>
+
+      {isHost && (
+        <div className="max-w-xl mx-auto fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-white shadow-md z-10 w-full p-4">
           <ShadcnButton
             className="w-full h-14 text-lg relative"
             size="lg"
-            onClick={startGame}
+            onClick={handleGameStart}
             disabled={isLoading}
           >
             {isLoading ? (
@@ -149,9 +149,15 @@ const WaitingRoom = () => {
               open={copied}
               setOpen={setCopied}
             />
+            <ToastMessage
+              message="해당 플레이어를 강퇴했습니다"
+              icon="warning"
+              open={kicked}
+              setOpen={setKicked}
+            />
           </ShadcnButton>
         </div>
-      </section>
+      )}
     </div>
   );
 };

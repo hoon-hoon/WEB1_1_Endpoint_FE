@@ -9,29 +9,35 @@ export type Topic =
   | '데이터베이스'
   | '소프트웨어 공학';
 
+/*
 export type User = {
   id: number;
   name: string;
   imgPath: string;
   rating: number;
 };
+*/
 
 export type Player = {
-  user: User;
-  guest: boolean;
-  waiting: boolean;
-  role: 'HOST' | 'PLAYER';
-  status: 'JOINED' | 'LEFT';
+  id: number;
+  name: string;
+  imgPath: string;
+  rating: number;
+  role: 'HOST' | 'GUEST';
   host: boolean;
   score: number;
 };
 
 export type Question = {
-  id: number;
-  text: string;
-  options: string[];
-  correctAnswer: number;
+  no: number;
+  content: string;
 };
+
+export interface GameQuiz {
+  id: number;
+  content: string;
+  options: Question[];
+}
 
 export type ScoreUpdateMessage = {
   playerId: number;

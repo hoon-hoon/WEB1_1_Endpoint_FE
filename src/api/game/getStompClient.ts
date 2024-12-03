@@ -15,8 +15,7 @@ export const getStompClient = () => {
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
-      debug: (str) => console.log(`STOMP: ${str}`), // 디버그 메시지
-      reconnectDelay: 5000, // 자동 재연결 (5초 딜레이)
+      //debug: (str) => console.log(`STOMP: ${str}`), // 디버그 메시지
       onConnect: () => {
         console.log('STOMP 연결 성공');
       },

@@ -1,4 +1,4 @@
-import { Player, Topic } from '@/types/GameTypes';
+import { Player, Topic, GameQuiz } from '@/types/GameTypes';
 import { create } from 'zustand';
 
 export type GameStore = {
@@ -6,18 +6,22 @@ export type GameStore = {
   players: Player[];
   subject: Topic | null;
   level: string;
+  quiz: GameQuiz[] | null;
   quizCount: number;
   currentQuestion: number;
   timeLeft: number;
   inviteCode: string;
+  isCorrect: boolean | null;
 
   updateId: (gameId: number) => void;
   updatePlayers: (players: Player[]) => void;
   updateSubject: (subject: Topic) => void;
   updateLevel: (level: string) => void;
+  updateQuiz: (quizzes: GameQuiz[]) => void;
   updateQuizCount: (count: number) => void;
-  updateScore: (playerId: number, increment: number) => void;
   updateInviteCode: (inviteCode: string) => void;
+  updateScores: (leaderboard: { userId: number; score: number }[]) => void;
+  setIsCorrect: (result: boolean | null) => void;
   getMyRank: (playerId: number) => { rank: number; score: number };
 };
 
@@ -26,10 +30,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
   players: [],
   subject: null,
   level: '',
+  quiz: null,
   quizCount: 5,
   currentQuestion: 0,
   timeLeft: 10,
   inviteCode: '',
+  earnedScore: 0,
+  isCorrect: null,
 
   updateId: (gameId) => {
     set(() => ({
@@ -41,6 +48,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
   updatePlayers: (players) => {
     set(() => ({
       players,
+    }));
+  },
+
+  updateScores: (leaderboard: { userId: number; score: number }[]) => {
+    set((state) => ({
+      players: state.players.map((player) => {
+        const updatedPlayer = leaderboard.find((entry) => entry.userId === player.id);
+        return updatedPlayer ? { ...player, score: updatedPlayer.score } : player; // 점수가 업데이트되지 않으면 기존 상태 유지
+      }),
     }));
   },
 
@@ -56,20 +72,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }));
   },
 
+  updateQuiz: (quizzes: GameQuiz[]) => {
+    set(() => ({
+      quiz: quizzes,
+    }));
+  },
   updateQuizCount: (count: number) => {
     set(() => ({
       quizCount: count,
-    }));
-  },
-
-  // 점수 업데이트
-  updateScore: (playerId, increment) => {
-    set((state) => ({
-      players: state.players.map((player) =>
-        player.user.id === playerId
-          ? { ...player, score: (player.score || 0) + increment }
-          : player,
-      ),
     }));
   },
 
@@ -79,12 +89,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }));
   },
 
+  setIsCorrect: (correct: boolean | null) => {
+    set(() => ({
+      isCorrect: correct,
+    }));
+  },
+
   // 플레이어의 순위 계산
   getMyRank: (playerId) => {
     const players = get().players;
     const sortedPlayers = [...players].sort((a, b) => (b.score || 0) - (a.score || 0));
-    const rank = sortedPlayers.findIndex((player) => player.user.id === playerId) + 1;
-    const score = players.find((player) => player.user.id === playerId)?.score || 0;
+    const rank = sortedPlayers.findIndex((player) => player.id === playerId) + 1;
+    const score = players.find((player) => player.id === playerId)?.score || 0;
 
     return { rank, score };
   },

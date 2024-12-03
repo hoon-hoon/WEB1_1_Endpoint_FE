@@ -1,3 +1,4 @@
+//import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import TopBar from '@/components/common/TopBar';
@@ -6,6 +7,38 @@ import { Button as ShadcnButton } from '@/shadcn/ui/button';
 
 export default function RandomMatching() {
   const navigate = useNavigate();
+  /*
+  const [matchStatus, setMatchStatus] = useState('매칭 중...');
+  const [isMatching, setIsMatching] = useState(true);
+
+  const url = 'https://quizy.n-e.kr/api/matching/subscribe';
+  const [data, setData] = useState<any>(null);
+  const [error, setError] = useState<any>(null);
+
+  useEffect(() => {
+    const eventSource = new EventSource(url);
+
+    eventSource.onmessage = (event) => {
+      try {
+        const parsedData = JSON.parse(event.data);
+        setData(parsedData);
+      } catch (e) {
+        console.error('Error parsing SSE data:', e);
+        setError(e);
+      }
+    };
+
+    eventSource.onerror = (e) => {
+      console.error('SSE error:', e);
+      setError(e);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [url]);
+
   /*
   const [matchStatus, setMatchStatus] = useState('매칭 중...'); // 매칭 상태
   const [isMatching, setIsMatching] = useState(true); // 매칭 진행 여부
