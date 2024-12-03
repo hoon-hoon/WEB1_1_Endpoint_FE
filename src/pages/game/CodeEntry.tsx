@@ -15,7 +15,7 @@ import { Button as ShadcnButton } from '@/shadcn/ui/button';
 export default function CodeEntry() {
   const navigate = useNavigate();
   const { mutate: joinGame } = useJoinGame();
-  const { connect, subscribeToGame } = useStompStore();
+  const { connect } = useStompStore();
   const { updateId, updatePlayers, updateSubject, updateLevel, updateInviteCode } = useGameStore();
   const [inviteCode, setInviteCode] = useState('');
 
@@ -28,10 +28,8 @@ export default function CodeEntry() {
 
     joinGame(inviteCode, {
       onSuccess: (res) => {
-        connect();
-        subscribeToGame(res.result.id);
+        connect(res.result.id);
         updateId(res.result.id);
-        console.log(res.result, res.result.id);
         updatePlayers(res.result.players);
         updateSubject(res.result.subject);
         updateLevel(res.result.level);

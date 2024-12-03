@@ -31,8 +31,8 @@ const difficulties: Difficulty[] = ['하', '중', '상'];
 export default function CreateGame() {
   const navigate = useNavigate();
   const { mutate: createGame } = useCreateGame();
-  const { updateInviteCode, updatePlayers, updateSubject, updateLevel } = useGameStore();
-  const { connect, subscribeToGame } = useStompStore();
+  const { updateId, updateInviteCode, updatePlayers, updateSubject, updateLevel } = useGameStore();
+  const { connect } = useStompStore();
 
   const [topic, setTopic] = useState<Topic | string>('');
   const [difficulty, setDifficulty] = useState<Difficulty | string>('');
@@ -64,8 +64,8 @@ export default function CreateGame() {
         },
         {
           onSuccess: (res: CreateGameResponse) => {
-            connect(); // 소캣 연결
-            subscribeToGame(res.result.id); // 게임관련 메시지 구독
+            connect(res.result.id); // 소캣 연결
+            updateId(res.result.id);
             updatePlayers(res.result.players);
             updateSubject(res.result.subject);
             updateLevel(res.result.level);

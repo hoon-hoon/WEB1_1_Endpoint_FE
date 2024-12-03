@@ -41,7 +41,6 @@ function App() {
           <Route path="/profile/reviewNote" element={<ReviewNote />} />
           <Route path="/profile/quizManagement" element={<QuizManagement />} />
           <Route path="/game/create" element={<CreateGame />} />
-          <Route path="/game/waiting" element={<WaitingRoom />} />
           <Route path="/game/random" element={<RandomMatch />} />
           <Route path="/game/entry" element={<CodeEntry />} />
           <Route path="/quiz/ab" element={<AbPage />} />
@@ -52,6 +51,7 @@ function App() {
           <Route path="/quiz/edit/multiple/:id" element={<EditMultipleQuizPage />} />
           {/* 추가적인 페이지 라우팅을 등록 */}
         </Route>
+        <Route path="/game/waiting" element={<WaitingRoom />} />
         <Route path="/game/play" element={<Play />} />
         <Route path="/game/result" element={<Result />} />
       </Routes>
