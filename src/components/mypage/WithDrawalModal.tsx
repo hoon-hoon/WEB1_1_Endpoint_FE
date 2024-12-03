@@ -26,12 +26,6 @@ export default function WithDrawalModal({ isOpen, onClose }: WitdhDrawalProps) {
         <Card className="w-full">
           <div className="relative mb-4">
             <h3 className="text-center text-xl font-bold">회원탈퇴</h3>
-            <button
-              onClick={onClose}
-              className="absolute right-0 top-0 text-gray-400 hover:text-gray-600"
-            >
-              <Icon icon="close" size={24} />
-            </button>
           </div>
 
           <form className="space-y-4">
