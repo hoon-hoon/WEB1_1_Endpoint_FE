@@ -16,9 +16,10 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [nickname, setNickname] = useState('');
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [nicknameError, setNicknameError] = useState('');
 
   useEffect(() => {
     if (profileData) {
@@ -29,8 +30,11 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
   const updateProfileMutation = useMutation({
     mutationFn: async () => {
       const formData = new FormData();
-      const data = { name: nickname };
-      formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+      formData.append(
+        'data',
+        new Blob([JSON.stringify({ name: nickname })], { type: 'application/json' }),
+      );
+
       if (profileImage) {
         formData.append('profileImage', profileImage);
       }
@@ -65,15 +69,24 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+  };
 
-    if (!nickname.trim()) {
-      alert('닉네임을 입력해주세요.');
-      return;
+  const validateNickname = () => {
+    if (nickname.length < 2) {
+      setNicknameError('닉네임은 최소 2글자 이상이어야 합니다.');
+      return false;
     }
+    setNicknameError('');
+    return true;
+  };
 
-    updateProfileMutation.mutate();
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateNickname()) {
+      updateProfileMutation.mutate();
+    }
   };
 
   if (!isOpen) return null;
@@ -128,10 +141,17 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
                 type="text"
                 id="nickname"
                 value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="새 닉네임을 입력해주세요"
+                onChange={handleNicknameChange}
+                onBlur={validateNickname}
+                className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-1 
+                  ${
+                    nicknameError
+                      ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                      : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+                  }`}
+                placeholder="새로운 닉네임을 입력해주세요"
               />
+              {nicknameError && <p className="mt-1 text-sm text-red-500">{nicknameError}</p>}
             </div>
 
             <div className="flex justify-center">
