@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '@/components/layout/Container';
 import Card from '../common/Card';
 import FlexBox from '@/components/layout/FlexBox';
 import { useWithdrawUser } from '@/api/mypage/useWithdraw';
+import ToastMessage from '../common/ToastMessage';
 
 interface WithDrawalProps {
   isOpen: boolean;
@@ -10,7 +11,12 @@ interface WithDrawalProps {
 }
 
 export default function WithDrawalModal({ isOpen, onClose }: WithDrawalProps) {
-  const { mutate, isPending } = useWithdrawUser();
+  const [toastOpen, setToastOpen] = useState(false);
+  const { mutate, isPending } = useWithdrawUser({
+    onError: () => {
+      setToastOpen(true);
+    },
+  });
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -61,6 +67,13 @@ export default function WithDrawalModal({ isOpen, onClose }: WithDrawalProps) {
             </FlexBox>
           </form>
         </Card>
+
+        <ToastMessage
+          message="회원 탈퇴 중 오류가 발생했습니다."
+          icon="warning"
+          open={toastOpen}
+          setOpen={setToastOpen}
+        />
       </div>
     </Container>
   );
