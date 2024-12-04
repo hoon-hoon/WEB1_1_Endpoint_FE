@@ -15,6 +15,7 @@ type StompState = {
   submitAnswer: (gameId: number, quizId: number, answer: string) => void;
   initiateGame: (gameId: number) => void;
   kickPlayer: (gameId: number, targetUserId: number) => void;
+  endGame: (gameId: number) => void;
   exitGame: (gameId: number) => void;
 };
 
@@ -78,7 +79,6 @@ export const useStompStore = create<StompState>((set, get) => ({
           break;
         case 'SCORE_BOARD':
           const { leaderboard } = response.payload;
-          console.log(leaderboard);
           updateScores(leaderboard);
           break;
         default:
@@ -98,6 +98,13 @@ export const useStompStore = create<StompState>((set, get) => ({
         case 'KICKED':
           set({ isLoading: true });
           updateQuiz(response.payload.quiz as GameQuiz[]);
+          break;
+        case 'GAME_RESULT':
+          console.log(response.payload.rank);
+          useGameStore.setState({
+            rank: response.payload.rank,
+            results: response.payload.results,
+          });
           break;
         case 'ERROR':
           console.log('에러 메시지', response);

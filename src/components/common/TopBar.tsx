@@ -2,12 +2,12 @@ import '@/styles/transition.css';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { useTopBarState } from '@/hooks/useTopBarState';
+import useGetProfile from '@/api/game/useGetProfile';
 import { MdLogout } from 'react-icons/md';
 import { SiQuizlet } from 'react-icons/si';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shadcn/ui/popover';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import Dialog from './Dialog';
-import defaultImageURL from '@/assets/defaultImage';
 import FlexBox from '@/components/layout/FlexBox';
 import axiosInstance from '@/api/axiosInstance';
 
@@ -20,7 +20,7 @@ type TopBarProps = {
 
 const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProps) => {
   const [state, dispatch] = useTopBarState();
-
+  const { data } = useGetProfile();
   const handleTransition = (onClickLeft: () => void) => {
     if (!document.startViewTransition) {
       onClickLeft();
@@ -62,11 +62,11 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
         <Popover open={state.isPop} onOpenChange={() => dispatch({ type: 'TOGGLE_POP' })}>
           <PopoverTrigger asChild>
             <button className="cursor-pointer">
-              <Avatar input="image" image={defaultImageURL} size="S" />
+              <Avatar input="image" image={data?.profileImageUrl} size="S" />
             </button>
           </PopoverTrigger>
           <PopoverContent>
-            <p className="w-full py-4 text-lg text-center">안녕하세요 원석님</p>
+            <p className="w-full py-4 text-lg text-center">안녕하세요 {data?.name}님</p>
             <FlexBox direction="col" className="gap-2">
               <ShadcnButton
                 variant="ghost"

@@ -7,7 +7,7 @@ async function fetchRandomMatch() {
 }
 
 async function deleteRandomMatch() {
-  await axiosInstance.delete(`/api/matching/unsubscribe`);
+  await axiosInstance.delete(`/matching/unsubscribe`);
 }
 function useRandomMatch() {
   return useQuery({
