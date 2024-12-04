@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axiosInstance from '../axiosInstance';
 
 const deleteCommentAPI = async (commentId: number): Promise<void> => {

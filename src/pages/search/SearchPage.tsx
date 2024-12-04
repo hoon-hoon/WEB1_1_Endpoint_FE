@@ -13,7 +13,7 @@ import TagSkeleton from './TagSkeleton';
 const SearchPage = () => {
   const { data: tags = [], isLoading: tagsLoading, error: tagsError } = useGetTags();
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [, setSelectedTags] = useState<string[]>([]);
   const [keyword, setKeyword] = useState('');
   const [filteredQuizzes, setFilteredQuizzes] = useState<BaseQuizAPI[]>([]);
   const [loading, setLoading] = useState(false);
