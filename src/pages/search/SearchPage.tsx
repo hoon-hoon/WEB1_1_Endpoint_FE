@@ -7,9 +7,12 @@ import QuizSkeleton from './QuizSkeleton';
 import DropDown from '@/components/common/DropDown';
 import { BaseQuizAPI } from '@/types';
 import axiosInstance from '@/api/axiosInstance';
+import useGetTags from '@/api/search/fetchTags';
+import TagSkeleton from './TagSkeleton';
 
 const SearchPage = () => {
-  const tags = ['React', 'JavaScript', 'TypeScript', 'Next.js', 'CSS', 'HTML'];
+  const { data: tags = [], isLoading: tagsLoading, error: tagsError } = useGetTags();
+
   const [, setSelectedTags] = useState<string[]>([]);
   const [keyword, setKeyword] = useState('');
   const [filteredQuizzes, setFilteredQuizzes] = useState<BaseQuizAPI[]>([]);
@@ -17,10 +20,10 @@ const SearchPage = () => {
   const [filterType, setFilterType] = useState<string>('전체 문제');
   const [sort, setSort] = useState<string>('인기순');
 
-  const handleTagClick = (selectedTags: string[]) => {
-    setSelectedTags(selectedTags);
-    console.log('Selected Tags:', selectedTags);
-    // TODO: 검색 필터 로직
+  const handleTagClick = (updatedTags: string[]) => {
+    const tagsWithoutHash = updatedTags.map((tag) => tag.replace(/^#/, ''));
+    setSelectedTags(tagsWithoutHash);
+    setKeyword(tagsWithoutHash.join(' '));
   };
 
   const handleSearch = async () => {
@@ -83,7 +86,13 @@ const SearchPage = () => {
             />
           </div>
         </div>
-        <TagList tags={tags} onTagClick={handleTagClick} />
+        {tagsLoading ? (
+          <TagSkeleton />
+        ) : tagsError ? (
+          <p className="text-gray-600">인기 태그를 불러오지 못했습니다.</p>
+        ) : (
+          <TagList tags={tags} onTagClick={handleTagClick} />
+        )}
         {!filteredQuizzes.length && !loading ? (
           <div className="text-center text-gray-500 mt-16">
             원하는 검색어와 필터로 퀴즈를 검색해보세요.
