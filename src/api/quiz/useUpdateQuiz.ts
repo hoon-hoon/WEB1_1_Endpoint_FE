@@ -31,16 +31,19 @@ interface UpdateQuizResponse {
 async function updateQuiz(requestData: UpdateQuizRequest): Promise<UpdateQuizResponse> {
   const { id, ...data } = requestData; // `id`는 URL에 포함되고 나머지는 요청 본문에 포함
   const response = await axiosInstance.put(`/quiz/${id}`, data);
+  console.log('퀴즈 수정 성공:', response.data);
   return response.data.result;
 }
 
-function useUpdateQuiz() {
+function useUpdateQuiz(options?: {
+  onSuccess?: (data: any) => void;
+  onError?: (error: any) => void;
+  onSettled?: (data: any, error: any) => void;
+}) {
   return useMutation({
     mutationKey: ['updateQuiz'],
-    mutationFn: (requestData: UpdateQuizRequest) => updateQuiz(requestData),
-    onError: (error) => {
-      console.error('퀴즈 수정 실패:', error);
-    },
+    mutationFn: updateQuiz,
+    ...options, // 동적으로 전달된 옵션을 적용
   });
 }
 
