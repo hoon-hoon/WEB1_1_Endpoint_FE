@@ -24,17 +24,18 @@ export default function RandomMatching() {
 
   useEffect(() => {
     initializeEventSource();
-
     if (isFirstRequest.current) {
-      // 이미 처리된 요청이면 무시
+      // 이미 첫 요청을 처리했으면 무시
       return;
     }
     eventSource.addEventListener('MATCHING', async (event) => {
       try {
         const messageEvent = event as MessageEvent;
         const parsedData: MatchEvent = JSON.parse(messageEvent.data);
-        updateId(parsedData.roomId);
         if (parsedData.roomId) {
+          isFirstRequest.current = true;
+
+          updateId(parsedData.roomId);
           setIsLoading(true);
           await connectPromise(parsedData.roomId);
           await joinGame(parsedData.roomId);
