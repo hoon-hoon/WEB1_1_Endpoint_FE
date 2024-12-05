@@ -15,7 +15,7 @@ import { GameQuiz } from '@/types/GameTypes';
 
 export default function GameProgress() {
   const navigate = useNavigate();
-  const { submitAnswer } = useStompStore();
+  const { submitAnswer, endGame } = useStompStore();
   const { gameId, quiz, players, isCorrect, setIsCorrect } = useGameStore();
   const [timeLeft, setTimeLeft] = useState(10);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -57,7 +57,10 @@ export default function GameProgress() {
       setIsCorrect(null);
       setIsSubmit(false);
     } else {
-      navigate('/game/result');
+      endGame(gameId);
+      setTimeout(() => {
+        navigate('/game/result');
+      }, 1000);
     }
   };
 
