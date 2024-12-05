@@ -1,28 +1,43 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../axiosInstance';
+import { Comment } from '@/types';
 
 const deleteCommentAPI = async (commentId: number): Promise<void> => {
-  try {
-    const response = await axiosInstance.delete(`/quiz/comments/${commentId}`);
-    console.log('댓글 삭제 응답 성공:', response.data);
-  } catch (error) {
-    console.error('댓글 삭제 API 호출 실패:', error);
-    throw error;
-  }
+  const response = await axiosInstance.delete(`/quiz/comments/${commentId}`);
+  console.log('댓글 삭제 응답 성공:', response.data);
 };
 
 const useDeleteComment = (quizId: number) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationKey: ['deleteComment', quizId],
-    mutationFn: (commentId: number) => {
-      return deleteCommentAPI(commentId);
+    mutationFn: (commentId: number) => deleteCommentAPI(commentId),
+    onMutate: async (commentId) => {
+      // 이전 상태 저장
+      const previousComments = queryClient.getQueryData<Comment[]>(['comments', quizId]);
+
+      // 낙관적 업데이트
+      queryClient.setQueryData<Comment[]>(['comments', quizId], (old = []) =>
+        old.filter((comment) => comment.id !== commentId),
+      );
+
+      return { previousComments };
+    },
+    onError: (err, _commentId, context) => {
+      // 오류 발생 시 이전 상태 복원
+      if (context?.previousComments) {
+        queryClient.setQueryData(['comments', quizId], context.previousComments);
+      }
+      console.error('댓글 삭제 실패:', err);
+    },
+    onSettled: () => {
+      // 삭제 후 캐시 무효화
+      queryClient.invalidateQueries({
+        queryKey: ['comments', quizId],
+      });
     },
     onSuccess: () => {
       console.log('댓글 삭제 성공');
-      //   queryClient.invalidateQueries(['comments', quizId]);
-    },
-    onError: (error: Error) => {
-      console.error('댓글 삭제 실패:', error.message);
     },
   });
 };

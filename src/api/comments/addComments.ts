@@ -23,20 +23,16 @@ const addCommentAPI = async ({
   console.log('댓글 등록 응답:', response.data);
 };
 
-function useAddComment(quizId: number) {
-  //   const queryClient = useQueryClient();
-
+const useAddComment = (quizId: number) => {
   return useMutation({
-    mutationKey: ['addComment', quizId],
     mutationFn: (newComment: AddCommentVariables) => addCommentAPI({ quizId, ...newComment }),
     onSuccess: () => {
       console.log('댓글 등록 성공');
-      //   queryClient.invalidateQueries(['comments', quizId]);
     },
     onError: (error: Error) => {
       console.error('댓글 등록 실패:', error.message);
     },
   });
-}
+};
 
 export default useAddComment;

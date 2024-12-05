@@ -7,7 +7,7 @@ import {
 } from '@/shadcn/ui/drawer';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import CommentSection from '../comments/CommentSection';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import CommentInput from '../comments/CommentInput';
 import useFetchComments from '@/api/comments/fetchComments';
 import useAddComment from '@/api/comments/addComments';
@@ -34,7 +34,14 @@ export default function BottomSheet({ isOpen, setOpen, quizId }: BottomSheetProp
   }, [isOpen, fetchComments]);
 
   const handleAddComment = (content: string, parentCommentId: number) => {
-    addCommentMutation.mutate({ content, parentCommentId });
+    addCommentMutation.mutate(
+      { parentCommentId, content },
+      {
+        onSuccess: () => {
+          fetchComments();
+        },
+      },
+    );
   };
 
   const handleDeleteComment = (commentId: number) => {

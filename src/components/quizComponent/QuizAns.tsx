@@ -20,11 +20,11 @@ function QuizAns({ isCorrect, explanation, answerRate }: QuizAnsProps) {
             />
             {isCorrect ? '정답입니다!' : '틀렸습니다 ㅠㅠ'}
           </h4>
-          <span className="text-sm font-semibold text-gray-600">{answerRate.toFixed(1)}%</span>
+          <span className="text-sm font-semibold text-gray-600">
+            전체 정답률: {answerRate.toFixed(1)}%
+          </span>
         </div>
-        <p className={`mt-2 ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>
-          전체 정답률: {explanation}
-        </p>
+        <p className={`mt-2 ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>{explanation}</p>
       </div>
     </>
   );
