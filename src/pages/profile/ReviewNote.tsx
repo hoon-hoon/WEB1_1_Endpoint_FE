@@ -1,58 +1,55 @@
-import { useState } from 'react';
 import TopBar from '@/components/common/TopBar';
 import ReviewNoteCard from '@/components/mypage/ReviewNoteCard';
-import { ReviewNoteItem } from '@/types/MyPageTpyes';
 import { useNavigate } from 'react-router-dom';
 import Container from '@/components/layout/Container';
 import FlexBox from '@/components/layout/FlexBox';
+import axiosInstance from '@/api/axiosInstance';
+import { useQuery } from '@tanstack/react-query';
+import { QuizWithAnswer } from '@/types/WrongQuizTypes';
+import { Loader2 } from 'lucide-react';
+
+const fetchIncorrectAnswers = async () => {
+  const response = await axiosInstance.get<{ result: { content: QuizWithAnswer[] } }>(
+    '/quiz/user-answers/incorrect',
+  );
+  return response.data.result.content;
+};
 
 export default function ReviewNote() {
   const navigate = useNavigate();
-  const [notes, setNotes] = useState<ReviewNoteItem[]>([
-    {
-      id: '1',
-      question: 'React의 Virtual DOM은 실제 DOM보다 항상 빠른가?',
-      date: '2024.11.15',
-      userAnswer: 'O',
-      correctAnswer: 'X',
-      explanation:
-        'Virtual DOM이 항상 빠른 것은 아닙니다. 간단한 UI 변경의 경우 실제 DOM 조작이 더 빠를 수 있습니다.',
-    },
-    {
-      id: '2',
-      question: 'React의 Virtual DOM은 실제 DOM보다 항상 빠른가?',
-      date: '2024.11.15',
-      userAnswer: 'A',
-      correctAnswer: 'C',
-      explanation:
-        'Virtual DOM이 항상 빠른 것은 아닙니다. 간단한 UI 변경의 경우 실제 DOM 조작이 더 빠를 수 있습니다. Virtual DOM의 효율성은 복잡한 UI 업데이트나 빈번한 변경이 있는 경우에 더 두드러집니다.',
-      choices: [
-        { id: 'A', text: '항상 빠르다' },
-        { id: 'B', text: '대부분의 경우 빠르다' },
-        { id: 'C', text: '경우에 따라 다르다' },
-        { id: 'D', text: '항상 느리다' },
-      ],
-    },
-  ]);
 
-  const handleDeleteNote = (id: string) => {
-    setNotes(notes.filter((note) => note.id !== id));
-  };
+  const {
+    data: incorrectQuizzes = [],
+    isPending,
+    isError,
+    error,
+  } = useQuery<QuizWithAnswer[], Error>({
+    queryKey: ['incorrectQuizzes'],
+    queryFn: fetchIncorrectAnswers,
+  });
 
   return (
     <Container>
-      <TopBar
-        leftIcon="left"
-        leftText="오답노트"
-        onClickLeft={() => {
-          navigate('/profile');
-        }}
-      />
-      <FlexBox direction="col" className="gap-4">
-        {notes.map((note) => (
-          <ReviewNoteCard key={note.id} note={note} onDelete={handleDeleteNote} />
-        ))}
-      </FlexBox>
+      <TopBar leftIcon="left" leftText="오답노트" onClickLeft={() => navigate('/profile')} />
+      {isPending ? (
+        <div className="flex justify-center items-center h-[calc(100vh-100px)]">
+          <Loader2 className="h-16 w-16 text-blue-500 animate-spin" />
+        </div>
+      ) : isError ? (
+        <div>오류가 발생했습니다: {error.message}</div>
+      ) : incorrectQuizzes.length === 0 ? (
+        <div className="flex justify-center items-center h-[calc(100vh-100px)] text-gray-500">
+          틀린 문제가 없습니다
+        </div>
+      ) : (
+        <FlexBox direction="col" className="gap-4">
+          {incorrectQuizzes.map((quizData) => (
+            <div key={quizData.quiz.id} className="w-full">
+              <ReviewNoteCard quizData={quizData} />
+            </div>
+          ))}
+        </FlexBox>
+      )}
     </Container>
   );
 }
