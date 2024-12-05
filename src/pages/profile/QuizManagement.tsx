@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useFetchMyQuizzes from '@/api/quiz/useFetchMyQuizzes';
 import useDeleteQuiz from '@/api/quiz/useDeleteQuiz';
 import { useQueryClient } from '@tanstack/react-query';
-import axiosInstance from '@/api/axiosInstance';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import { Button } from '@/shadcn/ui/button';
@@ -17,51 +17,19 @@ export default function MyQuizManagement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // 무한 스크롤용 상태
-  const [quizzes, setQuizzes] = useState<any[]>([]);
-  const [page, setPage] = useState(0);
-  const [hasNext, setHasNext] = useState(true);
-  const [isFetching, setIsFetching] = useState(false);
+  // React Query로 퀴즈 데이터 Fetch
+  const { data, isLoading, error } = useFetchMyQuizzes();
 
+  // Fetch된 데이터 상태 업데이트
+  const [quizzes, setQuizzes] = useState<any[]>([]);
   const [selectedQuizId, setSelectedQuizId] = useState<number | null>(null); // 선택한 퀴즈 ID
   const [showDeleteDialog, setShowDeleteDialog] = useState(false); // 모달 표시 여부
 
-  // API 호출 함수
-  const fetchQuizzes = async (page: number) => {
-    setIsFetching(true);
-    const size = 10; // 페이지 크기
-    const response = await axiosInstance.get('/quiz/my-quizzes', {
-      params: { page, size },
-    });
-
-    const data = response.data.result;
-    setQuizzes((prev) => [...prev, ...data.content]); // 기존 데이터에 새 데이터를 추가
-    setHasNext(!data.last); // 다음 페이지가 있는지 여부 설정
-    setIsFetching(false);
-  };
-
   useEffect(() => {
-    fetchQuizzes(page); // 초기 데이터 로드
-  }, [page]);
-
-  // 무한 스크롤 처리
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 100 &&
-      !isFetching &&
-      hasNext
-    ) {
-      setPage((prevPage) => prevPage + 1); // 페이지 증가
+    if (data?.result?.content) {
+      setQuizzes(data.result.content);
     }
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [isFetching, hasNext]);
+  }, [data]);
 
   // 관리 페이지로 돌아왔을 때 캐시를 무효화하여 최신 데이터 Fetch
   useEffect(() => {
@@ -102,7 +70,8 @@ export default function MyQuizManagement() {
     return options.some((option) => option.selectionCount > 0);
   };
 
-  if (isFetching && quizzes.length === 0) return <p>로딩 중...</p>;
+  if (isLoading) return <p>로딩 중...</p>;
+  if (error) return <p className="text-red-500">퀴즈 목록을 불러오는 데 실패했습니다.</p>;
 
   return (
     <Container>
@@ -141,6 +110,7 @@ export default function MyQuizManagement() {
                     size="sm"
                     className={`flex items-center gap-1 ml-4 ${solved ? 'opacity-80 pointer-events-none' : ''}`}
                   >
+                    {/* TODO: selectionCount 1이상일때 디자인 컨펌  */}
                     {solved ? (
                       <BadgeIcon icon="warning_circle_outlined" size={24} state="warning" />
                     ) : (
