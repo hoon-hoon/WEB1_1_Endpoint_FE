@@ -68,7 +68,7 @@ export default function MyPage() {
           </Card>
 
           <Card>
-            <h3 className="mb-4 text-lg font-medium">업적</h3>
+            <h3 className="mb-4 text-lg font-bold">달성한 업적</h3>
             {achievedAchievements.length > 0 ? (
               <div className="space-y-4">
                 {achievedAchievements.map((achievement) => (
