@@ -57,11 +57,7 @@ export const useStompStore = create<StompState>((set, get) => ({
   connectPromise: (gameId: number) => {
     return new Promise<void>((resolve, reject) => {
       const { client, isConnected, subscribeToGame } = get();
-      if (isConnected) {
-        console.log('이미 연결되어 있습니다.');
-        resolve();
-        return;
-      }
+      if (isConnected) return;
 
       client.onConnect = () => {
         console.log('STOMP 연결 성공');
