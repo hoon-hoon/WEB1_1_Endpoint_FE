@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/api/axiosInstance';
+import { Achievement } from '@/pages/MyPage';
 
 export interface UserData {
   id: number;
@@ -9,7 +10,7 @@ export interface UserData {
   rating: number;
   totalAnswered: number;
   correctRate: number;
-  achievements: string[];
+  achievements: Achievement[];
 }
 
 const getUserData = async (): Promise<UserData> => {
