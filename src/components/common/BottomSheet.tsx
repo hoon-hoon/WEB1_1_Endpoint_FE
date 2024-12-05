@@ -34,12 +34,11 @@ export default function BottomSheet({ isOpen, setOpen, quizId }: BottomSheetProp
   }, [isOpen, fetchComments]);
 
   const handleAddComment = (content: string, parentCommentId: number) => {
-    const writerId = 1;
-    addCommentMutation.mutate({ writerId, parentCommentId, content });
+    addCommentMutation.mutate({ content, parentCommentId });
   };
 
   const handleDeleteComment = (commentId: number) => {
-    deleteCommentMutation.mutate(commentId); // 댓글 삭제
+    deleteCommentMutation.mutate(commentId);
   };
 
   return (

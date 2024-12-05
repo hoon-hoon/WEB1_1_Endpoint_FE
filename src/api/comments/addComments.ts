@@ -2,25 +2,21 @@ import { useMutation } from '@tanstack/react-query';
 import axiosInstance from '../axiosInstance';
 
 interface AddCommentVariables {
-  writerId: number;
   parentCommentId: number;
   content: string;
 }
 
 const addCommentAPI = async ({
   quizId,
-  writerId,
   parentCommentId,
   content,
 }: {
   quizId: number;
-  writerId: number;
   parentCommentId: number;
   content: string;
 }): Promise<void> => {
   const response = await axiosInstance.post('/quiz/comments', {
     quizId,
-    writerId,
     parentCommentId,
     content,
   });
