@@ -14,13 +14,11 @@ import AchievementSkeleton from '../components/mypage/skeleton/AchievementSkelet
 import FlexBox from '@/components/layout/FlexBox';
 import { useUserData } from '@/api/mypage/useUserData';
 
-type IconType = Parameters<typeof Icon>[0]['icon'];
-
 export interface Achievement {
-  icon: IconType;
+  achievementId: string;
   title: string;
   description: string;
-  achieved: boolean;
+  achievedAt: string;
 }
 
 export default function MyPage() {
@@ -31,27 +29,45 @@ export default function MyPage() {
 
   const achievements: Achievement[] = [
     {
-      title: '퀴즈 마스터',
-      description: '100문제 연속 정답',
-      achieved: true,
-      icon: 'star_outlined',
+      achievementId: 'FIRST_CORRECT',
+      title: '첫 정답',
+      description: '처음으로 문제를 맞혔어요',
+      achievedAt: '2024-12-03T20:41:25.780499',
     },
     {
-      title: '지식의 탑',
-      description: '1000문제 해결',
-      achieved: false,
-      icon: 'building_bank',
+      achievementId: 'QUIZ_BEGINNER',
+      title: '시작이 반이다',
+      description: '첫 문제를 풀어보세요',
+      achievedAt: '2024-12-03T20:41:25.780519',
     },
     {
-      title: '개근왕',
-      description: '30일 연속 접속',
-      achieved: true,
-      icon: 'flag_outlined',
+      achievementId: 'CATEGORY_EXPLORER',
+      title: '분야 탐험가',
+      description: '모든 카테고리에서 최소 10문제 이상 풀기',
+      achievedAt: '2024-12-03T20:41:27.794329',
+    },
+    {
+      achievementId: 'STRIKE_MASTER',
+      title: '연속 정답왕',
+      description: '10문제 연속 정답',
+      achievedAt: '2024-12-03T20:41:27.794336',
+    },
+    {
+      achievementId: 'STRIKE_MASTER1',
+      title: '연속 정답왕',
+      description: '10문제 연속 정답',
+      achievedAt: '2024-12-03T20:41:27.794336',
+    },
+    {
+      achievementId: 'STRIKE_MASTER2',
+      title: '연속 정답왕',
+      description: '10문제 연속 정답',
+      achievedAt: '2024-12-03T20:41:27.794336',
     },
   ];
 
   const achievedAchievements = achievements
-    .filter((achievement) => achievement.achieved)
+    .sort((a, b) => new Date(b.achievedAt).getTime() - new Date(a.achievedAt).getTime())
     .slice(0, 3);
 
   return (
@@ -93,12 +109,14 @@ export default function MyPage() {
             <h3 className="mb-4 text-lg font-medium">업적</h3>
             {achievedAchievements.length > 0 ? (
               <div className="space-y-4">
-                {achievedAchievements.map((achievement, index) => (
-                  <div key={index} className="flex items-center gap-4">
-                    <Icon icon={achievement.icon} size={24} />
+                {achievedAchievements.map((achievement) => (
+                  <div key={achievement.achievementId} className="flex items-center gap-4">
                     <div>
                       <p className="font-medium text-gray-800">{achievement.title}</p>
                       <p className="text-sm text-gray-600">{achievement.description}</p>
+                      <p className="text-xs text-gray-400">
+                        {new Date(achievement.achievedAt).toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
                 ))}

@@ -1,13 +1,11 @@
 import Container from '@/components/layout/Container';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
-type IconType = Parameters<typeof Icon>[0]['icon'];
-
 interface Achievement {
+  achievementId: string;
   title: string;
   description: string;
-  achieved: boolean;
-  icon: IconType;
+  achievedAt: string;
 }
 
 interface ModalProps {
@@ -38,24 +36,18 @@ export function AchievementModal({ isOpen, onClose, achievements }: ModalProps) 
               <Icon icon="close" size={24} />
             </button>
           </div>
-          <div className="space-y-4">
-            {achievements.map((achievement, index) => (
+          <div className="space-y-4 max-h-[calc(100vh-341px)] overflow-y-scroll">
+            {achievements.map((achievement) => (
               <div
-                key={index}
-                className={`rounded-xl border p-4 ${
-                  achievement.achieved
-                    ? 'border-gray-200 bg-gray-50' // 달성한 업적 스타일
-                    : 'border-gray-100 bg-gray-25 opacity-50' // 미달성 업적 스타일
-                }`}
+                key={achievement.achievementId}
+                className="rounded-xl border p-4 border-gray-200 bg-gray-50"
               >
-                <div key={index} className="flex items-center gap-4">
-                  <Icon icon={achievement.icon} size={24} />
+                <div className="flex items-center gap-4">
                   <div>
-                    <h4 className={`${achievement.achieved ? 'font-medium' : 'font-normal'}`}>
-                      {achievement.title}
-                    </h4>
-                    <p className={`${achievement.achieved ? 'text-gray-600' : 'text-gray-400'}`}>
-                      {achievement.description}
+                    <h4 className="font-medium">{achievement.title}</h4>
+                    <p className="text-gray-600">{achievement.description}</p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      {new Date(achievement.achievedAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
