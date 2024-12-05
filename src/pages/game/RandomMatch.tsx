@@ -24,11 +24,11 @@ export default function RandomMatching() {
 
   useEffect(() => {
     initializeEventSource();
-    if (isFirstRequest.current) {
-      // 이미 첫 요청을 처리했으면 무시
-      return;
-    }
     eventSource.addEventListener('MATCHING', async (event) => {
+      if (isFirstRequest.current) {
+        // 이미 첫 요청을 처리했으면 무시
+        return;
+      }
       try {
         const messageEvent = event as MessageEvent;
         const parsedData: MatchEvent = JSON.parse(messageEvent.data);
@@ -49,10 +49,10 @@ export default function RandomMatching() {
     });
 
     return () => {
-      eventSource.onmessage = null;
+      eventSource.removeEventListener('MATCHING', () => {});
       eventSource.close();
     };
-  }, []);
+  }, [connectPromise, joinGame]);
 
   const cancleMatch = () => {
     deleteRandomMatch();
