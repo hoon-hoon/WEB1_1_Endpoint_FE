@@ -9,12 +9,13 @@ type StompState = {
   isConnected: boolean;
   isLoading: boolean;
   connect: (gameId: number) => void;
+  connectPromise: (gameId: number) => Promise<void>;
   disconnect: () => void;
   setIsLoading: (loading: boolean) => void;
   subscribeToGame: (Client: Client, gameId: number) => void;
   submitAnswer: (gameId: number, quizId: number, answer: string) => void;
   initiateGame: (gameId: number) => void;
-  joinGame: (gameId: number) => void;
+  joinGame: (gameId: number) => Promise<void>;
   kickPlayer: (gameId: number, targetUserId: number) => void;
   endGame: (gameId: number) => void;
   exitGame: (gameId: number) => void;
@@ -53,6 +54,37 @@ export const useStompStore = create<StompState>((set, get) => ({
     client.activate();
   },
 
+  connectPromise: (gameId: number) => {
+    return new Promise<void>((resolve, reject) => {
+      const { client, isConnected, subscribeToGame } = get();
+      if (isConnected) {
+        console.log('이미 연결되어 있습니다.');
+        resolve();
+        return;
+      }
+
+      client.onConnect = () => {
+        console.log('STOMP 연결 성공');
+        set({ isConnected: true });
+        subscribeToGame(client, gameId); // 연결 후 구독
+        resolve(); // 연결 성공 시 resolve
+      };
+
+      client.onDisconnect = () => {
+        console.log('STOMP 연결 종료');
+        set({ isConnected: false });
+      };
+
+      client.onStompError = (frame) => {
+        console.error('STOMP 연결 오류', frame);
+        set({ isConnected: false });
+        reject(new Error('STOMP 연결 오류')); // 연결 실패 시 reject
+      };
+
+      client.activate();
+    });
+  },
+
   disconnect: () => {
     const { isConnected, client } = get();
     if (!isConnected) return;
@@ -69,13 +101,15 @@ export const useStompStore = create<StompState>((set, get) => ({
     client.subscribe(`/topic/game/${gameId}`, (message) => {
       const response = JSON.parse(message.body);
       const responseType: BroadCastMessage = response.type;
-
+      console.log(response);
       switch (responseType) {
         case 'GAME_ROOM':
+          console.log(response.payload.players);
           updatePlayers(response.payload.players);
           break;
         case 'QUIZ_TRANSMITTED':
           set({ isLoading: true });
+          console.log(response.payload.quiz);
           updateQuiz(response.payload.quiz as GameQuiz[]);
           break;
         case 'SCORE_BOARD':
@@ -132,13 +166,24 @@ export const useStompStore = create<StompState>((set, get) => ({
   },
 
   joinGame: (gameId: number) => {
-    const { client, isConnected } = get();
-    if (!isConnected) {
-      console.warn('STOMP 연결이 활성화되지 않았습니다.');
-      return;
-    }
-    client.publish({
-      destination: `/app/join/${gameId}`,
+    return new Promise<void>((resolve, reject) => {
+      const { client, isConnected } = get();
+      if (!isConnected) {
+        console.warn('STOMP 연결이 활성화되지 않았습니다.');
+        reject(new Error('STOMP 연결 실패'));
+        return;
+      }
+
+      console.log('게임 조인 요청 보냄');
+      try {
+        client.publish({
+          destination: `/app/join/${gameId}`,
+        });
+        resolve(); // 조인 성공 시 resolve
+      } catch (error) {
+        console.error('게임 조인 요청 실패:', error);
+        reject(error); // 조인 실패 시 reject
+      }
     });
   },
 
