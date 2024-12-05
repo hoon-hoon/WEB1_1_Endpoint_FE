@@ -37,22 +37,28 @@ export function AchievementModal({ isOpen, onClose, achievements }: ModalProps) 
             </button>
           </div>
           <div className="space-y-4 max-h-[calc(100vh-341px)] overflow-y-scroll">
-            {achievements.map((achievement) => (
-              <div
-                key={achievement.achievementId}
-                className="rounded-xl border p-4 border-gray-200 bg-gray-50"
-              >
-                <div className="flex items-center gap-4">
-                  <div>
-                    <h4 className="font-medium">{achievement.title}</h4>
-                    <p className="text-gray-600">{achievement.description}</p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {new Date(achievement.achievedAt).toLocaleDateString()}
-                    </p>
+            {achievements.length > 0 ? (
+              achievements.map((achievement) => (
+                <div
+                  key={achievement.achievementId}
+                  className="rounded-xl border p-4 border-gray-200 bg-gray-50"
+                >
+                  <div className="flex items-center gap-4">
+                    <div>
+                      <h4 className="font-medium">{achievement.title}</h4>
+                      <p className="text-gray-600">{achievement.description}</p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {new Date(achievement.achievedAt).toLocaleDateString()}
+                      </p>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="flex items-center justify-center py-8">
+                <p className="text-gray-500">달성한 업적이 없습니다</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
