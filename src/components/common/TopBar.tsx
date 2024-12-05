@@ -76,14 +76,6 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
                 <MdLogout size={32} />
                 로그아웃
               </ShadcnButton>
-              <ShadcnButton
-                variant="ghost"
-                className="w-full py-4 font-semibold text-lg text-red-400"
-                onClick={() => dispatch({ type: 'EXIT' })}
-              >
-                <Icon icon="close_circle" size={32} />
-                탈퇴하기
-              </ShadcnButton>
             </FlexBox>
           </PopoverContent>
         </Popover>
@@ -95,16 +87,6 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
           leftText="예"
           rightText="아니요"
           leftOnClick={() => handleLogout()}
-          rightOnClick={() => dispatch({ type: 'CLOSE' })}
-        />
-        <Dialog
-          open={state.showExitDialog}
-          onClose={() => dispatch({ type: 'CLOSE' })}
-          title="회원 탈퇴"
-          description="이 작업은 되돌릴 수 없으며, 모든 데이터가 영구적으로 삭제됩니다."
-          leftText="예"
-          rightText="아니요"
-          leftOnClick={() => dispatch({ type: 'CLOSE' })}
           rightOnClick={() => dispatch({ type: 'CLOSE' })}
         />
       </div>

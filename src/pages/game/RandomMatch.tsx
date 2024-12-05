@@ -1,27 +1,43 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { eventSource, handleEventMessage, initializeEventSource } from '@/api/game/useEventSource';
+import { eventSource, initializeEventSource } from '@/api/game/useEventSource';
+import { useStompStore } from '@/api/game/useStompStore';
 import { useDeleteRandom } from '@/api/game/useRandomMatch';
 import { Loader2 } from 'lucide-react';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
+import LoadingSpinner from '@/components/game/LoadingSpinner';
 
+type MatchEvent = {
+  roomId: number;
+};
 export default function RandomMatching() {
   const navigate = useNavigate();
   const { mutate: deleteRandomMatch } = useDeleteRandom();
+  const { connect, joinGame } = useStompStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     initializeEventSource();
 
-    eventSource.onopen = () => {
-      console.log('SSE 연결 성공');
-    };
-
-    eventSource.onmessage = (event) => {
-      handleEventMessage(event as MessageEvent<string>);
-      console.log(JSON.parse(event.data));
-    };
+    eventSource.addEventListener('MATCHING', (event) => {
+      try {
+        const messageEvent = event as MessageEvent;
+        const parsedData: MatchEvent = JSON.parse(messageEvent.data);
+        console.log(JSON.parse(messageEvent.data));
+        if (parsedData) {
+          connect(parsedData.roomId);
+          joinGame(parsedData.roomId);
+          setIsLoading(true);
+          setTimeout(() => {
+            navigate('/game/play');
+          }, 1500);
+        }
+      } catch (error) {
+        console.error('Error', error);
+      }
+    });
 
     return () => {
       eventSource.onmessage = null;
@@ -31,6 +47,7 @@ export default function RandomMatching() {
 
   const cancleMatch = () => {
     deleteRandomMatch();
+    eventSource.close();
     navigate('/game');
   };
 
@@ -70,6 +87,7 @@ export default function RandomMatching() {
   return (
     <div className="flex flex-col">
       <TopBar leftIcon="left" leftText="랜덤 매칭" onClickLeft={() => cancleMatch()} />
+      {isLoading && <LoadingSpinner />}
       <main className="flex-1 pt-20 pb-6 px-4">
         <Card>
           <div className="flex flex-col items-center justify-center">

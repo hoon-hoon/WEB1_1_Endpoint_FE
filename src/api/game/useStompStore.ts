@@ -14,6 +14,7 @@ type StompState = {
   subscribeToGame: (Client: Client, gameId: number) => void;
   submitAnswer: (gameId: number, quizId: number, answer: string) => void;
   initiateGame: (gameId: number) => void;
+  joinGame: (gameId: number) => void;
   kickPlayer: (gameId: number, targetUserId: number) => void;
   endGame: (gameId: number) => void;
   exitGame: (gameId: number) => void;
@@ -127,6 +128,17 @@ export const useStompStore = create<StompState>((set, get) => ({
     }
     client.publish({
       destination: `/start/${gameId}`,
+    });
+  },
+
+  joinGame: (gameId: number) => {
+    const { client, isConnected } = get();
+    if (!isConnected) {
+      console.warn('STOMP 연결이 활성화되지 않았습니다.');
+      return;
+    }
+    client.publish({
+      destination: `/app/join/${gameId}`,
     });
   },
 
