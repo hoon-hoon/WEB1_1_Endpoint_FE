@@ -7,8 +7,8 @@ export interface UserData {
   name: string;
   profileImageUrl: string;
   rating: number;
-  solvedProblems: number;
-  correctAnswerRate: number;
+  totalAnswered: number;
+  correctRate: number;
   achievements: string[];
 }
 

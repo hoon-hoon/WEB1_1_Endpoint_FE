@@ -80,13 +80,11 @@ export default function MyPage() {
             <div className="grid grid-cols-2 gap-4 justify-items-center">
               <div>
                 <p className="text-sm text-gray-500">푼 문제</p>
-                <p className="text-xl font-bold text-center">{profileData?.solvedProblems || 0}</p>
+                <p className="text-xl font-bold text-center">{profileData?.totalAnswered}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">정답률</p>
-                <p className="text-xl font-bold text-center">
-                  {profileData?.correctAnswerRate || 0}%
-                </p>
+                <p className="text-xl font-bold text-center">{profileData?.correctRate}%</p>
               </div>
             </div>
           </Card>
