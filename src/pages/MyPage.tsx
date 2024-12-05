@@ -26,7 +26,6 @@ export default function MyPage() {
   const withdrawalModal = useModal();
   const { data: profileData, isLoading } = useUserData();
 
-  // achievements 데이터를 profileData에서 가져와서 정렬
   const achievedAchievements = profileData?.achievements
     ? [...profileData.achievements]
         .sort((a, b) => new Date(b.achievedAt).getTime() - new Date(a.achievedAt).getTime())
