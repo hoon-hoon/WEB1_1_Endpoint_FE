@@ -89,7 +89,7 @@ export default function MyPage() {
             )}
             <button
               onClick={achievementModal.open}
-              className="mt-4 w-full rounded-lg border py-3 text-center text-gray-600"
+              className="mt-4 w-full rounded-lg border-2 py-3 text-center text-gray-600"
             >
               전체 업적 조회하기
             </button>

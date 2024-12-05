@@ -9,15 +9,6 @@ export type Topic =
   | '데이터베이스'
   | '소프트웨어 공학';
 
-/*
-export type User = {
-  id: number;
-  name: string;
-  imgPath: string;
-  rating: number;
-};
-*/
-
 export type Player = {
   id: number;
   name: string;
@@ -44,8 +35,9 @@ export type ScoreUpdateMessage = {
   increment: number;
 };
 
-export type Rank = 1 | 2 | 3 | 4 | 5 | null;
+export type Rank = 1 | 2 | 3 | 4 | 5;
 
+/*
 export interface GameStore {
   gameId: number;
   players: Player[];
@@ -56,5 +48,11 @@ export interface GameStore {
   updatePlayers: (members: Player[]) => void;
   updateScore: (memberId: number, increment: number) => void;
   updateInviteCode: (inviteCode: string) => void;
-  getMyRank: (memberId: number) => { rank: Rank; score: number };
+}
+  */
+
+export interface RandomMatchEvent {
+  id: number;
+  event: 'CONNECT' | null;
+  data: string;
 }

@@ -1,77 +1,69 @@
-//import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { eventSource, initializeEventSource } from '@/api/game/useEventSource';
+import { useStompStore } from '@/api/game/useStompStore';
+import { useDeleteRandom } from '@/api/game/useRandomMatch';
+import { useGameStore } from '@/stores/useGameStore';
 import { Loader2 } from 'lucide-react';
 import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
+import LoadingSpinner from '@/components/game/LoadingSpinner';
 
+type MatchEvent = {
+  roomId: number;
+};
 export default function RandomMatching() {
   const navigate = useNavigate();
-  /*
-  const [matchStatus, setMatchStatus] = useState('매칭 중...');
-  const [isMatching, setIsMatching] = useState(true);
+  const { mutate: deleteRandomMatch } = useDeleteRandom();
+  const { connectPromise, joinGame } = useStompStore();
+  const { updateId } = useGameStore();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const url = 'https://quizy.n-e.kr/api/matching/subscribe';
-  const [data, setData] = useState<any>(null);
-  const [error, setError] = useState<any>(null);
+  const isFirstRequest = useRef(false);
 
   useEffect(() => {
-    const eventSource = new EventSource(url);
-
-    eventSource.onmessage = (event) => {
+    initializeEventSource();
+    eventSource.addEventListener('MATCHING', async (event) => {
+      if (isFirstRequest.current) {
+        // 이미 첫 요청을 처리했으면 무시
+        return;
+      }
       try {
-        const parsedData = JSON.parse(event.data);
-        setData(parsedData);
-      } catch (e) {
-        console.error('Error parsing SSE data:', e);
-        setError(e);
-      }
-    };
+        const messageEvent = event as MessageEvent;
+        const parsedData: MatchEvent = JSON.parse(messageEvent.data);
+        if (parsedData.roomId) {
+          isFirstRequest.current = true;
 
-    eventSource.onerror = (e) => {
-      console.error('SSE error:', e);
-      setError(e);
-      eventSource.close();
-    };
+          updateId(parsedData.roomId);
+          setIsLoading(true);
+          await connectPromise(parsedData.roomId);
+          await joinGame(parsedData.roomId);
+          setTimeout(() => {
+            navigate('/game/play');
+          }, 3000);
+        }
+      } catch (error) {
+        console.error('Error', error);
+      }
+    });
 
     return () => {
+      eventSource.removeEventListener('MATCHING', () => {});
       eventSource.close();
     };
-  }, [url]);
+  }, [connectPromise, joinGame]);
 
-  /*
-  const [matchStatus, setMatchStatus] = useState('매칭 중...'); // 매칭 상태
-  const [isMatching, setIsMatching] = useState(true); // 매칭 진행 여부
-
-  useEffect(() => {
-    const eventSource = new EventSource('/api/matching'); // 서버 SSE 엔드포인트
-
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.status === 200) {
-        setMatchStatus('매칭 성공! 곧 게임으로 이동합니다.');
-        setIsMatching(false);
-        setTimeout(() => navigate('/game/play'), 1000); // 자동 이동
-      } else if (data.status === 204) {
-        setMatchStatus('다른 플레이어를 찾고 있습니다. 잠시만 기다려주세요.');
-      }
-    };
-
-    eventSource.onerror = () => {
-      setMatchStatus('매칭 실패. 다시 시도해주세요.');
-      eventSource.close();
-    };
-
-    return () => {
-      eventSource.close(); // 언마운트 시 SSE 연결 종료
-    };
-  }, [navigate]);
-  */
+  const cancleMatch = () => {
+    deleteRandomMatch();
+    eventSource.close();
+    navigate('/game');
+  };
 
   return (
     <div className="flex flex-col">
-      <TopBar leftIcon="left" leftText="랜덤 매칭" onClickLeft={() => navigate('/game')} />
+      <TopBar leftIcon="left" leftText="랜덤 매칭" onClickLeft={() => cancleMatch()} />
+      {isLoading && <LoadingSpinner />}
       <main className="flex-1 pt-20 pb-6 px-4">
         <Card>
           <div className="flex flex-col items-center justify-center">
@@ -83,7 +75,7 @@ export default function RandomMatching() {
           </div>
         </Card>
         <div className="max-w-xl mx-auto">
-          <ShadcnButton className="w-full h-14 text-lg" size="lg" onClick={() => navigate('/game')}>
+          <ShadcnButton className="w-full h-14 text-lg" size="lg" onClick={() => cancleMatch()}>
             게임 취소
           </ShadcnButton>
           {/*}

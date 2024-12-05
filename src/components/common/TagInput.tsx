@@ -22,7 +22,9 @@ export default function TagInput({
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && inputValue.trim() !== '') {
       e.preventDefault();
-      addHashtag(inputValue.trim());
+      setTimeout(() => {
+        addHashtag(inputValue.trim());
+      }, 0);
     }
   };
 
@@ -41,7 +43,7 @@ export default function TagInput({
   };
 
   return (
-    <div className="w-full max-w-xs mx-auto px-4">
+    <div className="max-w-lg mx-auto">
       <div className="relative">
         <Input
           type="text"
@@ -51,6 +53,7 @@ export default function TagInput({
           onKeyDown={handleEnter}
           disabled={tags.length >= MAX_HASHTAGS}
           aria-label="해시태그 입력"
+          className="border"
         />
         <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
           {tags.length}/{MAX_HASHTAGS}

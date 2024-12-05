@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useGetProfile from '@/api/game/useGetProfile';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { IoGameControllerOutline, IoTrophyOutline } from 'react-icons/io5';
@@ -8,26 +8,10 @@ import TopBar from '@/components/common/TopBar';
 import Container from '@/components/layout/Container';
 import FlexBox from '@/components/layout/FlexBox';
 import { Skeleton } from '@/shadcn/ui/skeleton';
-import defaultImageURL from '@/assets/defaultImage';
 
-interface UserData {
-  name: string;
-  rating: number;
-}
 export default function Game() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [profileData, setProfileData] = useState<UserData | null>(null);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setProfileData({
-        name: '장원석님',
-        rating: 1500,
-      });
-      setLoading(false);
-    }, 1000);
-  }, []);
+  const { data, isLoading } = useGetProfile();
 
   return (
     <div className="flex flex-col">
@@ -35,7 +19,7 @@ export default function Game() {
       <Container>
         <Card>
           <div className="flex items-center gap-4">
-            {loading ? (
+            {isLoading ? (
               <>
                 <Skeleton className="w-16 h-16 rounded-full" />
                 <div className="flex-1">
@@ -45,12 +29,12 @@ export default function Game() {
               </>
             ) : (
               <>
-                <Avatar input="image" image={defaultImageURL} />
+                <Avatar input="image" image={data?.profileImageUrl} />
                 <div className="flex-1">
-                  <h2 className="text-lg font-bold mb-1">{profileData!.name}</h2>
+                  <h2 className="text-lg font-bold mb-1">{data?.name}</h2>
                   <div className="flex items-center gap-2">
                     <Icon icon={'person_outlined'} />
-                    <span className="font-medium">레이팅: {profileData!.rating}</span>
+                    <span className="font-medium">레이팅: {data.rating}</span>
                   </div>
                 </div>
               </>

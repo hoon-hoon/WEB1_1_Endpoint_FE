@@ -30,7 +30,7 @@ const DropDown = ({
   return (
     <div className="relative">
       <button
-        className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span>{selected ? items.find((item) => item === selected) : placeholder}</span>
