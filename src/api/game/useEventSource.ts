@@ -43,7 +43,6 @@ function initializeEventSource() {
       }
     }
   };
-  console.log('SSE 연결 초기화 완료.', eventSource);
 }
 
 function handleEventMessage(event: MessageEvent<string>) {
