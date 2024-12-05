@@ -41,8 +41,8 @@ export default function ABTestPage() {
     question: '',
     optionA: '',
     optionB: '',
-    imageA: null as File | null,
-    imageB: null as File | null,
+    imageA: '' as string | null,
+    imageB: '' as string | null,
     imageAId: null as number | null,
     imageBId: null as number | null,
     tags: [] as string[], // 태그
@@ -63,19 +63,24 @@ export default function ABTestPage() {
       try {
         const response = await axiosInstance.get(`/quiz/${id}`);
         const { result } = response.data;
-        console.log('퀴즈 데이터 불러오기:', result);
+
+        const imageAId =
+          result.options.find((option: any) => option.optionNumber === 1)?.imageId || null;
+        const imageBId =
+          result.options.find((option: any) => option.optionNumber === 2)?.imageId || null;
+
+        const imageAUrl = imageAId ? await fetchImageUrl(imageAId) : null;
+        const imageBUrl = imageBId ? await fetchImageUrl(imageBId) : null;
 
         setQuizData({
           category: toKoreanCategory(result.category),
           question: result.content,
           optionA: result.options.find((option: any) => option.optionNumber === 1)?.content || '',
           optionB: result.options.find((option: any) => option.optionNumber === 2)?.content || '',
-          imageAId:
-            result.options.find((option: any) => option.optionNumber === 1)?.imageId || null,
-          imageBId:
-            result.options.find((option: any) => option.optionNumber === 2)?.imageId || null,
-          imageA: null, // 이미지는 서버에서 가져온 후 미리보기가 없기 때문에 null로 초기화
-          imageB: null,
+          imageA: imageAUrl,
+          imageB: imageBUrl,
+          imageAId: imageAId,
+          imageBId: imageBId,
           tags: result.tags || [],
         });
       } catch (error) {
@@ -90,6 +95,20 @@ export default function ABTestPage() {
 
     if (id) fetchQuizData();
   }, [id]);
+
+  const fetchImageUrl = async (imageId: number): Promise<string> => {
+    if (!imageId) {
+      console.warn('이미지 ID가 null입니다. URL 요청을 건너뜁니다.');
+      return '';
+    }
+    try {
+      const response = await axiosInstance.get(`/quiz/images/${imageId}`);
+      return response.data.result.url;
+    } catch (error) {
+      console.error(`이미지 URL 가져오기 실패 (ID: ${imageId}):`, error);
+      return '';
+    }
+  };
 
   const handleInputChange = (field: keyof typeof quizData, value: string, maxLength?: number) => {
     setQuizData((prev) => ({
@@ -117,13 +136,15 @@ export default function ABTestPage() {
 
       try {
         const imageId = await uploadImage(file);
-        console.log('업로드한 이미지 ID:', imageId);
+        const imageUrl = await fetchImageUrl(imageId);
+
         setQuizData((prev) => ({
           ...prev,
-          [field]: file,
+          [field]: imageUrl,
           [`${field}Id`]: imageId,
         }));
       } catch (error) {
+        console.error('이미지 업로드 실패:', error);
         setToastMessage({ message: '이미지 업로드에 실패했습니다.', icon: 'warning' });
         setToastOpen(true);
       }
@@ -175,8 +196,6 @@ export default function ABTestPage() {
       tags: quizData.tags,
       deleteImageIds: [],
     };
-
-    console.log('Payload:', payload);
 
     updateQuizMutate(payload, {
       onSuccess: () => {
@@ -280,7 +299,7 @@ export default function ABTestPage() {
             {quizData.imageA && (
               <div className="relative mt-2">
                 <img
-                  src={URL.createObjectURL(quizData.imageA)}
+                  src={quizData.imageA}
                   alt="A 선택지 이미지"
                   className="w-full h-full object-cover rounded border"
                 />
@@ -317,7 +336,7 @@ export default function ABTestPage() {
             {quizData.imageB && (
               <div className="relative mt-2">
                 <img
-                  src={URL.createObjectURL(quizData.imageB)}
+                  src={quizData.imageB}
                   alt="B 선택지 이미지"
                   className="w-full h-full object-cover rounded border"
                 />
@@ -337,7 +356,7 @@ export default function ABTestPage() {
           size="default"
           onClick={handleSubmit}
         >
-          퀴즈 생성하기
+          퀴즈 수정하기
           <ToastMessage
             message={toastMessage.message}
             icon={toastMessage.icon as 'check' | 'warning'}
