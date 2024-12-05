@@ -25,6 +25,7 @@ const useOAuthHandler = (provider: Provider) => {
 
     if (accessToken) {
       localStorage.setItem('accessToken', accessToken);
+      // [Should]: 현재 zustand 스토어에 `accessToken`을 저장하고 있는데, 일반적인 클라이언트 상태 저장으로 저장하여서 메모리 초기화(리로딩등,,,)시 해당 accessToken에 접근할 수 없을거같습니다.
       setAccessToken(accessToken, provider);
 
       if (guest) {
