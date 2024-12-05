@@ -12,15 +12,10 @@ import Container from '@/components/layout/Container';
 import DropDown from '@/components/common/DropDown';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
-
-// Mock 데이터
-const MOCK_DATA = {
-  category: '알고리즘', // 카테고리
-  type: 'OX',
-  content: 'OX 퀴즈 내용~~~', // 질문
-  answer: 'O', // 정답
-  explanation: '해설~~~~~~~~~', // 해설
-};
+import TagInput from '@/components/common/TagInput';
+import useUpdateQuiz from '@/api/quiz/useUpdateQuiz';
+import axiosInstance from '@/api/axiosInstance';
+import { toEnglishCategory, toKoreanCategory } from '@/utils/categoryConverter';
 
 // 카테고리 목록
 const categories = [
@@ -38,38 +33,60 @@ const categories = [
 export default function EditOxQuizPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { mutate: updateQuizMutate } = useUpdateQuiz();
 
+  // 임시 get 퀴즈 데이터
   const [quizData, setQuizData] = useState({
     category: '', // 카테고리
     content: '', // 질문
-    answer: '', // 정답
+    answerNumber: null as number | null, // 정답 번호 (1: O, 2: X)
     explanation: '', // 해설
+    tags: [] as string[], // 태그
+    options: [
+      { optionNumber: 1, content: 'O', imageId: null },
+      { optionNumber: 2, content: 'X', imageId: null },
+    ],
   });
 
   const [fieldErrors, setFieldErrors] = useState({
     category: false,
     content: false,
     explanation: false,
-    answer: false,
+    answerNumber: false,
   });
 
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
+  // 퀴즈 데이터 가져오기 (GET 요청)
   useEffect(() => {
-    // Mock 데이터 로드
-    setQuizData(MOCK_DATA);
+    const fetchQuizData = async () => {
+      try {
+        const response = await axiosInstance.get(`/quiz/${id}`); // 특정 ID로 데이터 가져오기
+        const { result } = response.data;
+        console.log('퀴즈 데이터 불러오기:', result);
+        setQuizData({
+          category: toKoreanCategory(result.category),
+          content: result.content,
+          answerNumber: result.answerNumber,
+          explanation: result.explanation,
+          tags: result.tags || [],
+          options: result.options || [
+            { optionNumber: 1, content: 'O', imageId: null },
+            { optionNumber: 2, content: 'X', imageId: null },
+          ],
+        });
+      } catch (error) {
+        console.error('퀴즈 데이터를 가져오는 중 오류 발생:', error);
+        setToastMessage({
+          message: '퀴즈 데이터를 불러오는 데 실패했습니다.',
+          icon: 'warning',
+        });
+        setToastOpen(true);
+      }
+    };
 
-    // 서버 연결 시 활성화
-    // const fetchQuiz = async () => {
-    //   try {
-    //     const response = await axios.get(`/api/quiz/${id}`);
-    //     setQuizData(response.data.result);
-    //   } catch (error) {
-    //     console.error('퀴즈 데이터를 불러오는 중 오류 발생:', error);
-    //   }
-    // };
-    // fetchQuiz();
+    if (id) fetchQuizData();
   }, [id]);
 
   const handleInputChange = (field: keyof typeof quizData, value: string, maxLength?: number) => {
@@ -77,13 +94,12 @@ export default function EditOxQuizPage() {
     setFieldErrors((prev) => ({ ...prev, [field]: false }));
   };
 
-  const handleAnswerChange = (answer: string) => {
-    // 동일한 답변 클릭 시 선택 해제
+  const handleAnswerChange = (answer: number) => {
     setQuizData((prev) => ({
       ...prev,
-      answer: prev.answer === answer ? '' : answer,
+      answerNumber: prev.answerNumber === answer ? null : answer, // 기존 값을 취소하면 null로 설정
     }));
-    setFieldErrors((prev) => ({ ...prev, answer: false }));
+    setFieldErrors((prev) => ({ ...prev, answerNumber: false }));
   };
 
   const validateFields = () => {
@@ -91,7 +107,7 @@ export default function EditOxQuizPage() {
       category: quizData.category.trim() === '',
       content: quizData.content.trim() === '',
       explanation: quizData.explanation.trim() === '',
-      answer: quizData.answer === '',
+      answerNumber: quizData.answerNumber === null,
     };
     setFieldErrors(errors);
     return !Object.values(errors).some((err) => err); // 에러가 없으면 true 반환
@@ -107,35 +123,35 @@ export default function EditOxQuizPage() {
       return;
     }
 
+    const englishCategory = toEnglishCategory(quizData.category);
     const payload = {
-      id: id, // 퀴즈 ID
-      category: quizData.category,
-      type: 'OX',
+      id: Number(id), // 퀴즈 ID
+      category: englishCategory,
+      type: 'OX', // OX 퀴즈 고정
       content: quizData.content,
-      options: [
-        { optionNumber: 1, content: 'O', imageId: null },
-        { optionNumber: 2, content: 'X', imageId: null },
-      ],
-      answer: quizData.answer,
+      options: quizData.options,
+      answerNumber: quizData.answerNumber,
       explanation: quizData.explanation,
+      tags: quizData.tags,
+      deleteImageIds: [],
     };
 
-    console.log('Payload for submission:', payload);
-
-    setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
-    setToastOpen(true);
-
-    // 서버 연결 시 활성화
-    // try {
-    //   await axios.put(`/api/quiz/${id}`, payload);
-    //   alert('퀴즈가 성공적으로 수정되었습니다.');
-    //   navigate('/profile/quizManagement');
-    // } catch (error) {
-    //   console.error('퀴즈 수정 중 오류 발생:', error);
-    //   alert('퀴즈 수정 중 오류가 발생했습니다.');
-    // }
+    updateQuizMutate(payload, {
+      onSuccess: () => {
+        setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
+        setToastOpen(true);
+        navigate('/profile/quizManagement'); // 수정 완료 후 이동
+      },
+      onError: () => {
+        setToastMessage({ message: '퀴즈 수정에 실패했습니다.', icon: 'warning' });
+        setToastOpen(true);
+      },
+    });
   };
-
+  // TODO: quizData 상태의 변화를 감지
+  useEffect(() => {
+    console.log('quizData 상태 변경:', quizData);
+  }, [quizData]);
   return (
     <FlexBox direction="col">
       <Container>
@@ -173,6 +189,15 @@ export default function EditOxQuizPage() {
             </div>
           </div>
 
+          {/* 태그 입력 */}
+          <div className="mb-4">
+            <Label content="태그" htmlFor="tags" className="mb-1" />
+            <TagInput
+              tags={quizData.tags}
+              setTags={(tags) => setQuizData((prev) => ({ ...prev, tags }))}
+            />
+          </div>
+
           {/* 카테고리 선택 */}
           <div className="mb-4">
             <Label content="카테고리" htmlFor="category" className="mb-1" />
@@ -202,20 +227,20 @@ export default function EditOxQuizPage() {
             <div className="flex flex-row items-center gap-4">
               <Radio
                 size="M"
-                state={fieldErrors.answer ? 'error' : 'enable'}
+                state={fieldErrors.answerNumber ? 'error' : 'enable'}
                 title="O"
-                checked={quizData.answer === 'O'}
-                onChange={() => handleAnswerChange('O')}
+                checked={quizData.answerNumber === 1}
+                onChange={() => handleAnswerChange(1)}
               />
               <Radio
                 size="M"
-                state={fieldErrors.answer ? 'error' : 'enable'}
+                state={fieldErrors.answerNumber ? 'error' : 'enable'}
                 title="X"
-                checked={quizData.answer === 'X'}
-                onChange={() => handleAnswerChange('X')}
+                checked={quizData.answerNumber === 2}
+                onChange={() => handleAnswerChange(2)}
               />
             </div>
-            {fieldErrors.answer && (
+            {fieldErrors.answerNumber && (
               <div className="mt-2 flex items-center text-red-500 text-sm">
                 <Icon icon="warning_triangle_filled" className="mr-2" size={16} />
                 정답을 선택해주세요.
