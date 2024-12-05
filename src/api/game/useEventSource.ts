@@ -7,6 +7,11 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 let eventSource: EventSourcePolyfill;
 
 function initializeEventSource() {
+  if (eventSource && eventSource.readyState !== EventSource.CLOSED) {
+    console.log('이미 EventSource가 초기화되어 있습니다.');
+    return; // 기존 연결 재사용
+  }
+
   const token = localStorage.getItem('accessToken');
   eventSource = new EventSourcePolyfill(`${BACKEND_URL}/api/matching/subscribe`, {
     headers: {
