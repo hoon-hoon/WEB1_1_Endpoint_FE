@@ -29,14 +29,7 @@ function InterestPage() {
     );
   };
 
-  const { mutate: registerInterests } = useRegisterInterests(
-    () => {
-      console.log('관심사가 성공적으로 등록되었습니다.');
-    },
-    (error) => {
-      console.error(error);
-    },
-  );
+  const { mutate: registerInterests } = useRegisterInterests();
 
   const handleSubmit = () => {
     const englishInterests = selectedInterests.map(toEnglishCategory);

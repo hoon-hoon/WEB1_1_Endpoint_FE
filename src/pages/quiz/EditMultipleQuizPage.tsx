@@ -60,7 +60,6 @@ export default function EditMultipleChoicePage() {
       try {
         const response = await axiosInstance.get(`/quiz/${id}`);
         const { result } = response.data;
-        console.log('퀴즈 데이터 불러오기:', result);
 
         setQuizData({
           category: toKoreanCategory(result.category),

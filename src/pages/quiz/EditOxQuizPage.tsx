@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-// import axios from 'axios'; // 서버 연결 시 다시 활성화
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import FlexBox from '@/components/layout/FlexBox';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
@@ -64,7 +63,6 @@ export default function EditOxQuizPage() {
       try {
         const response = await axiosInstance.get(`/quiz/${id}`); // 특정 ID로 데이터 가져오기
         const { result } = response.data;
-        console.log('퀴즈 데이터 불러오기:', result);
         setQuizData({
           category: toKoreanCategory(result.category),
           content: result.content,
@@ -148,10 +146,7 @@ export default function EditOxQuizPage() {
       },
     });
   };
-  // TODO: quizData 상태의 변화를 감지
-  useEffect(() => {
-    console.log('quizData 상태 변경:', quizData);
-  }, [quizData]);
+
   return (
     <FlexBox direction="col">
       <Container>

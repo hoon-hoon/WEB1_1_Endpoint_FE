@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query';
 
 async function deleteQuiz(id: number): Promise<void> {
   const response = await axiosInstance.delete(`/quiz/${id}`);
-  console.log('퀴즈 삭제 성공:', response.data);
   return response.data;
 }
 

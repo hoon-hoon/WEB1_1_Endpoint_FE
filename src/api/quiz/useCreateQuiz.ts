@@ -28,7 +28,6 @@ interface CreateQuizResponse {
 
 async function createQuiz(requestData: CreateQuizRequest): Promise<CreateQuizResponse> {
   const response = await axiosInstance.post('/quiz', requestData);
-  console.log('퀴즈 등록 성공:', response.data);
   return response.data.result;
 }
 
