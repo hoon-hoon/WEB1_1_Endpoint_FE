@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { BottomNavBar } from '..';
+import { ProtectedLayout } from './ProtectedLayout';
 
 function MainLayout({
   activeTab,
@@ -9,10 +10,12 @@ function MainLayout({
   setActiveTab: (tab: string) => void;
 }) {
   return (
-    <div className="min-h-dvh pb-16">
-      <Outlet />
-      <BottomNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
-    </div>
+    <ProtectedLayout>
+      <div className="min-h-dvh pb-16">
+        <Outlet />
+        <BottomNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
+      </div>
+    </ProtectedLayout>
   );
 }
 

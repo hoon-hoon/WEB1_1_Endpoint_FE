@@ -11,6 +11,7 @@ import DragScrollWrapper from '@/components/common/DragScrollWrapper';
 import Dialog from '@/components/common/Dialog';
 import FlexBox from '@/components/layout/FlexBox';
 import Container from '@/components/layout/Container';
+import NotFound from '@/components/game/NotFound';
 import { GameQuiz } from '@/types/GameTypes';
 
 export default function GameProgress() {
@@ -22,6 +23,8 @@ export default function GameProgress() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
+
+  if (quiz === null) return <NotFound message="퀴즈 데이터가 없습니다...!" />;
 
   const questions = quiz as GameQuiz[];
   const currentQuestionData = questions[currentQuestion];

@@ -16,6 +16,8 @@ import { useState } from 'react';
 import ReviewNote from './pages/profile/ReviewNote';
 import QuizManagement from './pages/profile/QuizManagement';
 
+// [Should]: AuthLayout과 MainLayout에서 로그인 여부를 체크하여 로그인 여부에 따라 접근 제한을 하시는게 좋을거같습니다.
+
 function App() {
   const [activeTab, setActiveTab] = useState('home');
 
