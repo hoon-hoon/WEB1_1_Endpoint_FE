@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet';
+import { HelmetProvider } from 'react-helmet-async';
 
 interface AboutPageProps {
   title: string;
@@ -6,10 +6,10 @@ interface AboutPageProps {
 }
 const AboutPage = ({ title, description }: AboutPageProps) => {
   return (
-    <Helmet>
+    <HelmetProvider>
       <title>Quizy - {title}</title>
       <meta name="description" content={description} />
-    </Helmet>
+    </HelmetProvider>
   );
 };
 
