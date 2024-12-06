@@ -8,15 +8,26 @@ interface CommentItemProps {
   onDelete: (commentId: number) => void;
   toggleReplies?: () => void;
   expanded?: boolean;
+  onReply?: (parentCommentId: number) => void;
 }
 
-const CommentItem = ({ comment, onDelete, toggleReplies, expanded }: CommentItemProps) => (
+const CommentItem = ({ comment, onDelete, toggleReplies, expanded, onReply }: CommentItemProps) => (
   <div className="flex items-start gap-3 mb-2">
     <Avatar size="S" />
     <div className="flex-1">
       <div className="text-sm flex justify-between items-center">
         <span className="font-medium">User {comment.writerId}</span>
-        <div>
+        <div className="flex items-center gap-2">
+          {comment.parentCommentId === 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-blue-500 hover:underline"
+              onClick={() => onReply?.(comment.id)}
+            >
+              답글 달기
+            </Button>
+          )}
           <button
             onClick={() => onDelete(comment.id)}
             className="flex items-center justify-center pb-1 rounded bg-transparent hover:bg-gray-100 focus:bg-gray-200 active:bg-gray-300"
