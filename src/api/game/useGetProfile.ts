@@ -11,7 +11,7 @@ function useGetProfile() {
     queryKey: ['useGetProfile'],
     queryFn: fetchProfile,
     staleTime: Infinity,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
   });
 
   return { data, isLoading, error };

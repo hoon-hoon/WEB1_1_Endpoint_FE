@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shadcn/ui/popover';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import Dialog from './Dialog';
 import FlexBox from '@/components/layout/FlexBox';
+import { Skeleton } from '@/shadcn/ui/skeleton';
 import axiosInstance from '@/api/axiosInstance';
 
 type TopBarProps = {
@@ -20,7 +21,7 @@ type TopBarProps = {
 
 const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProps) => {
   const [state, dispatch] = useTopBarState();
-  const { data } = useGetProfile();
+  const { data, isLoading } = useGetProfile();
   const handleTransition = (onClickLeft: () => void) => {
     if (!document.startViewTransition) {
       onClickLeft();
@@ -62,7 +63,11 @@ const TopBar = ({ leftIcon = 'default', leftText = '', onClickLeft }: TopBarProp
         <Popover open={state.isPop} onOpenChange={() => dispatch({ type: 'TOGGLE_POP' })}>
           <PopoverTrigger asChild>
             <button className="cursor-pointer">
-              <Avatar input="image" image={data?.profileImageUrl} size="S" />
+              {isLoading ? (
+                <Skeleton className="w-12 h-12 rounded-full" />
+              ) : (
+                <Avatar input="image" image={data?.profileImageUrl} size="S" />
+              )}
             </button>
           </PopoverTrigger>
           <PopoverContent>

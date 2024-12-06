@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import AuthLayout from './components/layout/AuthLayout';
@@ -12,9 +13,9 @@ import {
   EditMultipleQuizPage,
 } from './pages/quiz';
 import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play, Result } from './pages/game';
-import { useState } from 'react';
 import ReviewNote from './pages/profile/ReviewNote';
 import QuizManagement from './pages/profile/QuizManagement';
+import NotFound from './components/game/NotFound';
 
 // [Should]: AuthLayout과 MainLayout에서 로그인 여부를 체크하여 로그인 여부에 따라 접근 제한을 하시는게 좋을거같습니다.
 
@@ -54,6 +55,8 @@ function App() {
         <Route path="/game/waiting" element={<WaitingRoom />} />
         <Route path="/game/play" element={<Play />} />
         <Route path="/game/result" element={<Result />} />
+        {/* 404 페이지 처리 */}
+        <Route path="*" element={<NotFound message="404: 적절하지 않은 접근 경로입니다" />} />
       </Routes>
     </Router>
   );

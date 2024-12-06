@@ -29,12 +29,11 @@ const useOAuthHandler = (provider: Provider) => {
       setAccessToken(accessToken, provider);
 
       if (guest) {
-        navigate('/main');
+        navigate('/interest');
       } else {
         navigate('/main');
       }
     }
-    //console.log(error);
     if (error) {
       const decodedError = decodeURIComponent(error);
       console.error('로그인 실패:', decodedError);
