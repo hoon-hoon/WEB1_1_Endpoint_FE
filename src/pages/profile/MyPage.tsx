@@ -8,8 +8,8 @@ import { useModal } from '@/hooks/useModal';
 import { AchievementModal } from '@/components/mypage/AchievementModal';
 import UserModal from '@/components/mypage/UserModal';
 import WithDrawalModal from '@/components/mypage/WithDrawalModal';
-import ProfileSkeleton from '../components/mypage/skeleton/ProfileSkeleton';
-import AchievementSkeleton from '../components/mypage/skeleton/AchievementSkeleton';
+import ProfileSkeleton from '../../components/mypage/skeleton/ProfileSkeleton';
+import AchievementSkeleton from '../../components/mypage/skeleton/AchievementSkeleton';
 import FlexBox from '@/components/layout/FlexBox';
 import { useUserData } from '@/api/mypage/useUserData';
 
