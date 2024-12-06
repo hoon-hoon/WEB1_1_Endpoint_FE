@@ -14,8 +14,7 @@ export default defineConfig({
     },
   },
   build: {
-    rollupOptions: {
-      // external: ['react', 'react-dom'],
-    },
+    rollupOptions: {},
   },
+  base: './', // 정적 파일 경로를 현재 디렉토리 기준으로 설정
 });
