@@ -1,18 +1,27 @@
 import TextField from '@eolluga/eolluga-ui/Input/TextField';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 interface CommentInputProps {
   onSubmit: (value: string) => void;
+  placeholder?: string;
 }
 
-export default function CommentInput({ onSubmit }: CommentInputProps) {
-  const [inputValue, setInputValue] = useState('');
+export default function CommentInput({
+  onSubmit,
+  placeholder = '댓글을 입력하세요...',
+}: CommentInputProps) {
+  const [value, setValue] = useState('');
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
+    console.log('호출됨');
+  };
 
   const handleSubmit = () => {
-    if (inputValue.trim()) {
-      onSubmit(inputValue);
-      setInputValue('');
+    if (value.trim()) {
+      onSubmit(value.trim());
+      setValue('');
     }
   };
 
@@ -21,11 +30,12 @@ export default function CommentInput({ onSubmit }: CommentInputProps) {
       <div className="flex px-4 py-4 gap-4">
         <div className="flex items-center w-full bg-white border border-gray-100 rounded-lg overflow-hidden gap-1">
           <TextField
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            value={value}
+            onChange={handleChange}
+            placeholder={placeholder}
             size="M"
             mode="outlined"
-            placeholder="댓글을 입력하세요"
+            inputMode="text"
           />
           <div className="p-3 bg-black rounded-xl cursor-pointer" onClick={handleSubmit}>
             <Icon icon="add" className="fill-white" />
