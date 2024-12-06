@@ -6,8 +6,6 @@ interface RegisterInterestsRequest {
 }
 
 async function registerInterests(requestData: RegisterInterestsRequest): Promise<void> {
-  //TODO: 관심사 등록 요청
-  console.log('관심사 등록 요청:', requestData.interests);
   await axiosInstance.post('/quiz/users/interests', requestData.interests, {});
 }
 
@@ -16,7 +14,6 @@ function useRegisterInterests(onSuccess?: () => void, onError?: (error: any) => 
     mutationKey: ['registerInterests'],
     mutationFn: registerInterests,
     onSuccess: () => {
-      console.log('관심사가 성공적으로 등록되었습니다.');
       if (onSuccess) onSuccess();
     },
     onError: (error) => {
