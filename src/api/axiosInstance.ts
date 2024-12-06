@@ -1,3 +1,4 @@
+import { getStorageItem } from '@/utils/storage';
 import axios from 'axios';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -12,7 +13,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = getStorageItem('accessToken');
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

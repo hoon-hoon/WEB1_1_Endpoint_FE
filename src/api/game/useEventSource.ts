@@ -1,6 +1,7 @@
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import axios from 'axios';
 import { RandomMatchEvent } from '@/types/GameTypes';
+import { getStorageItem } from '@/utils/storage';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -12,7 +13,7 @@ function initializeEventSource() {
     return; // 기존 연결 재사용
   }
 
-  const token = localStorage.getItem('accessToken');
+  const token = getStorageItem('accessToken');
   eventSource = new EventSourcePolyfill(`${BACKEND_URL}/api/matching/subscribe`, {
     headers: {
       Authorization: `Bearer ${token}`,

@@ -1,5 +1,6 @@
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import { getStorageItem } from '@/utils/storage';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const SOCKET_URL = `${BACKEND_URL}/ws`;
@@ -8,7 +9,7 @@ let stompClient: Client | null = null;
 
 export const getStompClient = () => {
   if (!stompClient) {
-    const token = localStorage.getItem('accessToken');
+    const token = getStorageItem('accessToken');
 
     stompClient = new Client({
       webSocketFactory: () => new SockJS(SOCKET_URL),
