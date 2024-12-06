@@ -109,7 +109,6 @@ export default function ABTestPage() {
 
       uploadImageMutate(file, {
         onSuccess: (imageId) => {
-          console.log('업로드된 이미지 ID:', imageId);
           setFormData((prev) => ({
             ...prev,
             [field]: file,

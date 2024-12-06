@@ -1,5 +1,4 @@
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
-import ProgressBar from '../common/ProgressBar';
 
 interface QuizAnsProps {
   isCorrect: boolean;
@@ -11,23 +10,21 @@ function QuizAns({ isCorrect, explanation, answerRate }: QuizAnsProps) {
   return (
     <>
       <div className={`mt-1 p-2 rounded-lg ${isCorrect ? 'bg-green-100' : 'bg-red-100'}`}>
-        <h4
-          className={`flex items-center gap-2 font-bold ${isCorrect ? 'text-green-600' : 'text-red-600'}`}
-        >
-          <Icon
-            icon={isCorrect ? 'chevron_down_circle' : 'close_circle'}
-            className={isCorrect ? 'text-green-600' : 'text-red-600'}
-          />
-          {isCorrect ? '정답입니다!' : '틀렸습니다 ㅠㅠ'}
-        </h4>
-        <p className={`mt-2 ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>{explanation}</p>
-      </div>
-      <div className="mt-2">
-        <p className="mb-1 text-sm font-medium text-gray-700">전체 정답률</p>
-        <div className="flex items-center gap-2">
-          <ProgressBar progress={answerRate} colorClass="bg-pastelGreen" />
-          <span className="text-sm font-semibold text-gray-600">{answerRate.toFixed(1)}</span>
+        <div className="flex items-center justify-between">
+          <h4
+            className={`flex items-center gap-2 font-bold ${isCorrect ? 'text-green-600' : 'text-red-600'}`}
+          >
+            <Icon
+              icon={isCorrect ? 'chevron_down_circle' : 'close_circle'}
+              className={isCorrect ? 'text-green-600' : 'text-red-600'}
+            />
+            {isCorrect ? '정답입니다!' : '틀렸습니다 ㅠㅠ'}
+          </h4>
+          <span className="text-sm font-semibold text-gray-600">
+            전체 정답률: {answerRate.toFixed(1)}%
+          </span>
         </div>
+        <p className={`mt-2 ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>{explanation}</p>
       </div>
     </>
   );
