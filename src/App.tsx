@@ -14,8 +14,9 @@ import {
 import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play, Result } from './pages/game';
 import { useState } from 'react';
 import ReviewNote from './pages/profile/ReviewNote';
-import ViewProfile from './pages/profile/ViewProfile';
 import QuizManagement from './pages/profile/QuizManagement';
+
+// [Should]: AuthLayout과 MainLayout에서 로그인 여부를 체크하여 로그인 여부에 따라 접근 제한을 하시는게 좋을거같습니다.
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
@@ -37,7 +38,6 @@ function App() {
           <Route path="/game" element={<GamePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={<MyPage />} />
-          <Route path="/profile/view" element={<ViewProfile />} />
           <Route path="/profile/reviewNote" element={<ReviewNote />} />
           <Route path="/profile/quizManagement" element={<QuizManagement />} />
           <Route path="/game/create" element={<CreateGame />} />

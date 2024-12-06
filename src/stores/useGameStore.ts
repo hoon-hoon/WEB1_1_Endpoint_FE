@@ -1,6 +1,14 @@
 import { Player, Topic, GameQuiz } from '@/types/GameTypes';
 import { create } from 'zustand';
 
+interface GameResult {
+  quizContent: string;
+  choice: string;
+  answer: string;
+  explanation: string;
+  isCorrect: boolean;
+}
+
 export type GameStore = {
   gameId: number;
   players: Player[];
@@ -12,6 +20,8 @@ export type GameStore = {
   timeLeft: number;
   inviteCode: string;
   isCorrect: boolean | null;
+  rank: number;
+  results: GameResult[];
 
   updateId: (gameId: number) => void;
   updatePlayers: (players: Player[]) => void;
@@ -22,10 +32,9 @@ export type GameStore = {
   updateInviteCode: (inviteCode: string) => void;
   updateScores: (leaderboard: { userId: number; score: number }[]) => void;
   setIsCorrect: (result: boolean | null) => void;
-  getMyRank: (playerId: number) => { rank: number; score: number };
 };
 
-export const useGameStore = create<GameStore>((set, get) => ({
+export const useGameStore = create<GameStore>((set) => ({
   gameId: 0,
   players: [],
   subject: null,
@@ -37,6 +46,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   inviteCode: '',
   earnedScore: 0,
   isCorrect: null,
+  rank: -1,
+  results: [],
 
   updateId: (gameId) => {
     set(() => ({
@@ -93,15 +104,5 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set(() => ({
       isCorrect: correct,
     }));
-  },
-
-  // 플레이어의 순위 계산
-  getMyRank: (playerId) => {
-    const players = get().players;
-    const sortedPlayers = [...players].sort((a, b) => (b.score || 0) - (a.score || 0));
-    const rank = sortedPlayers.findIndex((player) => player.id === playerId) + 1;
-    const score = players.find((player) => player.id === playerId)?.score || 0;
-
-    return { rank, score };
   },
 }));
