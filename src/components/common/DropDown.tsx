@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
 
 type DropDownProps = {
@@ -20,6 +20,24 @@ const DropDown = ({
 }: DropDownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string>(selectedItem);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setSelected(selectedItem);
+  }, [selectedItem]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside); // 이벤트 리스너 등록
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside); // 이벤트 리스너 해제
+    };
+  }, []);
 
   const handleSelect = (value: string) => {
     setItem(value);
@@ -28,7 +46,7 @@ const DropDown = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         className="w-full flex justify-between items-center bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
         onClick={() => setIsOpen(!isOpen)}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import FlexBox from '@/components/layout/FlexBox';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
@@ -12,7 +13,11 @@ import Card from '@/components/common/Card';
 import Container from '@/components/layout/Container';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import TagInput from '@/components/common/TagInput';
+import useUpdateQuiz from '@/api/quiz/useUpdateQuiz';
+import { useFetchQuizData, fetchImageUrl } from '@/api/quiz/useFetchQuizData';
 import { uploadImage } from '@/api/quiz/useUploadImage';
+import { toEnglishCategory } from '@/utils/categoryConverter';
 
 // 카테고리 목록
 const categories = [
@@ -27,19 +32,23 @@ const categories = [
   '소프트웨어 공학',
 ];
 
-export default function ABTestPage() {
+export default function EditABTestPage() {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const location = useLocation();
+  const queryClient = useQueryClient();
+  const { mutate: updateQuizMutate } = useUpdateQuiz();
+  const { data: quizData, isLoading } = useFetchQuizData(id!);
 
-  const [formData, setFormData] = useState({
-    category: '', // 카테고리
-    question: '', // 문제
-    optionA: '', // A 선택지
-    optionB: '', // B 선택지
-    imageA: null as File | null, // A 이미지 파일
-    imageB: null as File | null, // B 이미지 파일
-    imageAId: null as number | null, // A 이미지 ID
-    imageBId: null as number | null, // B 이미지 ID
+  const [updatedQuizData, setUpdatedQuizData] = useState({
+    category: '',
+    question: '',
+    optionA: '',
+    optionB: '',
+    imageA: null as string | null,
+    imageB: null as string | null,
+    imageAId: null as number | null,
+    imageBId: null as number | null,
+    tags: [] as string[],
   });
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -52,21 +61,38 @@ export default function ABTestPage() {
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
+  // 데이터 로딩 완료 시 초기화
   useEffect(() => {
-    if (location.pathname === '/quiz/ab') {
-      console.log('AB 테스트 페이지입니다.');
-    }
-  }, [location.pathname]);
+    if (quizData) {
+      const optionA = quizData.options.find((option) => option.optionNumber === 1);
+      const optionB = quizData.options.find((option) => option.optionNumber === 2);
 
-  const handleInputChange = (field: keyof typeof formData, value: string, maxLength?: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value.slice(0, maxLength),
-    }));
-    setFieldErrors((prev) => ({
-      ...prev,
-      [field]: false,
-    }));
+      Promise.all([
+        optionA?.imageId ? fetchImageUrl(optionA.imageId) : null,
+        optionB?.imageId ? fetchImageUrl(optionB.imageId) : null,
+      ]).then(([imageAUrl, imageBUrl]) => {
+        setUpdatedQuizData({
+          category: quizData.category,
+          question: quizData.content,
+          optionA: optionA?.content || '',
+          optionB: optionB?.content || '',
+          imageA: imageAUrl,
+          imageB: imageBUrl,
+          imageAId: optionA?.imageId || null,
+          imageBId: optionB?.imageId || null,
+          tags: quizData.tags,
+        });
+      });
+    }
+  }, [quizData]);
+
+  const handleInputChange = (
+    field: keyof typeof updatedQuizData,
+    value: string,
+    maxLength?: number,
+  ) => {
+    setUpdatedQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) }));
+    setFieldErrors((prev) => ({ ...prev, [field]: false }));
   };
 
   const handleImageChange = async (
@@ -84,13 +110,15 @@ export default function ABTestPage() {
 
       try {
         const imageId = await uploadImage(file);
-        console.log('업로드한 이미지 ID:', imageId);
-        setFormData((prev) => ({
+        const imageUrl = await fetchImageUrl(imageId);
+
+        setUpdatedQuizData((prev) => ({
           ...prev,
-          [field]: file,
-          [`${field}Id`]: imageId, // 예: imageAId, imageBId
+          [field]: imageUrl,
+          [`${field}Id`]: imageId,
         }));
       } catch (error) {
+        console.error('이미지 업로드 실패:', error);
         setToastMessage({ message: '이미지 업로드에 실패했습니다.', icon: 'warning' });
         setToastOpen(true);
       }
@@ -98,7 +126,7 @@ export default function ABTestPage() {
   };
 
   const removeImage = (field: 'imageA' | 'imageB') => {
-    setFormData((prev) => ({
+    setUpdatedQuizData((prev) => ({
       ...prev,
       [field]: null,
       [`${field}Id`]: null,
@@ -113,10 +141,10 @@ export default function ABTestPage() {
 
   const validateFields = () => {
     const errors = {
-      category: formData.category.trim() === '',
-      question: formData.question.trim() === '',
-      optionA: formData.optionA.trim() === '',
-      optionB: formData.optionB.trim() === '',
+      category: updatedQuizData.category.trim() === '',
+      question: updatedQuizData.question.trim() === '',
+      optionA: updatedQuizData.optionA.trim() === '',
+      optionB: updatedQuizData.optionB.trim() === '',
     };
 
     setFieldErrors(errors);
@@ -130,21 +158,36 @@ export default function ABTestPage() {
       return;
     }
 
-    setToastMessage({ message: '퀴즈가 수정되었습니다!', icon: 'check' });
-    setToastOpen(true);
-
     const payload = {
-      category: formData.category,
+      id: Number(id),
+      category: toEnglishCategory(updatedQuizData.category),
       type: 'AB_TEST',
-      content: formData.question,
+      content: updatedQuizData.question,
       options: [
-        { optionNumber: 1, content: formData.optionA, imageId: formData.imageAId },
-        { optionNumber: 2, content: formData.optionB, imageId: formData.imageBId },
+        { optionNumber: 1, content: updatedQuizData.optionA, imageId: updatedQuizData.imageAId },
+        { optionNumber: 2, content: updatedQuizData.optionB, imageId: updatedQuizData.imageBId },
       ],
+      tags: updatedQuizData.tags,
+      deleteImageIds: [],
     };
 
-    console.log('Payload:', payload);
+    updateQuizMutate(payload, {
+      onSuccess: () => {
+        setToastMessage({ message: 'AB 테스트가 성공적으로 수정되었습니다!', icon: 'check' });
+        setToastOpen(true);
+        queryClient.invalidateQueries({ queryKey: ['quizData', id] });
+        navigate('/profile/quizManagement');
+      },
+      onError: () => {
+        setToastMessage({ message: '수정에 실패했습니다.', icon: 'warning' });
+        setToastOpen(true);
+      },
+    });
   };
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <FlexBox direction="col">
@@ -181,11 +224,21 @@ export default function ABTestPage() {
               />
             </div>
           </div>
+
+          {/* 태그 입력 */}
+          <div className="mb-4">
+            <Label content="태그" htmlFor="tags" className="mb-1" />
+            <TagInput
+              tags={updatedQuizData.tags}
+              setTags={(tags) => setUpdatedQuizData((prev) => ({ ...prev, tags }))}
+            />
+          </div>
+
           <div className="mb-4">
             <Label content="카테고리" />
             <DropDown
               items={categories}
-              selectedItem={formData.category}
+              selectedItem={updatedQuizData.category}
               setItem={(value: string) => handleInputChange('category', value)}
               placeholder="카테고리를 선택하세요."
               alert="카테고리를 선택해주세요."
@@ -195,7 +248,7 @@ export default function ABTestPage() {
           <div className="mb-4">
             <Label content="문제" />
             <TextArea
-              value={formData.question}
+              value={updatedQuizData.question}
               onChange={(e) => handleInputChange('question', e.target.value, 42)} // 문제는 42자 제한
               placeholder="문제를 입력하세요."
               size="M"
@@ -207,7 +260,7 @@ export default function ABTestPage() {
             <div className="mb-2">
               <Label content="A 선택지" />
               <TextField
-                value={formData.optionA}
+                value={updatedQuizData.optionA}
                 onChange={(e) => handleInputChange('optionA', e.target.value, 20)} // 선택지는 20자 제한
                 placeholder="A 선택지를 입력하세요."
                 size="M"
@@ -222,10 +275,10 @@ export default function ABTestPage() {
               onChange={(e) => handleImageChange('imageA', e)}
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
             />
-            {formData.imageA && (
+            {updatedQuizData.imageA && (
               <div className="relative mt-2">
                 <img
-                  src={URL.createObjectURL(formData.imageA)}
+                  src={updatedQuizData.imageA}
                   alt="A 선택지 이미지"
                   className="w-full h-full object-cover rounded border"
                 />
@@ -244,7 +297,7 @@ export default function ABTestPage() {
             <div className="mb-2">
               <Label content="B 선택지" />
               <TextField
-                value={formData.optionB}
+                value={updatedQuizData.optionB}
                 onChange={(e) => handleInputChange('optionB', e.target.value, 20)} // 선택지는 20자 제한
                 placeholder="B 선택지를 입력하세요."
                 size="M"
@@ -259,10 +312,10 @@ export default function ABTestPage() {
               onChange={(e) => handleImageChange('imageB', e)}
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
             />
-            {formData.imageB && (
+            {updatedQuizData.imageB && (
               <div className="relative mt-2">
                 <img
-                  src={URL.createObjectURL(formData.imageB)}
+                  src={updatedQuizData.imageB}
                   alt="B 선택지 이미지"
                   className="w-full h-full object-cover rounded border"
                 />
@@ -282,7 +335,7 @@ export default function ABTestPage() {
           size="default"
           onClick={handleSubmit}
         >
-          퀴즈 생성하기
+          퀴즈 수정하기
           <ToastMessage
             message={toastMessage.message}
             icon={toastMessage.icon as 'check' | 'warning'}

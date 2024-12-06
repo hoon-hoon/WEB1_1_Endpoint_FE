@@ -34,13 +34,15 @@ async function updateQuiz(requestData: UpdateQuizRequest): Promise<UpdateQuizRes
   return response.data.result;
 }
 
-function useUpdateQuiz() {
+function useUpdateQuiz(options?: {
+  onSuccess?: (data: any) => void;
+  onError?: (error: any) => void;
+  onSettled?: (data: any, error: any) => void;
+}) {
   return useMutation({
     mutationKey: ['updateQuiz'],
-    mutationFn: (requestData: UpdateQuizRequest) => updateQuiz(requestData),
-    onError: (error) => {
-      console.error('퀴즈 수정 실패:', error);
-    },
+    mutationFn: updateQuiz,
+    ...options, // 동적으로 전달된 옵션을 적용
   });
 }
 
