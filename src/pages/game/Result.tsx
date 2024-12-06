@@ -69,7 +69,7 @@ export default function Result() {
                     {quiz.choice !== quiz.answer && (
                       <p className="text-sm text-gray-600 mb-2">정답: {quiz.answer}</p>
                     )}
-                    <p className="text-sm text-gray-600">{quiz.explanation}</p>
+                    <p className="text-sm text-gray-600">해설: {quiz.explanation}</p>
                   </div>
                 </div>
               </Card>

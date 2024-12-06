@@ -60,14 +60,12 @@ export const useStompStore = create<StompState>((set, get) => ({
       if (isConnected) return;
 
       client.onConnect = () => {
-        console.log('STOMP 연결 성공');
         set({ isConnected: true });
         subscribeToGame(client, gameId); // 연결 후 구독
         resolve(); // 연결 성공 시 resolve
       };
 
       client.onDisconnect = () => {
-        console.log('STOMP 연결 종료');
         set({ isConnected: false });
       };
 
@@ -97,15 +95,12 @@ export const useStompStore = create<StompState>((set, get) => ({
     client.subscribe(`/topic/game/${gameId}`, (message) => {
       const response = JSON.parse(message.body);
       const responseType: BroadCastMessage = response.type;
-      console.log(response);
       switch (responseType) {
         case 'GAME_ROOM':
-          console.log(response.payload.players);
           updatePlayers(response.payload.players);
           break;
         case 'QUIZ_TRANSMITTED':
           set({ isLoading: true });
-          console.log(response.payload.quiz);
           updateQuiz(response.payload.quiz as GameQuiz[]);
           break;
         case 'SCORE_BOARD':
@@ -131,7 +126,6 @@ export const useStompStore = create<StompState>((set, get) => ({
           updateQuiz(response.payload.quiz as GameQuiz[]);
           break;
         case 'GAME_RESULT':
-          console.log(response.payload.rank);
           useGameStore.setState({
             rank: response.payload.rank,
             results: response.payload.results,
@@ -170,7 +164,6 @@ export const useStompStore = create<StompState>((set, get) => ({
         return;
       }
 
-      console.log('게임 조인 요청 보냄');
       try {
         client.publish({
           destination: `/app/join/${gameId}`,

@@ -78,9 +78,6 @@ export default function RandomMatching() {
           <ShadcnButton className="w-full h-14 text-lg" size="lg" onClick={() => cancleMatch()}>
             게임 취소
           </ShadcnButton>
-          {/*}
-          {matchStatus === '실패' && <button>재시도</button>}
-          */}
         </div>
       </main>
     </div>
