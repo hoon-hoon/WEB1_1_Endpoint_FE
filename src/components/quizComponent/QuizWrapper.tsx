@@ -3,9 +3,8 @@ import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useEffect, useState } from 'react';
 import { QuizAns, QuizFooter, QuizRenderer } from '.';
 import BottomSheet from '../common/BottomSheet';
-import axiosInstance from '@/api/axiosInstance';
-import { useMutation } from '@tanstack/react-query';
 import { useToggleLike } from '@/api/updateLike';
+import { usePostAnswer } from '@/api/quiz/postAnswer';
 
 interface QuizWrapperProps {
   quiz: BaseQuizAPI;
@@ -19,6 +18,8 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   const [isBottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [isAnswerVisible, setIsAnswerVisible] = useState(false);
 
+  const submitAnswerMutation = usePostAnswer();
+
   useEffect(() => {
     if (selectedAnswer !== null) {
       setIsCorrect(selectedAnswer === quiz.answer?.answerNumber);
@@ -30,6 +31,9 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   }, [selectedAnswer]);
 
   const handleAnswerSelect = (answer: number) => {
+    setSelectedAnswer(answer);
+    submitAnswerMutation.mutate({ quizId: quiz.id, choiceNumber: answer });
+
     if (selectedAnswer !== null) return;
     setSelectedAnswer(answer);
     if (quiz.answer) {
@@ -57,7 +61,6 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   );
 
   const handleToggleLike = () => {
-    console.log(quiz.id);
     toggleLikeMutation.mutate(quiz.id);
   };
 
