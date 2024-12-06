@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import FlexBox from '@/components/layout/FlexBox';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
@@ -13,10 +14,9 @@ import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
 import TagInput from '@/components/common/TagInput';
 import useUpdateQuiz from '@/api/quiz/useUpdateQuiz';
-import axiosInstance from '@/api/axiosInstance';
-import { toEnglishCategory, toKoreanCategory } from '@/utils/categoryConverter';
+import useFetchQuizData from '@/api/quiz/useFetchQuizData'; // React Query 훅
+import { toEnglishCategory } from '@/utils/categoryConverter';
 
-// 카테고리 목록
 const categories = [
   '알고리즘',
   '프로그래밍 언어',
@@ -32,19 +32,17 @@ const categories = [
 export default function EditOxQuizPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { mutate: updateQuizMutate } = useUpdateQuiz();
 
-  // 임시 get 퀴즈 데이터
-  const [quizData, setQuizData] = useState({
-    category: '', // 카테고리
-    content: '', // 질문
-    answerNumber: null as number | null, // 정답 번호 (1: O, 2: X)
-    explanation: '', // 해설
-    tags: [] as string[], // 태그
-    options: [
-      { optionNumber: 1, content: 'O', imageId: null },
-      { optionNumber: 2, content: 'X', imageId: null },
-    ],
+  const { data: quizData, isLoading } = useFetchQuizData(id!);
+
+  const [updatedQuizData, setUpdatedQuizData] = useState({
+    category: '',
+    content: '',
+    answerNumber: null as number | null,
+    explanation: '',
+    tags: [] as string[],
   });
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -57,43 +55,30 @@ export default function EditOxQuizPage() {
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
-  // 퀴즈 데이터 가져오기 (GET 요청)
+  // 데이터 로딩 완료 시 초기화
   useEffect(() => {
-    const fetchQuizData = async () => {
-      try {
-        const response = await axiosInstance.get(`/quiz/${id}`); // 특정 ID로 데이터 가져오기
-        const { result } = response.data;
-        setQuizData({
-          category: toKoreanCategory(result.category),
-          content: result.content,
-          answerNumber: result.answerNumber,
-          explanation: result.explanation,
-          tags: result.tags || [],
-          options: result.options || [
-            { optionNumber: 1, content: 'O', imageId: null },
-            { optionNumber: 2, content: 'X', imageId: null },
-          ],
-        });
-      } catch (error) {
-        console.error('퀴즈 데이터를 가져오는 중 오류 발생:', error);
-        setToastMessage({
-          message: '퀴즈 데이터를 불러오는 데 실패했습니다.',
-          icon: 'warning',
-        });
-        setToastOpen(true);
-      }
-    };
+    if (quizData) {
+      setUpdatedQuizData({
+        category: quizData.category,
+        content: quizData.content,
+        answerNumber: quizData.answerNumber || null,
+        explanation: quizData.explanation || '',
+        tags: quizData.tags,
+      });
+    }
+  }, [quizData]);
 
-    if (id) fetchQuizData();
-  }, [id]);
-
-  const handleInputChange = (field: keyof typeof quizData, value: string, maxLength?: number) => {
-    setQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) })); // 최대 글자 수 제한
+  const handleInputChange = (
+    field: keyof typeof updatedQuizData,
+    value: string,
+    maxLength?: number,
+  ) => {
+    setUpdatedQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) }));
     setFieldErrors((prev) => ({ ...prev, [field]: false }));
   };
 
   const handleAnswerChange = (answer: number) => {
-    setQuizData((prev) => ({
+    setUpdatedQuizData((prev) => ({
       ...prev,
       answerNumber: prev.answerNumber === answer ? null : answer, // 기존 값을 취소하면 null로 설정
     }));
@@ -102,16 +87,16 @@ export default function EditOxQuizPage() {
 
   const validateFields = () => {
     const errors = {
-      category: quizData.category.trim() === '',
-      content: quizData.content.trim() === '',
-      explanation: quizData.explanation.trim() === '',
-      answerNumber: quizData.answerNumber === null,
+      category: updatedQuizData.category.trim() === '',
+      content: updatedQuizData.content.trim() === '',
+      explanation: updatedQuizData.explanation.trim() === '',
+      answerNumber: updatedQuizData.answerNumber === null,
     };
     setFieldErrors(errors);
     return !Object.values(errors).some((err) => err); // 에러가 없으면 true 반환
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!validateFields()) {
       setToastMessage({
         message: '모든 항목을 작성해주세요.',
@@ -121,24 +106,28 @@ export default function EditOxQuizPage() {
       return;
     }
 
-    const englishCategory = toEnglishCategory(quizData.category);
     const payload = {
-      id: Number(id), // 퀴즈 ID
-      category: englishCategory,
-      type: 'OX', // OX 퀴즈 고정
-      content: quizData.content,
-      options: quizData.options,
-      answerNumber: quizData.answerNumber,
-      explanation: quizData.explanation,
-      tags: quizData.tags,
-      deleteImageIds: [],
+      id: Number(id),
+      category: toEnglishCategory(updatedQuizData.category),
+      type: 'OX',
+      content: updatedQuizData.content,
+      options: [
+        { optionNumber: 1, content: 'O', imageId: null },
+        { optionNumber: 2, content: 'X', imageId: null },
+      ],
+      answerNumber: updatedQuizData.answerNumber,
+      explanation: updatedQuizData.explanation,
+      tags: updatedQuizData.tags,
+      deleteImageIds: [], // OX 퀴즈는 이미지가 없으므로 비워둠
     };
 
     updateQuizMutate(payload, {
       onSuccess: () => {
         setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
         setToastOpen(true);
-        navigate('/profile/quizManagement'); // 수정 완료 후 이동
+
+        queryClient.invalidateQueries({ queryKey: ['quizData'] });
+        navigate('/profile/quizManagement');
       },
       onError: () => {
         setToastMessage({ message: '퀴즈 수정에 실패했습니다.', icon: 'warning' });
@@ -146,6 +135,10 @@ export default function EditOxQuizPage() {
       },
     });
   };
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <FlexBox direction="col">
@@ -188,8 +181,8 @@ export default function EditOxQuizPage() {
           <div className="mb-4">
             <Label content="태그" htmlFor="tags" className="mb-1" />
             <TagInput
-              tags={quizData.tags}
-              setTags={(tags) => setQuizData((prev) => ({ ...prev, tags }))}
+              tags={updatedQuizData.tags}
+              setTags={(tags) => setUpdatedQuizData((prev) => ({ ...prev, tags }))}
             />
           </div>
 
@@ -198,18 +191,19 @@ export default function EditOxQuizPage() {
             <Label content="카테고리" htmlFor="category" className="mb-1" />
             <DropDown
               items={categories}
-              selectedItem={quizData.category}
+              selectedItem={updatedQuizData.category}
               setItem={(value: string) => handleInputChange('category', value)}
               placeholder="카테고리를 선택하세요"
               alert="카테고리를 선택해주세요."
-              required={fieldErrors.category && quizData.category === ''}
+              required={fieldErrors.category}
             />
           </div>
 
+          {/* 문제 입력 */}
           <div className="mb-4">
             <Label content="문제" />
             <TextArea
-              value={quizData.content}
+              value={updatedQuizData.content}
               onChange={(e) => handleInputChange('content', e.target.value, 42)}
               placeholder="문제를 입력하세요."
               size="M"
@@ -217,6 +211,7 @@ export default function EditOxQuizPage() {
             />
           </div>
 
+          {/* 정답 선택 */}
           <div className="mb-4">
             <Label content="정답" />
             <div className="flex flex-row items-center gap-4">
@@ -224,14 +219,14 @@ export default function EditOxQuizPage() {
                 size="M"
                 state={fieldErrors.answerNumber ? 'error' : 'enable'}
                 title="O"
-                checked={quizData.answerNumber === 1}
+                checked={updatedQuizData.answerNumber === 1}
                 onChange={() => handleAnswerChange(1)}
               />
               <Radio
                 size="M"
                 state={fieldErrors.answerNumber ? 'error' : 'enable'}
                 title="X"
-                checked={quizData.answerNumber === 2}
+                checked={updatedQuizData.answerNumber === 2}
                 onChange={() => handleAnswerChange(2)}
               />
             </div>
@@ -243,9 +238,10 @@ export default function EditOxQuizPage() {
             )}
           </div>
 
+          {/* 해설 입력 */}
           <Label content="해설" />
           <TextArea
-            value={quizData.explanation}
+            value={updatedQuizData.explanation}
             onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
             placeholder="해설을 입력하세요."
             size="M"

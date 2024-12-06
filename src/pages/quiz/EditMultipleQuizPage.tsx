@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import FlexBox from '@/components/layout/FlexBox';
 import TextArea from '@eolluga/eolluga-ui/Input/TextArea';
@@ -14,8 +15,8 @@ import ToastMessage from '@/components/common/ToastMessage';
 import DropDown from '@/components/common/DropDown';
 import TagInput from '@/components/common/TagInput';
 import useUpdateQuiz from '@/api/quiz/useUpdateQuiz';
-import axiosInstance from '@/api/axiosInstance';
-import { toEnglishCategory, toKoreanCategory } from '@/utils/categoryConverter';
+import useFetchQuizData from '@/api/quiz/useFetchQuizData';
+import { toEnglishCategory } from '@/utils/categoryConverter';
 
 const categories = [
   '알고리즘',
@@ -32,13 +33,15 @@ const categories = [
 export default function EditMultipleChoicePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { mutate: updateQuizMutate } = useUpdateQuiz();
+  const { data: quizData, isLoading } = useFetchQuizData(id!);
 
-  const [quizData, setQuizData] = useState({
+  const [updatedQuizData, setUpdatedQuizData] = useState({
     category: '',
     content: '',
-    options: [] as { optionNumber: number; content: string; imageId: null }[],
-    tags: [] as string[], // 태그
+    options: [] as { optionNumber: number; content: string; imageId: number | null }[],
+    tags: [] as string[],
     answerNumber: null as number | null,
     explanation: '',
   });
@@ -54,40 +57,27 @@ export default function EditMultipleChoicePage() {
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
-  // 퀴즈 데이터 가져오기
+  // 데이터 로딩 완료 시 초기화
   useEffect(() => {
-    const fetchQuizData = async () => {
-      try {
-        const response = await axiosInstance.get(`/quiz/${id}`);
-        const { result } = response.data;
-
-        setQuizData({
-          category: toKoreanCategory(result.category),
-          content: result.content,
-          options: result.options.map((option: any) => ({
-            optionNumber: option.optionNumber,
-            content: option.content,
-          })),
-          tags: result.tags || [],
-          answerNumber: result.answerNumber,
-          explanation: result.explanation,
-        });
-      } catch (error) {
-        console.error('퀴즈 데이터를 가져오는 중 오류 발생:', error);
-        setToastMessage({
-          message: '퀴즈 데이터를 불러오는 데 실패했습니다.',
-          icon: 'warning',
-        });
-        setToastOpen(true);
-      }
-    };
-
-    if (id) fetchQuizData();
-  }, [id]);
+    if (quizData) {
+      setUpdatedQuizData({
+        category: quizData.category,
+        content: quizData.content,
+        options: quizData.options.map((option) => ({
+          optionNumber: option.optionNumber,
+          content: option.content,
+          imageId: option.imageId || null,
+        })),
+        tags: quizData.tags,
+        answerNumber: quizData.answerNumber || null,
+        explanation: quizData.explanation || '',
+      });
+    }
+  }, [quizData]);
 
   // 입력 필드 변경 핸들러
   const handleInputChange = (field: string, value: string, maxLength?: number) => {
-    setQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) }));
+    setUpdatedQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) }));
     if (field !== 'options') {
       setFieldErrors((prev) => ({ ...prev, [field]: false }));
     }
@@ -95,10 +85,10 @@ export default function EditMultipleChoicePage() {
 
   // 선택지 변경 핸들러
   const handleOptionChange = (optionNumber: number, value: string) => {
-    const updatedOptions = quizData.options.map((option) =>
-      option.optionNumber === optionNumber ? { ...option, title: value.slice(0, 20) } : option,
+    const updatedOptions = updatedQuizData.options.map((option) =>
+      option.optionNumber === optionNumber ? { ...option, content: value.slice(0, 20) } : option,
     );
-    setQuizData((prev) => ({ ...prev, options: updatedOptions }));
+    setUpdatedQuizData((prev) => ({ ...prev, options: updatedOptions }));
 
     const updatedErrors = [...fieldErrors.options];
     updatedErrors[optionNumber - 1] = value.trim() === '';
@@ -107,7 +97,7 @@ export default function EditMultipleChoicePage() {
 
   // 정답 선택 핸들러
   const handleAnswerChange = (answer: number) => {
-    setQuizData((prev) => ({
+    setUpdatedQuizData((prev) => ({
       ...prev,
       answerNumber: prev.answerNumber === answer ? null : answer, // 기존 값을 취소하면 null로 설정
     }));
@@ -116,18 +106,18 @@ export default function EditMultipleChoicePage() {
 
   // 카테고리 선택 핸들러
   const handleCategoryChange = (category: string) => {
-    setQuizData((prev) => ({ ...prev, category }));
+    setUpdatedQuizData((prev) => ({ ...prev, category }));
     setFieldErrors((prev) => ({ ...prev, category: false }));
   };
 
   // 유효성 검사
   const validateFields = () => {
     const errors = {
-      category: quizData.category.trim() === '',
-      content: quizData.content.trim() === '',
-      options: quizData.options.map((option) => option.content.trim() === ''),
-      answerNumber: quizData.answerNumber === 0, // 정답 번호가 없으면 error
-      explanation: quizData.explanation.trim() === '',
+      category: updatedQuizData.category.trim() === '',
+      content: updatedQuizData.content.trim() === '',
+      options: updatedQuizData.options.map((option) => option.content.trim() === ''),
+      answerNumber: updatedQuizData.answerNumber === null,
+      explanation: updatedQuizData.explanation.trim() === '',
     };
 
     setFieldErrors(errors);
@@ -141,7 +131,7 @@ export default function EditMultipleChoicePage() {
   };
 
   // 제출 핸들러
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!validateFields()) {
       setToastMessage({
         message: '모든 항목을 작성해주세요.',
@@ -153,13 +143,13 @@ export default function EditMultipleChoicePage() {
 
     const payload = {
       id: Number(id),
-      category: toEnglishCategory(quizData.category),
+      category: toEnglishCategory(updatedQuizData.category),
       type: 'MULTIPLE_CHOICE',
-      content: quizData.content,
-      options: quizData.options,
-      answerNumber: quizData.answerNumber,
-      explanation: quizData.explanation,
-      tags: quizData.tags,
+      content: updatedQuizData.content,
+      options: updatedQuizData.options,
+      answerNumber: updatedQuizData.answerNumber,
+      explanation: updatedQuizData.explanation,
+      tags: updatedQuizData.tags,
       deleteImageIds: [],
     };
 
@@ -167,7 +157,8 @@ export default function EditMultipleChoicePage() {
       onSuccess: () => {
         setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
         setToastOpen(true);
-        navigate('/profile/quizManagement'); // 수정 완료 후 이동
+        queryClient.invalidateQueries({ queryKey: ['quizData', id] });
+        navigate('/profile/quizManagement');
       },
       onError: () => {
         setToastMessage({ message: '퀴즈 수정에 실패했습니다.', icon: 'warning' });
@@ -175,6 +166,10 @@ export default function EditMultipleChoicePage() {
       },
     });
   };
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <FlexBox direction="col">
@@ -216,8 +211,8 @@ export default function EditMultipleChoicePage() {
           <div className="mb-4">
             <Label content="태그" htmlFor="tags" className="mb-1" />
             <TagInput
-              tags={quizData.tags}
-              setTags={(tags) => setQuizData((prev) => ({ ...prev, tags }))}
+              tags={updatedQuizData.tags}
+              setTags={(tags) => setUpdatedQuizData((prev) => ({ ...prev, tags }))}
             />
           </div>
 
@@ -226,7 +221,7 @@ export default function EditMultipleChoicePage() {
             <Label content="카테고리" />
             <DropDown
               items={categories}
-              selectedItem={quizData.category}
+              selectedItem={updatedQuizData.category}
               setItem={handleCategoryChange}
               placeholder="카테고리를 선택하세요."
               alert="카테고리를 선택해주세요."
@@ -238,7 +233,7 @@ export default function EditMultipleChoicePage() {
           <div className="mb-4">
             <Label content="문제" />
             <TextArea
-              value={quizData.content}
+              value={updatedQuizData.content}
               onChange={(e) => handleInputChange('content', e.target.value, 42)}
               placeholder="문제를 입력하세요."
               size="M"
@@ -248,7 +243,7 @@ export default function EditMultipleChoicePage() {
 
           {/* 선택지 입력 */}
           <div className="mb-4">
-            {quizData.options.map((option) => (
+            {updatedQuizData.options.map((option) => (
               <div key={option.optionNumber} className="mb-2">
                 <Label content={`${option.optionNumber}번 선택지`} />
                 <TextField
@@ -267,13 +262,13 @@ export default function EditMultipleChoicePage() {
           <div className="mb-4">
             <Label content="정답" />
             <div className="flex flex-row items-center gap-4">
-              {quizData.options.map((option) => (
+              {updatedQuizData.options.map((option) => (
                 <Radio
                   key={option.optionNumber}
                   size="M"
                   state={fieldErrors.answerNumber ? 'error' : 'enable'}
                   title={`${option.optionNumber}`}
-                  checked={quizData.answerNumber === option.optionNumber}
+                  checked={updatedQuizData.answerNumber === option.optionNumber}
                   onChange={() => handleAnswerChange(option.optionNumber)}
                 />
               ))}
@@ -289,7 +284,7 @@ export default function EditMultipleChoicePage() {
           {/* 해설 입력 */}
           <Label content="해설" />
           <TextArea
-            value={quizData.explanation}
+            value={updatedQuizData.explanation}
             onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
             placeholder="해설을 입력하세요."
             size="M"
