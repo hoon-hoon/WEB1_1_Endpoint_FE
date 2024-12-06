@@ -16,11 +16,8 @@ import { convertQuizTypeForURL, convertQuizTypeForDisplay } from '@/utils/quizTy
 export default function MyQuizManagement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  // React Query로 퀴즈 데이터 Fetch
   const { data, isLoading, error } = useFetchMyQuizzes();
 
-  // Fetch된 데이터 상태 업데이트
   const [quizzes, setQuizzes] = useState<any[]>([]);
   const [selectedQuizId, setSelectedQuizId] = useState<number | null>(null); // 선택한 퀴즈 ID
   const [showDeleteDialog, setShowDeleteDialog] = useState(false); // 모달 표시 여부
@@ -36,7 +33,6 @@ export default function MyQuizManagement() {
     queryClient.invalidateQueries({ queryKey: ['myQuizzes'] });
   }, [queryClient]);
 
-  // 수정 페이지로 이동
   const handleEdit = (quizType: string, id: number) => {
     const urlType = convertQuizTypeForURL(quizType);
     navigate(`/quiz/edit/${urlType}/${id}`);
@@ -45,12 +41,11 @@ export default function MyQuizManagement() {
   const { mutate: deleteQuiz } = useDeleteQuiz({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myQuizzes'] }); // 캐시 무효화
-      console.log('퀴즈가 성공적으로 삭제되었습니다.');
-      setShowDeleteDialog(false); // 모달 닫기
+      setShowDeleteDialog(false);
     },
     onError: (error) => {
       console.error('퀴즈 삭제 실패:', error);
-      setShowDeleteDialog(false); // 모달 닫기
+      setShowDeleteDialog(false);
     },
   });
 
