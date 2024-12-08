@@ -1,6 +1,7 @@
 export default function handler(req, res) {
+  /*
   const userAgent = req.headers['user-agent'] || '';
-
+  
   // Bot 확인
   const isBot = /bot|crawl|spider|mediapartners/i.test(userAgent);
 
@@ -8,6 +9,7 @@ export default function handler(req, res) {
     res.status(200).send('Robots.txt is only for bots.');
     return;
   }
+  */
 
   // robots.txt 생성
   const robots = `User-agent: *
