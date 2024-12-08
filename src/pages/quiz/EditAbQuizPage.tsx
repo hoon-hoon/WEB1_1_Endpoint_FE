@@ -249,7 +249,7 @@ export default function EditABTestPage() {
             <Label content="문제" />
             <TextArea
               value={updatedQuizData.question}
-              onChange={(e) => handleInputChange('question', e.target.value, 42)} // 문제는 42자 제한
+              onChange={(e) => handleInputChange('question', e.target.value, 70)}
               placeholder="문제를 입력하세요."
               size="M"
               state={fieldErrors.question ? 'error' : 'enable'}

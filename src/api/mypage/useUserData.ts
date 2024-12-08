@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/api/axiosInstance';
-import { Achievement } from '@/pages/MyPage';
+import { Achievement } from '@/pages/profile/MyPage';
 
 export interface UserData {
   id: number;
