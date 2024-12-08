@@ -8,10 +8,11 @@ import { useModal } from '@/hooks/useModal';
 import { AchievementModal } from '@/components/mypage/AchievementModal';
 import UserModal from '@/components/mypage/UserModal';
 import WithDrawalModal from '@/components/mypage/WithDrawalModal';
-import ProfileSkeleton from '../components/mypage/skeleton/ProfileSkeleton';
-import AchievementSkeleton from '../components/mypage/skeleton/AchievementSkeleton';
+import ProfileSkeleton from '../../components/mypage/skeleton/ProfileSkeleton';
+import AchievementSkeleton from '../../components/mypage/skeleton/AchievementSkeleton';
 import FlexBox from '@/components/layout/FlexBox';
 import { useUserData } from '@/api/mypage/useUserData';
+import AboutPage from '@/components/common/AboutPage';
 
 export interface Achievement {
   achievementId: string;
@@ -34,6 +35,11 @@ export default function MyPage() {
 
   return (
     <Container>
+      <AboutPage
+        title="프로필페이지"
+        description="사용자의 프로필, 업적, 퀴즈 현황을 확인할 수 있는 페이지"
+        keywords="마이페이지, 프로필, 업적, 퀴즈, 사용자 통계"
+      />
       <TopBar />
       {isLoading ? (
         <>
@@ -62,13 +68,15 @@ export default function MyPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">정답률</p>
-                <p className="text-xl font-bold text-center">{profileData?.correctRate}%</p>
+                <p className="text-xl font-bold text-center">
+                  {Math.floor((profileData?.correctRate ?? 0) * 100)}%
+                </p>
               </div>
             </div>
           </Card>
 
           <Card>
-            <h3 className="mb-4 text-lg font-medium">업적</h3>
+            <h3 className="mb-4 text-lg font-bold">달성한 업적</h3>
             {achievedAchievements.length > 0 ? (
               <div className="space-y-4">
                 {achievedAchievements.map((achievement) => (

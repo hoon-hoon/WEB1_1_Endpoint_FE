@@ -2,11 +2,13 @@ import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import { QuizWithAnswer } from '@/types/WrongQuizTypes';
 import Card from '@/components/common/Card';
 
-interface ReviewNoteCardProps {
+export default function ReviewNoteCard({
+  quizData,
+  onUpdate,
+}: {
   quizData: QuizWithAnswer;
-}
-
-export default function ReviewNoteCard({ quizData }: ReviewNoteCardProps) {
+  onUpdate: (quizId: number) => void;
+}) {
   const { quiz, userAnswer } = quizData;
   const formattedDate = new Date(userAnswer.answeredAt)
     .toLocaleDateString('ko-KR', {
@@ -16,9 +18,16 @@ export default function ReviewNoteCard({ quizData }: ReviewNoteCardProps) {
     })
     .replace(/\. /g, '.');
 
+  const handleUpdate = () => {
+    onUpdate(quizData.quiz.id);
+  };
+
   return (
     <Card className="relative">
-      <button className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 rounded-full">
+      <button
+        onClick={handleUpdate}
+        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 rounded-full"
+      >
         <Icon icon="close" size={24} />
       </button>
 
