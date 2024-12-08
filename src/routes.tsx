@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import AuthLayout from './components/layout/AuthLayout';
+import RequireAuth from './components/auth/RequireAuth';
 import { LoginPage, InterestPage, CallbackPage } from './pages/Login';
 import { GamePage, MainPage, MyPage, SearchPage } from './pages';
 import {
@@ -30,36 +31,41 @@ const createRoutes = () => {
       ],
     },
     {
-      element: <MainLayout />,
+      element: <RequireAuth />, // 인증 가드 추가
       children: [
-        { path: '/main', element: <MainPage /> },
-        { path: '/game', element: <GamePage /> },
-        { path: '/search', element: <SearchPage /> },
         {
-          path: '/profile',
+          element: <MainLayout />,
           children: [
-            { path: '', element: <MyPage /> },
-            { path: 'reviewNote', element: <ReviewNote /> },
-            { path: 'quizManagement', element: <QuizManagement /> },
-          ],
-        },
-        {
-          path: '/quiz',
-          children: [
-            { path: 'ox', element: <OxPage /> },
-            { path: 'ab', element: <AbPage /> },
-            { path: 'multiple', element: <MultipleChoicePage /> },
-            { path: 'edit/ox/:id', element: <EditOxQuizPage /> },
-            { path: 'edit/ab/:id', element: <EditAbQuizPage /> },
-            { path: 'edit/multiple/:id', element: <EditMultipleQuizPage /> },
-          ],
-        },
-        {
-          path: '/game',
-          children: [
-            { path: 'create', element: <CreateGame /> },
-            { path: 'random', element: <RandomMatch /> },
-            { path: 'entry', element: <CodeEntry /> },
+            { path: '/main', element: <MainPage /> },
+            { path: '/game', element: <GamePage /> },
+            { path: '/search', element: <SearchPage /> },
+            {
+              path: '/profile',
+              children: [
+                { path: '', element: <MyPage /> },
+                { path: 'reviewNote', element: <ReviewNote /> },
+                { path: 'quizManagement', element: <QuizManagement /> },
+              ],
+            },
+            {
+              path: '/quiz',
+              children: [
+                { path: 'ox', element: <OxPage /> },
+                { path: 'ab', element: <AbPage /> },
+                { path: 'multiple', element: <MultipleChoicePage /> },
+                { path: 'edit/ox/:id', element: <EditOxQuizPage /> },
+                { path: 'edit/ab/:id', element: <EditAbQuizPage /> },
+                { path: 'edit/multiple/:id', element: <EditMultipleQuizPage /> },
+              ],
+            },
+            {
+              path: '/game',
+              children: [
+                { path: 'create', element: <CreateGame /> },
+                { path: 'random', element: <RandomMatch /> },
+                { path: 'entry', element: <CodeEntry /> },
+              ],
+            },
           ],
         },
       ],
