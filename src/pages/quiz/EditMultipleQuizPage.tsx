@@ -234,7 +234,7 @@ export default function EditMultipleChoicePage() {
             <Label content="문제" />
             <TextArea
               value={updatedQuizData.content}
-              onChange={(e) => handleInputChange('content', e.target.value, 42)}
+              onChange={(e) => handleInputChange('content', e.target.value, 70)}
               placeholder="문제를 입력하세요."
               size="M"
               state={fieldErrors.content ? 'error' : 'enable'}
@@ -285,7 +285,7 @@ export default function EditMultipleChoicePage() {
           <Label content="해설" />
           <TextArea
             value={updatedQuizData.explanation}
-            onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
+            onChange={(e) => handleInputChange('explanation', e.target.value, 100)}
             placeholder="해설을 입력하세요."
             size="M"
             state={fieldErrors.explanation ? 'error' : 'enable'}
