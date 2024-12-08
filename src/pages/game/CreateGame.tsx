@@ -2,16 +2,17 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '@/stores/useGameStore';
 import useCreateGame, { CreateGameResponse } from '@/api/game/useCreateGame';
-import TopBar from '@/components/common/TopBar';
-import DropDown from '@/components/common/DropDown';
 import NumberStepper from '@eolluga/eolluga-ui/Input/NumberStepper';
 import Container from '@/components/layout/Container';
 import FlexBox from '@/components/layout/FlexBox';
+import TopBar from '@/components/common/TopBar';
+import DropDown from '@/components/common/DropDown';
 import Label from '@/components/common/Label';
 import Card from '@/components/common/Card';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import { Topic } from '@/types/GameTypes';
 import { useStompStore } from '@/api/game/useStompStore';
+import { Loader2 } from 'lucide-react';
 
 const topics: Topic[] = [
   '알고리즘',
@@ -40,6 +41,7 @@ export default function CreateGame() {
 
   const [isTopicSelected, setIsTopicSelected] = useState(false);
   const [isDifficultySelected, setIsDifficultySelected] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCount = (count: React.SetStateAction<number>) => {
     const newCount = typeof count === 'number' ? count : Number(count);
@@ -56,6 +58,7 @@ export default function CreateGame() {
       setIsDifficultySelected(true);
     }
     if (topic && difficulty) {
+      setIsLoading(true);
       createGame(
         {
           subject: topic,
@@ -71,6 +74,7 @@ export default function CreateGame() {
             updateLevel(res.result.level);
             updateInviteCode(res.result.inviteCode);
             navigate('/game/waiting');
+            setIsLoading(false);
           },
         },
       );
@@ -116,8 +120,17 @@ export default function CreateGame() {
           </div>
         </Card>
 
-        <ShadcnButton className="w-full h-14 text-lg" size="lg" onClick={() => createRoom()}>
-          방 생성하기
+        <ShadcnButton
+          className="w-full h-14 text-lg"
+          size="lg"
+          onClick={() => createRoom()}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin"> 방 생성 중... </Loader2>
+          ) : (
+            <>방 생성하기</>
+          )}
         </ShadcnButton>
       </Container>
     </FlexBox>

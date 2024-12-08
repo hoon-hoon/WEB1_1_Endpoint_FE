@@ -3,6 +3,8 @@ import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useEffect, useState } from 'react';
 import { QuizAns, QuizFooter, QuizRenderer } from '.';
 import BottomSheet from '../common/BottomSheet';
+import { useToggleLike } from '@/api/updateLike';
+import { usePostAnswer } from '@/api/quiz/postAnswer';
 
 interface QuizWrapperProps {
   quiz: BaseQuizAPI;
@@ -10,11 +12,13 @@ interface QuizWrapperProps {
 
 function QuizWrapper({ quiz }: QuizWrapperProps) {
   const [isLiked, setIsLiked] = useState(quiz.liked || false);
-  const [likes] = useState(quiz.count.like);
+  const [likes, setLikes] = useState(quiz.count.like);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(quiz.answeredOption ?? null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [isBottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [isAnswerVisible, setIsAnswerVisible] = useState(false);
+
+  const submitAnswerMutation = usePostAnswer();
 
   useEffect(() => {
     if (selectedAnswer !== null) {
@@ -27,6 +31,9 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
   }, [selectedAnswer]);
 
   const handleAnswerSelect = (answer: number) => {
+    setSelectedAnswer(answer);
+    submitAnswerMutation.mutate({ quizId: quiz.id, choiceNumber: answer });
+
     if (selectedAnswer !== null) return;
     setSelectedAnswer(answer);
     if (quiz.answer) {
@@ -42,6 +49,20 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
 
   const authorName = quiz.author?.name || 'default';
   const authorImage = quiz.author?.imagePath || '/';
+
+  const toggleLikeMutation = useToggleLike(
+    () => {
+      setIsLiked((prev) => !prev);
+      setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
+    },
+    (error) => {
+      console.error('좋아요 요청 중 오류 발생:', error);
+    },
+  );
+
+  const handleToggleLike = () => {
+    toggleLikeMutation.mutate(quiz.id);
+  };
 
   return (
     <div className="flex justify-center">
@@ -75,7 +96,7 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
           likes={likes}
           comments={quiz.count.comment}
           isLiked={isLiked}
-          onToggleLike={() => setIsLiked(!isLiked)}
+          onToggleLike={handleToggleLike}
           onCommentsClick={() => setBottomSheetOpen(true)}
         />
       </div>

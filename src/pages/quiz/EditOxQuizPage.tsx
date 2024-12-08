@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-// import axios from 'axios'; // 서버 연결 시 다시 활성화
+import { useQueryClient } from '@tanstack/react-query';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import FlexBox from '@/components/layout/FlexBox';
 import Radio from '@eolluga/eolluga-ui/Input/Radio';
@@ -12,17 +12,11 @@ import Container from '@/components/layout/Container';
 import DropDown from '@/components/common/DropDown';
 import Label from '@/components/common/Label';
 import ToastMessage from '@/components/common/ToastMessage';
+import TagInput from '@/components/common/TagInput';
+import useUpdateQuiz from '@/api/quiz/useUpdateQuiz';
+import useFetchQuizData from '@/api/quiz/useFetchQuizData'; // React Query 훅
+import { toEnglishCategory } from '@/utils/categoryConverter';
 
-// Mock 데이터
-const MOCK_DATA = {
-  category: '알고리즘', // 카테고리
-  type: 'OX',
-  content: 'OX 퀴즈 내용~~~', // 질문
-  answer: 'O', // 정답
-  explanation: '해설~~~~~~~~~', // 해설
-};
-
-// 카테고리 목록
 const categories = [
   '알고리즘',
   '프로그래밍 언어',
@@ -38,66 +32,71 @@ const categories = [
 export default function EditOxQuizPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { mutate: updateQuizMutate } = useUpdateQuiz();
 
-  const [quizData, setQuizData] = useState({
-    category: '', // 카테고리
-    content: '', // 질문
-    answer: '', // 정답
-    explanation: '', // 해설
+  const { data: quizData, isLoading } = useFetchQuizData(id!);
+
+  const [updatedQuizData, setUpdatedQuizData] = useState({
+    category: '',
+    content: '',
+    answerNumber: null as number | null,
+    explanation: '',
+    tags: [] as string[],
   });
 
   const [fieldErrors, setFieldErrors] = useState({
     category: false,
     content: false,
     explanation: false,
-    answer: false,
+    answerNumber: false,
   });
 
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState({ message: '', icon: 'check' });
 
+  // 데이터 로딩 완료 시 초기화
   useEffect(() => {
-    // Mock 데이터 로드
-    setQuizData(MOCK_DATA);
+    if (quizData) {
+      setUpdatedQuizData({
+        category: quizData.category,
+        content: quizData.content,
+        answerNumber: quizData.answerNumber || null,
+        explanation: quizData.explanation || '',
+        tags: quizData.tags,
+      });
+    }
+  }, [quizData]);
 
-    // 서버 연결 시 활성화
-    // const fetchQuiz = async () => {
-    //   try {
-    //     const response = await axios.get(`/api/quiz/${id}`);
-    //     setQuizData(response.data.result);
-    //   } catch (error) {
-    //     console.error('퀴즈 데이터를 불러오는 중 오류 발생:', error);
-    //   }
-    // };
-    // fetchQuiz();
-  }, [id]);
-
-  const handleInputChange = (field: keyof typeof quizData, value: string, maxLength?: number) => {
-    setQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) })); // 최대 글자 수 제한
+  const handleInputChange = (
+    field: keyof typeof updatedQuizData,
+    value: string,
+    maxLength?: number,
+  ) => {
+    setUpdatedQuizData((prev) => ({ ...prev, [field]: value.slice(0, maxLength) }));
     setFieldErrors((prev) => ({ ...prev, [field]: false }));
   };
 
-  const handleAnswerChange = (answer: string) => {
-    // 동일한 답변 클릭 시 선택 해제
-    setQuizData((prev) => ({
+  const handleAnswerChange = (answer: number) => {
+    setUpdatedQuizData((prev) => ({
       ...prev,
-      answer: prev.answer === answer ? '' : answer,
+      answerNumber: prev.answerNumber === answer ? null : answer, // 기존 값을 취소하면 null로 설정
     }));
-    setFieldErrors((prev) => ({ ...prev, answer: false }));
+    setFieldErrors((prev) => ({ ...prev, answerNumber: false }));
   };
 
   const validateFields = () => {
     const errors = {
-      category: quizData.category.trim() === '',
-      content: quizData.content.trim() === '',
-      explanation: quizData.explanation.trim() === '',
-      answer: quizData.answer === '',
+      category: updatedQuizData.category.trim() === '',
+      content: updatedQuizData.content.trim() === '',
+      explanation: updatedQuizData.explanation.trim() === '',
+      answerNumber: updatedQuizData.answerNumber === null,
     };
     setFieldErrors(errors);
     return !Object.values(errors).some((err) => err); // 에러가 없으면 true 반환
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!validateFields()) {
       setToastMessage({
         message: '모든 항목을 작성해주세요.',
@@ -108,33 +107,38 @@ export default function EditOxQuizPage() {
     }
 
     const payload = {
-      id: id, // 퀴즈 ID
-      category: quizData.category,
+      id: Number(id),
+      category: toEnglishCategory(updatedQuizData.category),
       type: 'OX',
-      content: quizData.content,
+      content: updatedQuizData.content,
       options: [
         { optionNumber: 1, content: 'O', imageId: null },
         { optionNumber: 2, content: 'X', imageId: null },
       ],
-      answer: quizData.answer,
-      explanation: quizData.explanation,
+      answerNumber: updatedQuizData.answerNumber,
+      explanation: updatedQuizData.explanation,
+      tags: updatedQuizData.tags,
+      deleteImageIds: [], // OX 퀴즈는 이미지가 없으므로 비워둠
     };
 
-    console.log('Payload for submission:', payload);
+    updateQuizMutate(payload, {
+      onSuccess: () => {
+        setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
+        setToastOpen(true);
 
-    setToastMessage({ message: '퀴즈가 성공적으로 수정되었습니다!', icon: 'check' });
-    setToastOpen(true);
-
-    // 서버 연결 시 활성화
-    // try {
-    //   await axios.put(`/api/quiz/${id}`, payload);
-    //   alert('퀴즈가 성공적으로 수정되었습니다.');
-    //   navigate('/profile/quizManagement');
-    // } catch (error) {
-    //   console.error('퀴즈 수정 중 오류 발생:', error);
-    //   alert('퀴즈 수정 중 오류가 발생했습니다.');
-    // }
+        queryClient.invalidateQueries({ queryKey: ['quizData'] });
+        navigate('/profile/quizManagement');
+      },
+      onError: () => {
+        setToastMessage({ message: '퀴즈 수정에 실패했습니다.', icon: 'warning' });
+        setToastOpen(true);
+      },
+    });
   };
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <FlexBox direction="col">
@@ -173,23 +177,33 @@ export default function EditOxQuizPage() {
             </div>
           </div>
 
+          {/* 태그 입력 */}
+          <div className="mb-4">
+            <Label content="태그" htmlFor="tags" className="mb-1" />
+            <TagInput
+              tags={updatedQuizData.tags}
+              setTags={(tags) => setUpdatedQuizData((prev) => ({ ...prev, tags }))}
+            />
+          </div>
+
           {/* 카테고리 선택 */}
           <div className="mb-4">
             <Label content="카테고리" htmlFor="category" className="mb-1" />
             <DropDown
               items={categories}
-              selectedItem={quizData.category}
+              selectedItem={updatedQuizData.category}
               setItem={(value: string) => handleInputChange('category', value)}
               placeholder="카테고리를 선택하세요"
               alert="카테고리를 선택해주세요."
-              required={fieldErrors.category && quizData.category === ''}
+              required={fieldErrors.category}
             />
           </div>
 
+          {/* 문제 입력 */}
           <div className="mb-4">
             <Label content="문제" />
             <TextArea
-              value={quizData.content}
+              value={updatedQuizData.content}
               onChange={(e) => handleInputChange('content', e.target.value, 42)}
               placeholder="문제를 입력하세요."
               size="M"
@@ -197,25 +211,26 @@ export default function EditOxQuizPage() {
             />
           </div>
 
+          {/* 정답 선택 */}
           <div className="mb-4">
             <Label content="정답" />
             <div className="flex flex-row items-center gap-4">
               <Radio
                 size="M"
-                state={fieldErrors.answer ? 'error' : 'enable'}
+                state={fieldErrors.answerNumber ? 'error' : 'enable'}
                 title="O"
-                checked={quizData.answer === 'O'}
-                onChange={() => handleAnswerChange('O')}
+                checked={updatedQuizData.answerNumber === 1}
+                onChange={() => handleAnswerChange(1)}
               />
               <Radio
                 size="M"
-                state={fieldErrors.answer ? 'error' : 'enable'}
+                state={fieldErrors.answerNumber ? 'error' : 'enable'}
                 title="X"
-                checked={quizData.answer === 'X'}
-                onChange={() => handleAnswerChange('X')}
+                checked={updatedQuizData.answerNumber === 2}
+                onChange={() => handleAnswerChange(2)}
               />
             </div>
-            {fieldErrors.answer && (
+            {fieldErrors.answerNumber && (
               <div className="mt-2 flex items-center text-red-500 text-sm">
                 <Icon icon="warning_triangle_filled" className="mr-2" size={16} />
                 정답을 선택해주세요.
@@ -223,9 +238,10 @@ export default function EditOxQuizPage() {
             )}
           </div>
 
+          {/* 해설 입력 */}
           <Label content="해설" />
           <TextArea
-            value={quizData.explanation}
+            value={updatedQuizData.explanation}
             onChange={(e) => handleInputChange('explanation', e.target.value, 70)}
             placeholder="해설을 입력하세요."
             size="M"

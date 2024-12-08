@@ -7,9 +7,15 @@ interface CommentSectionProps {
   comments: Comment[];
   loading?: boolean;
   onDelete: (commentId: number) => void;
+  onReply: (parentCommentId: number) => void;
 }
 
-export default function CommentSection({ comments, loading, onDelete }: CommentSectionProps) {
+export default function CommentSection({
+  comments,
+  loading,
+  onDelete,
+  onReply,
+}: CommentSectionProps) {
   const [expandedComments, setExpandedComments] = useState<{ [key: number]: boolean }>({});
 
   const toggleReplies = (commentId: number) => {
@@ -38,6 +44,7 @@ export default function CommentSection({ comments, loading, onDelete }: CommentS
         onDelete={onDelete}
         expandedComments={expandedComments}
         toggleReplies={toggleReplies}
+        onReply={onReply}
       />
     </div>
   );
