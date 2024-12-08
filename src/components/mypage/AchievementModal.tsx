@@ -1,5 +1,6 @@
 import Container from '@/components/layout/Container';
 import Icon from '@eolluga/eolluga-ui/icon/Icon';
+import { getAchievementIcon } from '@/utils/achievementIcons';
 
 interface Achievement {
   achievementId: string;
@@ -38,12 +39,17 @@ export function AchievementModal({ isOpen, onClose, achievements }: ModalProps) 
           </div>
           <div className="space-y-4 max-h-[calc(100vh-341px)] overflow-y-scroll">
             {achievements.length > 0 ? (
-              achievements.map((achievement) => (
-                <div
-                  key={achievement.achievementId}
-                  className="rounded-xl border p-4 border-gray-200 bg-gray-50"
-                >
-                  <div className="flex items-center gap-4">
+              achievements.map((achievement) => {
+                const AchievementIcon = getAchievementIcon(achievement.achievementId);
+
+                return (
+                  <div
+                    key={achievement.achievementId}
+                    className="rounded-xl border p-4 border-gray-200 bg-gray-50 flex items-center"
+                  >
+                    <div className="mr-4">
+                      <AchievementIcon className="text-4xl text-indigo-500" />
+                    </div>
                     <div>
                       <h4 className="font-medium">{achievement.title}</h4>
                       <p className="text-gray-600">{achievement.description}</p>
@@ -52,8 +58,8 @@ export function AchievementModal({ isOpen, onClose, achievements }: ModalProps) 
                       </p>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="flex items-center justify-center py-8">
                 <p className="text-gray-500">달성한 업적이 없습니다</p>

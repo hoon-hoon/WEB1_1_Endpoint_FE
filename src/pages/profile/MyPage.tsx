@@ -13,6 +13,7 @@ import AchievementSkeleton from '../../components/mypage/skeleton/AchievementSke
 import FlexBox from '@/components/layout/FlexBox';
 import { useUserData } from '@/api/mypage/useUserData';
 import AboutPage from '@/components/common/AboutPage';
+import { getAchievementIcon } from '@/utils/achievementIcons';
 
 export interface Achievement {
   achievementId: string;
@@ -79,17 +80,22 @@ export default function MyPage() {
             <h3 className="mb-4 text-lg font-bold">달성한 업적</h3>
             {achievedAchievements.length > 0 ? (
               <div className="space-y-4">
-                {achievedAchievements.map((achievement) => (
-                  <div key={achievement.achievementId} className="flex items-center gap-4">
-                    <div>
-                      <p className="font-medium text-gray-800">{achievement.title}</p>
-                      <p className="text-sm text-gray-600">{achievement.description}</p>
-                      <p className="text-xs text-gray-400">
-                        {new Date(achievement.achievedAt).toLocaleDateString()}
-                      </p>
+                {achievedAchievements.map((achievement) => {
+                  const AchievementIcon = getAchievementIcon(achievement.achievementId);
+
+                  return (
+                    <div key={achievement.achievementId} className="flex items-center gap-4">
+                      <AchievementIcon className="text-2xl text-indigo-500" />
+                      <div>
+                        <p className="font-medium text-gray-800">{achievement.title}</p>
+                        <p className="text-sm text-gray-600">{achievement.description}</p>
+                        <p className="text-xs text-gray-400">
+                          {new Date(achievement.achievedAt).toLocaleDateString()}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <p className="text-gray-500">아직 달성한 업적이 없습니다</p>
