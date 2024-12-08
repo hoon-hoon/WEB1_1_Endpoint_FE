@@ -33,8 +33,6 @@ export default function MyPage() {
         .slice(0, 3)
     : [];
 
-  console.log(profileData);
-
   return (
     <Container>
       <AboutPage
