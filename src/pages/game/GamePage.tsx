@@ -8,7 +8,7 @@ import TopBar from '@/components/common/TopBar';
 import Container from '@/components/layout/Container';
 import FlexBox from '@/components/layout/FlexBox';
 import { Skeleton } from '@/shadcn/ui/skeleton';
-import { AboutPage } from '@/components';
+import AboutPage from '@/components/common/AboutPage';
 
 export default function Game() {
   const navigate = useNavigate();

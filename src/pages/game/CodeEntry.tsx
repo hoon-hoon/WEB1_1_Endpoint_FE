@@ -11,7 +11,7 @@ import { ArrowRight } from 'lucide-react';
 import Container from '@/components/layout/Container';
 import Card from '@/components/common/Card';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
-import { AboutPage } from '@/components';
+import AboutPage from '@/components/common/AboutPage';
 
 export default function CodeEntry() {
   const navigate = useNavigate();

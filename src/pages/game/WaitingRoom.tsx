@@ -16,7 +16,7 @@ import Label from '@/components/common/Label';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import ToastMessage from '@/components/common/ToastMessage';
 import LoadingSpinner from '@/components/game/LoadingSpinner';
-import { AboutPage } from '@/components';
+import AboutPage from '@/components/common/AboutPage';
 
 const WaitingRoom = () => {
   const navigate = useNavigate();

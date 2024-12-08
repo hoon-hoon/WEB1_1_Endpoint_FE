@@ -13,7 +13,7 @@ import FlexBox from '@/components/layout/FlexBox';
 import Container from '@/components/layout/Container';
 import NotFound from '@/components/game/NotFound';
 import { GameQuiz } from '@/types/GameTypes';
-import { AboutPage } from '@/components';
+import AboutPage from '@/components/common/AboutPage';
 
 export default function GameProgress() {
   const navigate = useNavigate();

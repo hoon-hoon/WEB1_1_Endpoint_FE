@@ -13,7 +13,7 @@ import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import { Topic } from '@/types/GameTypes';
 import { useStompStore } from '@/api/game/useStompStore';
 import { Loader2 } from 'lucide-react';
-import { AboutPage } from '@/components';
+import AboutPage from '@/components/common/AboutPage';
 
 const topics: Topic[] = [
   '알고리즘',

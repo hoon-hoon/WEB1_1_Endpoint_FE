@@ -9,7 +9,7 @@ import TopBar from '@/components/common/TopBar';
 import Card from '@/components/common/Card';
 import { Button as ShadcnButton } from '@/shadcn/ui/button';
 import LoadingSpinner from '@/components/game/LoadingSpinner';
-import { AboutPage } from '@/components';
+import AboutPage from '@/components/common/AboutPage';
 
 type MatchEvent = {
   roomId: number;

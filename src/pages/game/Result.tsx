@@ -8,7 +8,7 @@ import Container from '@/components/layout/Container';
 import Celebrate from './Celebrate';
 import { Rank } from '@/types/GameTypes';
 import { useGameStore } from '@/stores/useGameStore';
-import { AboutPage } from '@/components';
+import AboutPage from '@/components/common/AboutPage';
 
 export default function Result() {
   const { rank, results, players } = useGameStore();
