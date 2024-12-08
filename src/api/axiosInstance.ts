@@ -29,8 +29,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+    //console.log(error.response.status);
+    console.log(originalRequest);
+    if (error.response.status === 401) {
+      //originalRequest._retry = true;
       try {
         // 원래 요청 재시도
         const refreshResponse = await axios.post(
@@ -38,6 +40,7 @@ axiosInstance.interceptors.response.use(
           {},
           { withCredentials: true },
         );
+        console.log(refreshResponse.data);
         const { accessToken } = refreshResponse.data.result;
         localStorage.setItem('accessToken', accessToken);
         return axiosInstance(originalRequest);
