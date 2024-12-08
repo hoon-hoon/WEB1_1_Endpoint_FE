@@ -12,6 +12,7 @@ import ProfileSkeleton from '../../components/mypage/skeleton/ProfileSkeleton';
 import AchievementSkeleton from '../../components/mypage/skeleton/AchievementSkeleton';
 import FlexBox from '@/components/layout/FlexBox';
 import { useUserData } from '@/api/mypage/useUserData';
+import AboutPage from '@/components/common/AboutPage';
 
 export interface Achievement {
   achievementId: string;
@@ -36,6 +37,11 @@ export default function MyPage() {
 
   return (
     <Container>
+      <AboutPage
+        title="프로필페이지"
+        description="사용자의 프로필, 업적, 퀴즈 현황을 확인할 수 있는 페이지"
+        keywords="마이페이지, 프로필, 업적, 퀴즈, 사용자 통계"
+      />
       <TopBar />
       {isLoading ? (
         <>

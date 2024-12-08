@@ -5,6 +5,7 @@ import Container from '@/components/layout/Container';
 import FlexBox from '@/components/layout/FlexBox';
 import { Loader2 } from 'lucide-react';
 import { useReviewNote } from '@/hooks/useReviewNote';
+import AboutPage from '@/components/common/AboutPage';
 
 export default function ReviewNote() {
   const { incorrectQuizzes, isPending, isError, error, updateQuizReviewStatus } = useReviewNote();
@@ -12,6 +13,11 @@ export default function ReviewNote() {
 
   return (
     <Container>
+      <AboutPage
+        title="오답노트"
+        description="사용자가 틀린 퀴즈들의 오답노트를 확인 할 수 있는 페이지"
+        keywords="퀴즈, 오답노트"
+      />
       <TopBar leftIcon="left" leftText="오답노트" onClickLeft={() => navigate('/profile')} />
       {isPending ? (
         <div className="flex justify-center items-center h-[calc(100vh-100px)]">
