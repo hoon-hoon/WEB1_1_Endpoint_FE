@@ -7,24 +7,25 @@ import Container from '@/components/layout/Container';
 import QuizCard from './QuizCard';
 import useQuizFeed from '@/api/main/fetchQuiz';
 import Spinner from '@/components/common/Spinner';
+import { useState } from 'react';
 
 const MainPage = () => {
-  const { data, fetchNextPage, hasNextPage, isFetching, isError } = useQuizFeed();
+  const { data, fetchNextPage, hasNextPage, isError } = useQuizFeed();
 
   const quizzes = data?.pages.flatMap((page) => page.quizzes) || [];
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  // 최초 로딩 판단
+  const isLoadingInitialData = !data && !isError;
 
   return (
     <>
       <TopBar />
       <Container>
-        {isFetching ? (
+        {isLoadingInitialData ? (
           <div className="flex flex-col items-center justify-center h-[80dvh] space-y-4">
             <Spinner />
             <p className="text-gray-600">퀴즈를 불러오고 있습니다...</p>
-          </div>
-        ) : quizzes.length === 0 ? (
-          <div className="flex items-center justify-center h-[80dvh] text-gray-600">
-            퀴즈가 없습니다.
           </div>
         ) : (
           <Swiper
@@ -34,6 +35,10 @@ const MainPage = () => {
             onReachEnd={() => {
               if (hasNextPage) fetchNextPage();
             }}
+            onSlideChange={(swiper) => {
+              setCurrentSlideIndex(swiper.activeIndex);
+            }}
+            initialSlide={currentSlideIndex}
           >
             {quizzes.map((quiz) => (
               <SwiperSlide key={quiz.id}>
