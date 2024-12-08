@@ -32,6 +32,8 @@ export default function MyPage() {
         .slice(0, 3)
     : [];
 
+  console.log(profileData);
+
   return (
     <Container>
       <TopBar />
@@ -62,7 +64,9 @@ export default function MyPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">정답률</p>
-                <p className="text-xl font-bold text-center">{profileData?.correctRate}%</p>
+                <p className="text-xl font-bold text-center">
+                  {Math.floor((profileData?.correctRate ?? 0) * 100)}%
+                </p>
               </div>
             </div>
           </Card>
