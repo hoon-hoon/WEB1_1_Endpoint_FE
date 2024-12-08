@@ -15,10 +15,8 @@ import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play, Result } from '.
 import ReviewNote from './pages/profile/ReviewNote';
 import QuizManagement from './pages/profile/QuizManagement';
 import NotFound from './components/game/NotFound';
-import { useState } from 'react';
 
 const createRoutes = () => {
-  const [activeTab, setActiveTab] = useState('home');
   // [Should]: AuthLayout과 MainLayout에서 로그인 여부를 체크하여 로그인 여부에 따라 접근 제한을 하시는게 좋을거같습니다.
   return createBrowserRouter([
     {
@@ -32,7 +30,7 @@ const createRoutes = () => {
       ],
     },
     {
-      element: <MainLayout activeTab={activeTab} setActiveTab={setActiveTab} />,
+      element: <MainLayout />,
       children: [
         { path: '/main', element: <MainPage /> },
         { path: '/game', element: <GamePage /> },
