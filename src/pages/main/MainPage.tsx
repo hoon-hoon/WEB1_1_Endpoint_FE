@@ -27,6 +27,10 @@ const MainPage = () => {
             <Spinner />
             <p className="text-gray-600">퀴즈를 불러오고 있습니다...</p>
           </div>
+        ) : quizzes.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-[80dvh] text-gray-600">
+            <p>현재 퀴즈가 없습니다. 새로 추가될 퀴즈를 기다려주세요!</p>
+          </div>
         ) : (
           <Swiper
             direction="vertical"
