@@ -61,6 +61,11 @@ const SearchPage = () => {
 
   return (
     <>
+      <AboutPage
+        title="검색페이지"
+        description="원하는 키워드와 인기 태그로 퀴즈를 검색하고, 최신 퀴즈와 인기 퀴즈를 확인하세요."
+        keywords="퀴즈 검색, 태그 검색, 최신 퀴즈, 인기 퀴즈, OX퀴즈, 객관식, AB테스트"
+      />
       <TopBar />
       <Container>
         <SearchBar

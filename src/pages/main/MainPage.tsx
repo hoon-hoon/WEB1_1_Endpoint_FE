@@ -8,6 +8,7 @@ import QuizCard from './QuizCard';
 import useQuizFeed from '@/api/main/fetchQuiz';
 import Spinner from '@/components/common/Spinner';
 import { useState } from 'react';
+import AboutPage from '@/components/common/AboutPage';
 
 const MainPage = () => {
   const { data, fetchNextPage, hasNextPage, isError } = useQuizFeed();
@@ -20,6 +21,11 @@ const MainPage = () => {
 
   return (
     <>
+      <AboutPage
+        title="메인페이지"
+        description="다양한 카테고리의 최신 퀴즈를 즐겨보세요. OX퀴즈, 객관식 퀴즈, 맞춤형 퀴즈 제공."
+        keywords="메인페이지, 피드, 퀴즈, OX퀴즈, 객관식, AB테스트, 맞춤형"
+      />
       <TopBar />
       <Container>
         {isLoadingInitialData ? (
