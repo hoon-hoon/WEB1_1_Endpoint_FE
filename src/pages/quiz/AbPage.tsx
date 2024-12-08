@@ -243,7 +243,7 @@ export default function ABTestPage() {
             <Label content="문제" htmlFor="quiz-question" className="mb-1" />
             <TextArea
               value={formData.question}
-              onChange={(e) => handleInputChange('question', e.target.value, 42)}
+              onChange={(e) => handleInputChange('question', e.target.value, 70)}
               placeholder="문제를 입력하세요."
               size="M"
               state={fieldErrors.question ? 'error' : 'enable'}

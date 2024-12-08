@@ -255,7 +255,7 @@ export default function MultipleChoicePage() {
             <Label content="문제" htmlFor="quiz-question" className="mb-1" />
             <TextArea
               value={formData.question}
-              onChange={(e) => handleInputChange('question', e.target.value, 42)} // 42글자 제한
+              onChange={(e) => handleInputChange('question', e.target.value, 70)} // 42글자 제한
               placeholder="문제를 입력하세요."
               size="M"
               state={fieldErrors.question ? 'error' : 'enable'}
@@ -310,7 +310,7 @@ export default function MultipleChoicePage() {
           <Label content="해설" htmlFor="explanation" className="mb-1" />
           <TextArea
             value={formData.explanation}
-            onChange={(e) => handleInputChange('explanation', e.target.value, 70)} // 70글자 제한
+            onChange={(e) => handleInputChange('explanation', e.target.value, 100)} // 70글자 제한
             placeholder="해설을 입력하세요."
             size="M"
             state={fieldErrors.explanation ? 'error' : 'enable'}
