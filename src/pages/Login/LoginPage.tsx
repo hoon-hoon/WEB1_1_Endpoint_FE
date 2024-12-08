@@ -3,10 +3,16 @@ import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
 import Container from '@/components/layout/Container';
 import FlexBox from '@/components/layout/FlexBox';
 import { SiQuizlet } from 'react-icons/si';
+import AboutPage from '@/components/common/AboutPage';
 
 function LoginPage() {
   return (
     <Container className="h-full flex flex-col justify-between">
+      <AboutPage
+        title="로그인"
+        description="Quizy 로그인 페이지"
+        keywords="로그인, 인증, 구글, 카카오"
+      />
       {/* Quizy 소개 */}
       <div className="grid place-items-center animate-fadeIn">
         <div className="flex flex-col items-center">
