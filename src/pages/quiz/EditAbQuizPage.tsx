@@ -18,6 +18,7 @@ import useUpdateQuiz from '@/api/quiz/useUpdateQuiz';
 import { useFetchQuizData, fetchImageUrl } from '@/api/quiz/useFetchQuizData';
 import { uploadImage } from '@/api/quiz/useUploadImage';
 import { toEnglishCategory } from '@/utils/categoryConverter';
+import AboutPage from '@/components/common/AboutPage';
 
 // 카테고리 목록
 const categories = [
@@ -191,6 +192,11 @@ export default function EditABTestPage() {
 
   return (
     <FlexBox direction="col">
+      <AboutPage
+        title="AB 테스트"
+        description="내가 만든 AB 테스트를 수정하기 위한 페이지입니다."
+        keywords="quiz, AB, 퀴즈, AB 테스트"
+      />
       <Container>
         <TopBar
           leftIcon="left"

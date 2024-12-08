@@ -14,6 +14,7 @@ import ToastMessage from '@/components/common/ToastMessage';
 import TagInput from '@/components/common/TagInput';
 import useCreateQuiz from '@/api/quiz/useCreateQuiz';
 import { toEnglishCategory } from '@/utils/categoryConverter';
+import AboutPage from '@/components/common/AboutPage';
 
 // 카테고리 목록
 const categories = [
@@ -148,6 +149,11 @@ export default function OXQuizPage() {
 
   return (
     <FlexBox direction="col">
+      <AboutPage
+        title="OX 퀴즈"
+        description="내가 원하는 주제로 OX 퀴즈를 만들어보세요."
+        keywords="quiz, OX, 퀴즈, OX 퀴즈"
+      />
       <Container>
         <TopBar
           leftIcon="left"

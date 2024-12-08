@@ -12,6 +12,7 @@ import Icon from '@eolluga/eolluga-ui/icon/Icon';
 import BadgeIcon from '@eolluga/eolluga-ui/Display/BadgeIcon';
 import Dialog from '@/components/common/Dialog';
 import { convertQuizTypeForURL, convertQuizTypeForDisplay } from '@/utils/quizTypeConverter';
+import AboutPage from '@/components/common/AboutPage';
 
 export default function MyQuizManagement() {
   const navigate = useNavigate();
@@ -70,6 +71,11 @@ export default function MyQuizManagement() {
 
   return (
     <Container>
+      <AboutPage
+        title="내 퀴즈 관리"
+        description="내가 작성한 퀴즈를 확인하고 수정할 수 있는 페이지"
+        keywords="quiz"
+      />
       <TopBar leftIcon="left" leftText="내 퀴즈 관리" onClickLeft={() => navigate('/profile')} />
       <FlexBox>
         <div className="w-full space-y-3">

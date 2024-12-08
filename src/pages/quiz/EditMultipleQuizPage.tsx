@@ -17,6 +17,7 @@ import TagInput from '@/components/common/TagInput';
 import useUpdateQuiz from '@/api/quiz/useUpdateQuiz';
 import useFetchQuizData from '@/api/quiz/useFetchQuizData';
 import { toEnglishCategory } from '@/utils/categoryConverter';
+import AboutPage from '@/components/common/AboutPage';
 
 const categories = [
   '알고리즘',
@@ -173,6 +174,11 @@ export default function EditMultipleChoicePage() {
 
   return (
     <FlexBox direction="col">
+      <AboutPage
+        title="객관식 퀴즈"
+        description="내가 만든 객관식 퀴즈를 수정하기 위한 페이지입니다."
+        keywords="quiz, Multiple, 퀴즈, 객관식 퀴즈"
+      />
       <Container>
         <TopBar
           leftIcon="left"

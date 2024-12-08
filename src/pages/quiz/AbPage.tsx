@@ -16,6 +16,7 @@ import TagInput from '@/components/common/TagInput';
 import useUploadImage from '@/api/quiz/useUploadImage';
 import useCreateQuiz from '@/api/quiz/useCreateQuiz';
 import { toEnglishCategory } from '@/utils/categoryConverter';
+import AboutPage from '@/components/common/AboutPage';
 
 // 카테고리 목록
 const categories = [
@@ -181,6 +182,11 @@ export default function ABTestPage() {
 
   return (
     <FlexBox direction="col">
+      <AboutPage
+        title="AB 테스트"
+        description="내가 원하는 주제로 AB 테스트를 만들어보세요."
+        keywords="quiz, AB, 퀴즈, AB 테스트"
+      />
       <Container>
         <TopBar
           leftIcon="left"
