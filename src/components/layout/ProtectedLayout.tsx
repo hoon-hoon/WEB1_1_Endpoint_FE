@@ -16,6 +16,10 @@ export function ProtectedLayout({ children, requireAuth = true }: ProtectedRoute
   const { isAuthenticated } = useAuthStore();
   const location = useLocation();
 
+  if (isAuthenticated || location.pathname === '/interest') {
+    return <>{children}</>;
+  }
+
   if (requireAuth && !isAuthenticated) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }

@@ -27,7 +27,6 @@ const createRoutes = () => {
         { path: '/', element: <LoginPage /> },
         { path: '/oauth/kakao/callback', element: <CallbackPage provider="kakao" /> },
         { path: '/oauth/google/callback', element: <CallbackPage provider="google" /> },
-        { path: '/interest', element: <InterestPage /> },
       ],
     },
     {
@@ -70,6 +69,7 @@ const createRoutes = () => {
         },
       ],
     },
+    { path: '/interest', element: <InterestPage /> },
     { path: '/game/waiting', element: <WaitingRoom /> },
     { path: '/game/play', element: <Play /> },
     { path: '/game/result', element: <Result /> },

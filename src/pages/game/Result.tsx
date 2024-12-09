@@ -11,7 +11,7 @@ import { useGameStore } from '@/stores/useGameStore';
 import AboutPage from '@/components/common/AboutPage';
 
 export default function Result() {
-  const { rank, results, players } = useGameStore();
+  const { rank, results, players, clear } = useGameStore();
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const [showCelebrate, setCelebrate] = useState(true);
@@ -33,6 +33,11 @@ export default function Result() {
       default:
         return null;
     }
+  };
+
+  const goToMain = () => {
+    navigate('/game');
+    clear();
   };
 
   return (
@@ -81,11 +86,7 @@ export default function Result() {
               </Card>
             ))}
 
-            <ShadcnButton
-              className="w-full h-14 text-lg"
-              size="lg"
-              onClick={() => navigate('/game')}
-            >
+            <ShadcnButton className="w-full h-14 text-lg" size="lg" onClick={() => goToMain()}>
               나가기 <ArrowRight className="ml-2 h-5 w-5" />
             </ShadcnButton>
           </Card>
