@@ -33,10 +33,7 @@ export default function BottomSheet({ isOpen, setOpen, quizId }: BottomSheetProp
 
   useEffect(() => {
     if (isOpen) {
-      console.log(`fetchComments 호출 ${quizId}`);
-      fetchComments()
-        .then(() => console.log('댓글 데이터 로드 완료'))
-        .catch((err) => console.error('댓글 데이터 로드 실패:', err));
+      fetchComments().catch((err) => console.error('댓글 데이터 로드 실패:', err));
     }
   }, [isOpen, fetchComments]);
 
@@ -82,7 +79,6 @@ export default function BottomSheet({ isOpen, setOpen, quizId }: BottomSheetProp
   const handleReply = (replyParentId: number) => {
     setParentCommentId(replyParentId);
     setInputPlaceholder('답글을 입력하세요...');
-    console.log(replyParentId);
   };
 
   return (

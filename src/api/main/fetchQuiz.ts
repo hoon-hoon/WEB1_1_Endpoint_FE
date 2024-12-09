@@ -24,11 +24,7 @@ const fetchQuizzes = async ({
     const params: Record<string, any> = { page, size };
     if (category) params.category = category;
 
-    console.log('요청 URL:', '/quiz/my/feed');
-    console.log('요청 매개변수:', params);
-
     const response = await axiosInstance.get('/quiz/my/feed', { params });
-    console.log('API 응답 데이터:', response.data);
 
     const { slice, category: responseCategory } = response.data.result;
 

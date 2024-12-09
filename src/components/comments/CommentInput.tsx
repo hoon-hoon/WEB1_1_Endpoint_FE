@@ -15,7 +15,6 @@ export default function CommentInput({
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
-    console.log('호출됨');
   };
 
   const handleSubmit = () => {
