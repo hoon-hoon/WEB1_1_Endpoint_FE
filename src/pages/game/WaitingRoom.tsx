@@ -27,7 +27,7 @@ const WaitingRoom = () => {
   const [kicked, setKicked] = useState(false);
 
   useEffect(() => {
-    if (quiz !== null) {
+    if (quiz !== null && isLoading) {
       setTimeout(() => {
         navigate('/game/play');
         setIsLoading(false);

@@ -32,6 +32,7 @@ export type GameStore = {
   updateInviteCode: (inviteCode: string) => void;
   updateScores: (leaderboard: { userId: number; score: number }[]) => void;
   setIsCorrect: (result: boolean | null) => void;
+  clear: () => void;
 };
 
 export const useGameStore = create<GameStore>((set) => ({
@@ -103,6 +104,22 @@ export const useGameStore = create<GameStore>((set) => ({
   setIsCorrect: (correct: boolean | null) => {
     set(() => ({
       isCorrect: correct,
+    }));
+  },
+  clear: () => {
+    set(() => ({
+      gameId: 0,
+      players: [],
+      subject: null,
+      level: '',
+      quiz: null,
+      quizCount: 5,
+      currentQuestion: 0,
+      timeLeft: 10,
+      inviteCode: '',
+      isCorrect: null,
+      rank: -1,
+      results: [],
     }));
   },
 }));
