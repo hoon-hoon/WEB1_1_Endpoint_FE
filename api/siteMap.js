@@ -1,6 +1,7 @@
 export default function handler(req, res) {
+  /*
   const userAgent = req.headers['user-agent'] || '';
-
+  
   // Bot 확인
   const isBot = /bot|crawl|spider|mediapartners/i.test(userAgent);
 
@@ -8,6 +9,7 @@ export default function handler(req, res) {
     res.status(200).send('Sitemap is only for bots.');
     return;
   }
+  */
 
   const routes = [
     { loc: 'https://quizy-fe.vercel.app/', priority: 1.0 },
