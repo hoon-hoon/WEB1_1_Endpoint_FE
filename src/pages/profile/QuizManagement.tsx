@@ -17,17 +17,33 @@ import AboutPage from '@/components/common/AboutPage';
 export default function MyQuizManagement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { data, isLoading, error } = useFetchMyQuizzes();
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useFetchMyQuizzes();
 
   const [quizzes, setQuizzes] = useState<any[]>([]);
   const [selectedQuizId, setSelectedQuizId] = useState<number | null>(null); // 선택한 퀴즈 ID
   const [showDeleteDialog, setShowDeleteDialog] = useState(false); // 모달 표시 여부
 
   useEffect(() => {
-    if (data?.result?.content) {
-      setQuizzes(data.result.content);
+    if (data?.pages) {
+      const allQuizzes = data.pages.flatMap((page) => page.data); // 모든 페이지의 데이터를 병합
+      setQuizzes(allQuizzes);
     }
   }, [data]);
+  const handleScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+      if (hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [hasNextPage, isFetchingNextPage]);
 
   // 관리 페이지로 돌아왔을 때 캐시를 무효화하여 최신 데이터 Fetch
   useEffect(() => {
@@ -132,6 +148,7 @@ export default function MyQuizManagement() {
               </Card>
             );
           })}
+          {isFetchingNextPage}
         </div>
       </FlexBox>
       <Dialog
