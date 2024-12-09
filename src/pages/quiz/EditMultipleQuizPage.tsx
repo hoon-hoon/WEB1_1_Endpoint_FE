@@ -17,6 +17,7 @@ import TagInput from '@/components/common/TagInput';
 import useUpdateQuiz from '@/api/quiz/useUpdateQuiz';
 import useFetchQuizData from '@/api/quiz/useFetchQuizData';
 import { toEnglishCategory } from '@/utils/categoryConverter';
+import AboutPage from '@/components/common/AboutPage';
 
 const categories = [
   '알고리즘',
@@ -86,7 +87,7 @@ export default function EditMultipleChoicePage() {
   // 선택지 변경 핸들러
   const handleOptionChange = (optionNumber: number, value: string) => {
     const updatedOptions = updatedQuizData.options.map((option) =>
-      option.optionNumber === optionNumber ? { ...option, content: value.slice(0, 20) } : option,
+      option.optionNumber === optionNumber ? { ...option, content: value.slice(0, 30) } : option,
     );
     setUpdatedQuizData((prev) => ({ ...prev, options: updatedOptions }));
 
@@ -173,6 +174,11 @@ export default function EditMultipleChoicePage() {
 
   return (
     <FlexBox direction="col">
+      <AboutPage
+        title="객관식 퀴즈"
+        description="내가 만든 객관식 퀴즈를 수정하기 위한 페이지입니다."
+        keywords="quiz, Multiple, 퀴즈, 객관식 퀴즈"
+      />
       <Container>
         <TopBar
           leftIcon="left"

@@ -6,7 +6,7 @@ import { IoGameControllerOutline } from 'react-icons/io5';
 const BottomNavBar = ({ activeTab, setActiveTab }: NavBarType) => {
   const navigate = useNavigate();
   const tabs = [
-    { id: 'home', label: '메인', icon: <Icon icon="home" />, path: '/main' },
+    { id: 'main', label: '메인', icon: <Icon icon="home" />, path: '/main' },
     {
       id: 'game',
       label: '게임',
