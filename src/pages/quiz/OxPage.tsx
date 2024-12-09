@@ -134,11 +134,26 @@ export default function OXQuizPage() {
       answerNumber,
       explanation: formData.explanation,
     };
-
     createQuizMutate(payload, {
       onSuccess: () => {
         setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
         setToastOpen(true);
+        // 상태 초기화
+        setFormData({
+          category: '',
+          question: '',
+          selectedAnswer: null,
+          explanation: '',
+          tags: [],
+        });
+
+        // 에러 상태도 초기화
+        setFieldErrors({
+          category: false,
+          question: false,
+          explanation: false,
+          selectedAnswer: false,
+        });
       },
       onError: () => {
         setToastMessage({ message: '퀴즈 생성에 실패했습니다.', icon: 'warning' });

@@ -167,11 +167,36 @@ export default function ABTestPage() {
         { optionNumber: 2, content: formData.optionB, imageId: formData.imageBId },
       ],
     };
-
     createQuizMutate(payload, {
       onSuccess: () => {
         setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
         setToastOpen(true);
+        // 상태 초기화
+        setFormData({
+          category: '',
+          question: '',
+          optionA: '',
+          optionB: '',
+          imageA: null,
+          imageB: null,
+          imageAId: null,
+          imageBId: null,
+          tags: [],
+        });
+
+        setFieldErrors({
+          category: false,
+          question: false,
+          optionA: false,
+          optionB: false,
+        });
+
+        // 이미지 입력 필드 초기화
+        const imageAInput = document.getElementById('image-a') as HTMLInputElement;
+        const imageBInput = document.getElementById('image-b') as HTMLInputElement;
+
+        if (imageAInput) imageAInput.value = '';
+        if (imageBInput) imageBInput.value = '';
       },
       onError: () => {
         setToastMessage({ message: '퀴즈 생성에 실패했습니다.', icon: 'warning' });
@@ -261,7 +286,7 @@ export default function ABTestPage() {
               <TextField
                 mode="outlined"
                 value={formData.optionA}
-                onChange={(e) => handleInputChange('optionA', e.target.value, 20)}
+                onChange={(e) => handleInputChange('optionA', e.target.value, 30)}
                 placeholder="A 선택지를 입력하세요."
                 size="M"
                 state={fieldErrors.optionA ? 'error' : 'enable'}

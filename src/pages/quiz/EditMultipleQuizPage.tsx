@@ -87,7 +87,7 @@ export default function EditMultipleChoicePage() {
   // 선택지 변경 핸들러
   const handleOptionChange = (optionNumber: number, value: string) => {
     const updatedOptions = updatedQuizData.options.map((option) =>
-      option.optionNumber === optionNumber ? { ...option, content: value.slice(0, 20) } : option,
+      option.optionNumber === optionNumber ? { ...option, content: value.slice(0, 30) } : option,
     );
     setUpdatedQuizData((prev) => ({ ...prev, options: updatedOptions }));
 

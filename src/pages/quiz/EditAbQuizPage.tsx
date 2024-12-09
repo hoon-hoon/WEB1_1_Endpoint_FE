@@ -267,7 +267,7 @@ export default function EditABTestPage() {
               <Label content="A 선택지" />
               <TextField
                 value={updatedQuizData.optionA}
-                onChange={(e) => handleInputChange('optionA', e.target.value, 20)} // 선택지는 20자 제한
+                onChange={(e) => handleInputChange('optionA', e.target.value, 30)} // 선택지는 20자 제한
                 placeholder="A 선택지를 입력하세요."
                 size="M"
                 state={fieldErrors.optionA ? 'error' : 'enable'}
