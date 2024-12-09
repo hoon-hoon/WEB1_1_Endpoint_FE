@@ -16,6 +16,7 @@ import TagInput from '@/components/common/TagInput';
 import useUpdateQuiz from '@/api/quiz/useUpdateQuiz';
 import useFetchQuizData from '@/api/quiz/useFetchQuizData'; // React Query 훅
 import { toEnglishCategory } from '@/utils/categoryConverter';
+import AboutPage from '@/components/common/AboutPage';
 
 const categories = [
   '알고리즘',
@@ -142,6 +143,11 @@ export default function EditOxQuizPage() {
 
   return (
     <FlexBox direction="col">
+      <AboutPage
+        title="OX 퀴즈"
+        description="내가 만든 OX 퀴즈를 수정하기 위한 페이지입니다."
+        keywords="quiz, OX, 퀴즈, OX 퀴즈"
+      />
       <Container>
         <TopBar
           leftIcon="left"

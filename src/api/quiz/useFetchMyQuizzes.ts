@@ -1,15 +1,23 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import axiosInstance from '@/api/axiosInstance';
 
+const PAGE_SIZE = 10;
+
+async function fetchMyQuizzes({ pageParam = 0 }) {
+  const response = await axiosInstance.get(`/quiz/my-quizzes?page=${pageParam}&size=${PAGE_SIZE}`);
+  return {
+    data: response.data.result.content,
+    nextPage: pageParam + 1,
+    isLast: response.data.result.last, // 마지막 페이지인지 여부
+  };
+}
+
 function useFetchMyQuizzes() {
-  return useQuery({
-    queryKey: ['myQuizzes'], // 고정된 키
-    queryFn: async () => {
-      const response = await axiosInstance.get('/quiz/my-quizzes?page=0&size=10'); // 기본 API 호출
-      return response.data;
-    },
-    staleTime: 1000 * 60, // 1분 동안 캐시 데이터 유지 후 다시 가져옴
-    retry: 2, // 실패 시 2회 재시도
+  return useInfiniteQuery({
+    queryKey: ['myQuizzes'],
+    queryFn: fetchMyQuizzes,
+    getNextPageParam: (lastPage) => (!lastPage.isLast ? lastPage.nextPage : undefined),
+    initialPageParam: 0,
   });
 }
 
