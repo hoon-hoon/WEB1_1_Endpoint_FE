@@ -25,7 +25,7 @@ export default function RandomMatching() {
 
   useEffect(() => {
     initializeEventSource();
-    eventSource.addEventListener('MATCHING', async (event) => {
+    const handleMatchingEvent = async (event: any) => {
       if (isFirstRequest.current) {
         // 이미 첫 요청을 처리했으면 무시
         return;
@@ -47,10 +47,11 @@ export default function RandomMatching() {
       } catch (error) {
         console.error('Error', error);
       }
-    });
+    };
+    eventSource.addEventListener('MATCHING', handleMatchingEvent);
 
     return () => {
-      eventSource.removeEventListener('MATCHING', () => {});
+      eventSource.removeEventListener('MATCHING', handleMatchingEvent);
       eventSource.close();
     };
   }, [connectPromise, joinGame]);

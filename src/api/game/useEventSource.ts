@@ -6,6 +6,8 @@ import { getStorageItem, setStorageItem } from '@/utils/storage';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 let eventSource: EventSourcePolyfill;
+let retryCount = 0;
+const MAX_RETRIES = 5;
 
 function initializeEventSource() {
   if (eventSource && eventSource.readyState !== EventSource.CLOSED) {
@@ -21,6 +23,12 @@ function initializeEventSource() {
   });
 
   eventSource.onerror = async (error: any) => {
+    if (retryCount >= MAX_RETRIES) {
+      console.error('SSE 재연결 시도 초과');
+      eventSource.close();
+      return;
+    }
+
     if (error.status === 401) {
       console.log('401 Unauthorized. 토큰 갱신 시도 중...');
       try {
