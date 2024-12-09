@@ -9,6 +9,7 @@ import useGetTags from '@/api/search/fetchTags';
 import TagSkeleton from './TagSkeleton';
 import AboutPage from '@/components/common/AboutPage';
 import { useSearchQuizzes } from '@/api/search/fetchQuizzes';
+import { Button } from '@/shadcn/ui/button';
 
 const SearchPage = () => {
   const { data: tags = [], isLoading: tagsLoading, error: tagsError } = useGetTags();
@@ -100,13 +101,13 @@ const SearchPage = () => {
         )}
         {hasNextPage && (
           <div className="flex justify-center mt-8">
-            <button
+            <Button
+              variant="outline"
               onClick={() => fetchNextPage()}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md"
               disabled={isFetchingNextPage}
             >
               {isFetchingNextPage ? '불러오는 중...' : '더보기'}
-            </button>
+            </Button>
           </div>
         )}
       </Container>
