@@ -15,6 +15,7 @@ import ToastMessage from '@/components/common/ToastMessage';
 import TagInput from '@/components/common/TagInput';
 import useCreateQuiz from '@/api/quiz/useCreateQuiz';
 import { toEnglishCategory } from '@/utils/categoryConverter';
+import AboutPage from '@/components/common/AboutPage';
 
 // 카테고리 목록
 const categories = [
@@ -100,7 +101,7 @@ export default function MultipleChoicePage() {
   // 선택지 변경 핸들러
   const handleOptionChange = (index: number, value: string) => {
     const updatedOptions = [...formData.options];
-    updatedOptions[index] = value.slice(0, 20); // 선택지 최대 글자 수 제한
+    updatedOptions[index] = value.slice(0, 30); // 선택지 최대 글자 수 제한
     setFormData((prev) => ({
       ...prev,
       options: updatedOptions,
@@ -180,6 +181,23 @@ export default function MultipleChoicePage() {
       onSuccess: () => {
         setToastMessage({ message: '퀴즈가 생성되었습니다!', icon: 'check' });
         setToastOpen(true);
+        // 상태 초기화
+        setFormData({
+          category: '',
+          question: '',
+          options: ['', '', '', ''],
+          selectedAnswer: null,
+          explanation: '',
+          tags: [],
+        });
+
+        setFieldErrors({
+          category: false,
+          question: false,
+          options: [false, false, false, false],
+          explanation: false,
+          selectedAnswer: false,
+        });
       },
       onError: () => {
         setToastMessage({ message: '퀴즈 생성에 실패했습니다.', icon: 'warning' });
@@ -190,6 +208,11 @@ export default function MultipleChoicePage() {
 
   return (
     <FlexBox direction="col">
+      <AboutPage
+        title="객관식 퀴즈"
+        description="내가 원하는 주제로 객관식 퀴즈를 만들어보세요."
+        keywords="quiz, Multiple, 퀴즈, 객관식 퀴즈"
+      />
       <Container>
         <TopBar
           leftIcon="left"
