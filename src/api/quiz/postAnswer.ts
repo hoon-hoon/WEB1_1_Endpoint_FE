@@ -3,8 +3,7 @@ import axiosInstance from '@/api/axiosInstance';
 
 const submitAnswerAPI = async (quizId: number, choiceNumber: number): Promise<void> => {
   const requestData = { quizId, choiceNumber };
-  const response = await axiosInstance.post('/quiz/user-answers', requestData);
-  console.log('API 응답:', response.data);
+  await axiosInstance.post('/quiz/user-answers', requestData);
 };
 
 export const usePostAnswer = () =>

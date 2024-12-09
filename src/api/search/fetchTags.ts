@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 
 const fetchTagsAPI = async (): Promise<string[]> => {
   const response = await axiosInstance.get('/quiz/search/trending');
-  console.log('인기 태그 응답 데이터:', response.data);
   return response.data.result.keywords;
 };
 

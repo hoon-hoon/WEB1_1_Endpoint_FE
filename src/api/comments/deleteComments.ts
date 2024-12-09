@@ -3,8 +3,7 @@ import axiosInstance from '../axiosInstance';
 import { Comment } from '@/types';
 
 const deleteCommentAPI = async (commentId: number): Promise<void> => {
-  const response = await axiosInstance.delete(`/quiz/comments/${commentId}`);
-  console.log('댓글 삭제 응답 성공:', response.data);
+  await axiosInstance.delete(`/quiz/comments/${commentId}`);
 };
 
 const useDeleteComment = (quizId: number) => {
@@ -35,9 +34,6 @@ const useDeleteComment = (quizId: number) => {
       queryClient.invalidateQueries({
         queryKey: ['comments', quizId],
       });
-    },
-    onSuccess: () => {
-      console.log('댓글 삭제 성공');
     },
   });
 };
