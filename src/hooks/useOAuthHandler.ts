@@ -21,10 +21,8 @@ const useOAuthHandler = (provider: Provider) => {
   const handleRedirectCallback = useCallback(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const accessToken = searchParams.get('token');
-    const role = searchParams.get('role');
+    const isGuest = searchParams.get('guest') === 'true';
     const error = searchParams.get('error');
-
-    const isGuest = role === 'GUEST';
 
     if (accessToken) {
       setStorageItem('accessToken', accessToken);
