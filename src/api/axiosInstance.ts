@@ -44,6 +44,8 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (retryError) {
         console.error('재요청 실패:', retryError);
+        localStorage.removeItem('accessToken');
+        window.location.href = '/';
         return Promise.reject(retryError);
       }
     }
