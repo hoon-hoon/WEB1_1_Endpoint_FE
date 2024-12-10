@@ -79,6 +79,8 @@
 | PM                                                                           |                                                                              |                                                                             | 팀장                                                                        |
 
 </div>
+<br><br>
+</div>
 
 # 📚 기술 스택
 
@@ -86,8 +88,8 @@
 
 ## Config
 
-![yarn](https://img.shields.io/badge/npm-2C8EBB?style=for-the-badge&logo=yarn&logoColor=white)
-![Vite](https://img.shields.io/badge/vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?style=for-the-badge&logo=yarn&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
 ## Development
 
