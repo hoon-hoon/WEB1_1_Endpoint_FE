@@ -47,10 +47,7 @@
 
 ## 📅 개발 기간
 
-- `전체 개발 기간` : 2024-11-06 ~ 2024-12-02
-- `프로젝트 기획` : 2024-11-06 ~ 2024-11-10
-- `개발환경 세팅` : 2024-11-08 ~ 2024-11-11
-- `기능 구현` : 2024-11-11 ~ 2024-12-02
+- `전체 개발 기간` : 2024-11-15 ~ 2024-12-06
 
 ## ✨ 팀원 소개
 
@@ -146,6 +143,16 @@
 </table>
 
 ### 게임 페이지
+
+<table>
+    <tr>
+      <td align="center"><p><strong>퀴즈 게임방 생성</strong></p><img src="https://github.com/user-attachments/assets/c4b75645-cf4b-4cd7-8d57-767193f77b4d" alt="게임 방 생성"></td>
+      <td align="center"><p><strong>랜덤 매칭</strong></p><img src="https://github.com/user-attachments/assets/08471291-3b4b-48a2-9855-9df0d7b912e3" alt="랜덤 매칭"></td>
+      <td align="center"><p><strong>퀴즈 게임방 대기방</strong></p><img src="https://github.com/user-attachments/assets/f269d60e-2987-49f5-aba4-7839017016ed" alt="게임 대기방"></td>
+      <td align="center"><p><strong>게임 시연 영상</strong></p><img src="https://github.com/user-attachments/assets/8f93e80b-90f1-47f6-b915-c1a777a34e04" alt="게임 시연 gif"></td>
+      <td align="center"><p><strong>게임 결과</strong></p><img src="https://github.com/user-attachments/assets/029840d8-5e85-4d7d-943a-481d65f77ba7" alt="게임 1등"></td>
+    </tr>
+</table>
 
 ### 마이 페이지
 
