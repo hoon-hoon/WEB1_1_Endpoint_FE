@@ -125,7 +125,7 @@
 
 ### Architecture
 
-![앤드포인트 아키텍처](https://github.com/user-attachments/assets/ac12ff48-87fe-4f05-9cb0-2e1c90c0726c)
+![아키텍처](https://github.com/user-attachments/assets/8640ac58-aa0b-4f38-a829-3be0a1ee34ef)
 
 </div>
 
