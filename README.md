@@ -96,7 +96,10 @@
 ![Zustand](https://img.shields.io/badge/zustand-orange?style=for-the-badge&logo=zustand&logoColor=white)
 ![ReactQuery](https://img.shields.io/badge/Reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
 ![ReactRouter](https://img.shields.io/badge/reactrouter-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
-![Socket.io](https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socketdotio&logoColor=white)
+![stomp.js](https://img.shields.io/badge/stomp.js-0366d6?style=for-the-badge&logo=javascript&logoColor=white)
+![sock.js](https://img.shields.io/badge/sock.js-9cf?style=for-the-badge&logo=javascript&logoColor=black)
+![EventSource Polyfill](https://img.shields.io/badge/EventSource%20Polyfill-f39c12?style=for-the-badge&logo=polymer-project&logoColor=white)
+
 
 ### 🛠️ Back-End
 
