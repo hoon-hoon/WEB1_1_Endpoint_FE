@@ -136,9 +136,9 @@
 
 <table>
     <tr>
-      <td align="center"><p><strong>퀴즈 작성</strong></p><img src="https://github.com/user-attachments/assets/cbec332f-ee8e-49ff-87c9-d9e56c06bc74" alt="퀴즈 작성 및 조회"></td>
-       <td align="center"><p><strong>퀴즈 조회 및 수정</strong></p><img src="https://github.com/user-attachments/assets/fe967e1f-11d6-4df9-a6b3-4e7e1017081c" alt="퀴즈 수정"></td>
-       <td align="center"><p><strong>퀴즈 삭제</strong></p><img src="https://github.com/user-attachments/assets/3132d64c-a1f6-46ec-9c72-dfc0dda05547" alt="퀴즈 삭제"></td>
+      <td width="270" align="center"><p><strong>퀴즈 작성</strong></p><img src="https://github.com/user-attachments/assets/cbec332f-ee8e-49ff-87c9-d9e56c06bc74" alt="퀴즈 작성 및 조회"></td>
+       <td width="270" align="center"><p><strong>퀴즈 조회 및 수정</strong></p><img src="https://github.com/user-attachments/assets/fe967e1f-11d6-4df9-a6b3-4e7e1017081c" alt="퀴즈 수정"></td>
+       <td width="270" align="center"><p><strong>퀴즈 삭제</strong></p><img src="https://github.com/user-attachments/assets/3132d64c-a1f6-46ec-9c72-dfc0dda05547" alt="퀴즈 삭제"></td>
     </tr>
 </table>
 
