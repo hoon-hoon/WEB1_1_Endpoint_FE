@@ -187,32 +187,3 @@
 
 ![Quizy CICD](https://github.com/user-attachments/assets/33c6a245-bbf5-4197-a996-62b8dccb40c1)
 
-# Quizy-front
-
-## 세팅
-
-1. 레포지토리 포크
-
-```bash
-git clone ~
-cd (project-name)
-
-yarn install
-yarn dev
-```
-
-## 폴더 구조
-
-```
-src/
-|── api/
-|── components/
-| |── common/
-| └── layout/
-|── pages/
-| └── MainPage.tsx
-|── hooks/
-|── styles/
-|── stores/
-└── types/
-```
