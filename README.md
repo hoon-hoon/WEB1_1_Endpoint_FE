@@ -161,6 +161,13 @@
 
 ### 마이 페이지
 
+<table>
+    <tr>
+      <td width="270" align="center"><p><strong>마이 페이지</strong></p><img src="https://github.com/user-attachments/assets/1cf20d30-d0e1-43d8-ac65-60a56bcc8fa6" alt="마이 페이지"></td>
+      <td width="270" align="center"><p><strong>오답노트</strong></p><img src="https://github.com/user-attachments/assets/08e2ac53-d98e-4c47-bf60-fc627295fb1a" alt="오답노트"></td>
+    </tr>
+</table>
+
 ## 작업 관리
 
 [JIRA](https://rkdwldnjs878-1731394506977.atlassian.net/jira/software/projects/QUZ/boards/1/backlog?epics=visible)
