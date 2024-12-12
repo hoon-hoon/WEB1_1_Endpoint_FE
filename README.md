@@ -47,10 +47,7 @@
 
 ## 📅 개발 기간
 
-- `전체 개발 기간` : 2024-11-06 ~ 2024-12-02
-- `프로젝트 기획` : 2024-11-06 ~ 2024-11-10
-- `개발환경 세팅` : 2024-11-08 ~ 2024-11-11
-- `기능 구현` : 2024-11-11 ~ 2024-12-02
+- `전체 개발 기간` : 2024-11-15 ~ 2024-12-06
 
 ## ✨ 팀원 소개
 
@@ -101,7 +98,10 @@
 ![Zustand](https://img.shields.io/badge/zustand-orange?style=for-the-badge&logo=zustand&logoColor=white)
 ![ReactQuery](https://img.shields.io/badge/Reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
 ![ReactRouter](https://img.shields.io/badge/reactrouter-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
-![Socket.io](https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socketdotio&logoColor=white)
+![stomp.js](https://img.shields.io/badge/stomp.js-0366d6?style=for-the-badge&logo=javascript&logoColor=white)
+![sock.js](https://img.shields.io/badge/sock.js-9cf?style=for-the-badge&logo=javascript&logoColor=black)
+![EventSource Polyfill](https://img.shields.io/badge/EventSource%20Polyfill-f39c12?style=for-the-badge&logo=polymer-project&logoColor=white)
+
 
 ### 🛠️ Back-End
 
@@ -141,13 +141,23 @@
 
 <table>
     <tr>
-      <td align="center"><p><strong>퀴즈 작성</strong></p><img src="https://github.com/user-attachments/assets/cbec332f-ee8e-49ff-87c9-d9e56c06bc74" alt="퀴즈 작성 및 조회"></td>
-       <td align="center"><p><strong>퀴즈 조회 및 수정</strong></p><img src="https://github.com/user-attachments/assets/fe967e1f-11d6-4df9-a6b3-4e7e1017081c" alt="퀴즈 수정"></td>
-       <td align="center"><p><strong>퀴즈 삭제</strong></p><img src="https://github.com/user-attachments/assets/3132d64c-a1f6-46ec-9c72-dfc0dda05547" alt="퀴즈 삭제"></td>
+      <td width="270" align="center"><p><strong>퀴즈 작성</strong></p><img src="https://github.com/user-attachments/assets/cbec332f-ee8e-49ff-87c9-d9e56c06bc74" alt="퀴즈 작성 및 조회"></td>
+       <td width="270" align="center"><p><strong>퀴즈 조회 및 수정</strong></p><img src="https://github.com/user-attachments/assets/fe967e1f-11d6-4df9-a6b3-4e7e1017081c" alt="퀴즈 수정"></td>
+       <td width="270" align="center"><p><strong>퀴즈 삭제</strong></p><img src="https://github.com/user-attachments/assets/3132d64c-a1f6-46ec-9c72-dfc0dda05547" alt="퀴즈 삭제"></td>
     </tr>
 </table>
 
 ### 게임 페이지
+
+<table>
+    <tr>
+      <td width="270" align="center"><p><strong>퀴즈 게임방 생성</strong></p><img src="https://github.com/user-attachments/assets/c4b75645-cf4b-4cd7-8d57-767193f77b4d" alt="게임 방 생성"></td>
+      <td width="270" align="center"><p><strong>랜덤 매칭</strong></p><img src="https://github.com/user-attachments/assets/08471291-3b4b-48a2-9855-9df0d7b912e3" alt="랜덤 매칭"></td>
+      <td width="280" align="center"><p><strong>퀴즈 게임방 대기방</strong></p><img src="https://github.com/user-attachments/assets/f269d60e-2987-49f5-aba4-7839017016ed" alt="게임 대기방"></td>
+      <td width="270" align="center"><p><strong>게임 시연 영상</strong></p><img src="https://github.com/user-attachments/assets/8f93e80b-90f1-47f6-b915-c1a777a34e04" alt="게임 시연 gif"></td>
+      <td width="270" align="center"><p><strong>게임 결과</strong></p><img src="https://github.com/user-attachments/assets/029840d8-5e85-4d7d-943a-481d65f77ba7" alt="게임 1등"></td>
+    </tr>
+</table>
 
 ### 마이 페이지
 
@@ -179,32 +189,3 @@
 
 ![Quizy CICD](https://github.com/user-attachments/assets/33c6a245-bbf5-4197-a996-62b8dccb40c1)
 
-# Quizy-front
-
-## 세팅
-
-1. 레포지토리 포크
-
-```bash
-git clone ~
-cd (project-name)
-
-yarn install
-yarn dev
-```
-
-## 폴더 구조
-
-```
-src/
-|── api/
-|── components/
-| |── common/
-| └── layout/
-|── pages/
-| └── MainPage.tsx
-|── hooks/
-|── styles/
-|── stores/
-└── types/
-```
