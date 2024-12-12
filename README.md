@@ -177,9 +177,6 @@
 
 </div>
 
-# 와이어프레임
-
-[Figma](https://embed.figma.com/board/b0GOfiYpuendfJwq8Gatbv/%EC%88%8F%ED%8F%BC-%ED%80%B4%EC%A6%88-%ED%94%8C%EB%9E%AB%ED%8F%BC-%ED%99%94%EB%A9%B4-%EC%A0%95%EC%9D%98?node-id=0-1&node-type=canvas&t=yheujhD0MAfZ215H-0&embed-host=notion&footer=false&theme=system)
 
 ## 시스템 아키텍쳐
 
