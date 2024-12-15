@@ -135,7 +135,19 @@
 
 ### 퀴즈 피드
 
+<table>
+    <tr>
+      <td width="270" align="center"><p><strong>퀴즈 피드</strong></p><img src="https://github.com/user-attachments/assets/c6c90da6-bb88-4f2b-81ef-a290ba2cbc4d" alt="퀴즈 피드"></td>
+    </tr>
+</table>
+
 ### 퀴즈 검색
+
+<table>
+    <tr>
+      <td width="270" align="center"><p><strong>퀴즈 검색</strong></p><img src="https://github.com/user-attachments/assets/3f5e9ec5-1a5c-4f21-b0f3-0cd0e8eea6fb" alt="퀴즈 검색"></td>
+    </tr>
+</table>
 
 ### 퀴즈 CRUD
 
