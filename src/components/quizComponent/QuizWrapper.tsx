@@ -5,6 +5,7 @@ import { QuizAns, QuizFooter, QuizRenderer } from '.';
 import BottomSheet from '../common/BottomSheet';
 import { useToggleLike } from '@/api/updateLike';
 import { usePostAnswer } from '@/api/quiz/postAnswer';
+import defaultUserImage from '@/assets/default_user.png';
 
 interface QuizWrapperProps {
   quiz: BaseQuizAPI;
@@ -47,9 +48,11 @@ function QuizWrapper({ quiz }: QuizWrapperProps) {
 
   const answerRate = correctOption ? correctOption.selectionRatio * 100 : 0;
 
-  const authorName = quiz.author?.name || 'default';
-  const authorImage = quiz.author?.imagePath || '/';
-  
+  const defaultImageUrl = defaultUserImage;
+
+  const authorName = quiz.author?.name || '사용자';
+  const authorImage = quiz.author?.imagePath || defaultImageUrl;
+
   const toggleLikeMutation = useToggleLike(
     () => {
       setIsLiked((prev) => !prev);
