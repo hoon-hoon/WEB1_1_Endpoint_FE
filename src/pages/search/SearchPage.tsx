@@ -1,4 +1,3 @@
-import { QuizWrapper, TagList } from '@/components';
 import SearchBar from '@/components/common/SearchBar';
 import TopBar from '@/components/common/TopBar';
 import Container from '@/components/layout/Container';
@@ -10,6 +9,8 @@ import TagSkeleton from './TagSkeleton';
 import AboutPage from '@/components/common/AboutPage';
 import { useSearchQuizzes } from '@/api/search/fetchQuizzes';
 import { Button } from '@/shadcn/ui/button';
+import TagList from '@/components/common/TagList';
+import QuizWrapper from '@/components/quizComponent/QuizWrapper';
 
 const SearchPage = () => {
   const { data: tags = [], isLoading: tagsLoading, error: tagsError } = useGetTags();

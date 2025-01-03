@@ -1,11 +1,13 @@
-import { BaseQuizAPI } from '@/types';
 import Avatar from '@eolluga/eolluga-ui/Display/Avatar';
 import { useEffect, useState } from 'react';
-import { QuizAns, QuizFooter, QuizRenderer } from '.';
 import BottomSheet from '../common/BottomSheet';
 import { useToggleLike } from '@/api/updateLike';
 import { usePostAnswer } from '@/api/quiz/postAnswer';
 import defaultUserImage from '@/assets/default_user.png';
+import QuizAns from './QuizAns';
+import QuizRenderer from './QuizRenderer';
+import QuizFooter from './QuizFooter';
+import { BaseQuizAPI } from '@/types/QuizTypes';
 
 interface QuizWrapperProps {
   quiz: BaseQuizAPI;

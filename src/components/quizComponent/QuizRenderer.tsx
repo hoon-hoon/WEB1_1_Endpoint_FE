@@ -1,5 +1,7 @@
-import { BaseQuizAPI } from '@/types';
-import { QuizAB, QuizMul, QuizOX } from '.';
+import QuizOX from './QuizOX';
+import QuizAB from './QuizAB';
+import QuizMul from './QuizMul';
+import { BaseQuizAPI } from '@/types/QuizTypes';
 
 interface QuizRendererProps {
   quiz: BaseQuizAPI;

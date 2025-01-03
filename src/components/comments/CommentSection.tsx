@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import CommentSkeleton from './CommentSkeleton';
 import CommentList from './CommentList';
-import { Comment } from '@/types';
+import { Comment } from '@/types/CommentTypes';
 
 interface CommentSectionProps {
   comments: Comment[];

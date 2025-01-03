@@ -1,4 +1,4 @@
-import { QuizWrapper } from '@/components';
+import QuizWrapper from '@/components/quizComponent/QuizWrapper';
 import { ChevronDown } from 'lucide-react';
 
 interface QuizCardProps {

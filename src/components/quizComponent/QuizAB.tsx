@@ -1,5 +1,5 @@
+import { BaseQuizAPI } from '@/types/QuizTypes';
 import { useState } from 'react';
-import type { BaseQuizAPI } from '@/types';
 
 interface QuizABProps {
   quiz: BaseQuizAPI;

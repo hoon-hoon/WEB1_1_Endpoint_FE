@@ -1,21 +1,47 @@
 import { createBrowserRouter } from 'react-router-dom';
-import MainLayout from './components/layout/MainLayout';
-import AuthLayout from './components/layout/AuthLayout';
-import RequireAuth from './components/auth/RequireAuth';
-import { LoginPage, InterestPage, CallbackPage } from './pages/Login';
-import { GamePage, MainPage, MyPage, SearchPage } from './pages';
-import {
-  AbPage,
-  OxPage,
-  MultipleChoicePage,
-  EditOxQuizPage,
-  EditAbQuizPage,
-  EditMultipleQuizPage,
-} from './pages/quiz';
-import { CreateGame, WaitingRoom, RandomMatch, CodeEntry, Play, Result } from './pages/game';
-import ReviewNote from './pages/profile/ReviewNote';
-import QuizManagement from './pages/profile/QuizManagement';
-import NotFound from './components/game/NotFound';
+
+// Layout Components
+import MainLayout from '@components/layout/MainLayout';
+import AuthLayout from '@components/layout/AuthLayout';
+
+// Auth Components
+import RequireAuth from '@components/auth/RequireAuth';
+
+// Game Components
+import NotFound from '@components/game/NotFound';
+
+// Pages - Login
+import LoginPage from '@pages/Login/LoginPage';
+import CallbackPage from '@pages/Login/CallbackPage';
+import InterestPage from '@pages/Login/InterestPage';
+
+// Pages - Main
+import MainPage from '@pages/main/MainPage';
+
+// Pages - Search
+import SearchPage from '@pages/search/SearchPage';
+
+// Pages - Profile
+import MyPage from '@pages/profile/MyPage';
+import ReviewNote from '@pages/profile/ReviewNote';
+import QuizManagement from '@pages/profile/QuizManagement';
+
+// Pages - Quiz
+import OxPage from '@pages/quiz/OxPage';
+import AbPage from '@pages/quiz/AbPage';
+import MultipleChoicePage from '@pages/quiz/MultipleChoicePage';
+import EditOxQuizPage from '@pages/quiz/EditOxQuizPage';
+import EditAbQuizPage from '@pages/quiz/EditAbQuizPage';
+import EditMultipleQuizPage from '@pages/quiz/EditMultipleQuizPage';
+
+// Pages - Game
+import GamePage from '@pages/game/GamePage';
+import CreateGame from '@pages/game/CreateGame';
+import RandomMatch from '@pages/game/RandomMatch';
+import CodeEntry from '@pages/game/CodeEntry';
+import WaitingRoom from '@pages/game/WaitingRoom';
+import Play from '@pages/game/Play';
+import Result from '@pages/game/Result';
 
 const createRoutes = () => {
   // [Should]: AuthLayout과 MainLayout에서 로그인 여부를 체크하여 로그인 여부에 따라 접근 제한을 하시는게 좋을거같습니다.

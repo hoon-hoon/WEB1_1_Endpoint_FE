@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { BottomNavBar } from '..';
 import { ProtectedLayout } from './ProtectedLayout';
 import { useEffect, useMemo } from 'react';
+import BottomNavBar from '../common/BottomNavBar';
 
 function MainLayout() {
   const location = useLocation();

@@ -1,6 +1,7 @@
+import { BaseQuizAPI } from '@/types/QuizTypes';
 import { useEffect, useState } from 'react';
-import type { BaseQuizAPI } from '@/types';
-import { Button } from '../common/Button';
+import Button from '../common/Button/Button';
+
 
 interface QuizOXProps {
   quiz: BaseQuizAPI;
